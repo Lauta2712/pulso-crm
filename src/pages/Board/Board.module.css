@@ -1,0 +1,10 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.filters select {
+  min-width: 160px;
+}

@@ -1,0 +1,142 @@
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.metricLabel {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.metricValue {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.section {
+  margin-bottom: var(--space-xl);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  gap: var(--space-md);
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.tableWrapper {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 12px var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.table td {
+  padding: 14px var(--space-md);
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.tableRow {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.tableRow:hover {
+  background: var(--bg-hover);
+}
+
+.amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--text-secondary);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 900px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.filters select {
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+.recurrentBadge {
+  margin-left: 6px;
+}
+
+.expenseRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+}
+
+.expenseRow:last-child {
+  border-bottom: none;
+}
+
+.expenseTitle {
+  font-weight: 500;
+}
+
+.backLink {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+  display: inline-block;
+}
+
+.backLink:hover {
+  color: var(--text-primary);
+}

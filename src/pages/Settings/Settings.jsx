@@ -1,0 +1,189 @@
+import { useState } from 'react'
+import { useOrg, useUpdateOrg } from '../../hooks/useOrg'
+import { useUsers, useUpdateUserRole } from '../../hooks/useUsers'
+import { useCreateTag, useDeleteTag, useTags } from '../../hooks/useTags'
+import Button from '../../components/ui/Button'
+import EmptyState from '../../components/ui/EmptyState'
+import { useUIStore } from '../../store/useUIStore'
+import styles from './Settings.module.css'
+
+const ROLE_OPTIONS = [
+  { value: 'owner', label: 'Owner' },
+  { value: 'developer', label: 'Developer' },
+  { value: 'designer', label: 'Designer' },
+  { value: 'pm', label: 'PM' },
+  { value: 'viewer', label: 'Viewer' },
+]
+
+export default function Settings() {
+  const addToast = useUIStore((state) => state.addToast)
+
+  const { data: org, isLoading: loadingOrg } = useOrg()
+  const updateOrg = useUpdateOrg()
+
+  const { data: users, isLoading: loadingUsers } = useUsers()
+  const updateUserRole = useUpdateUserRole()
+
+  const { data: tags, isLoading: loadingTags } = useTags()
+  const createTag = useCreateTag()
+  const deleteTag = useDeleteTag()
+
+  const [orgForm, setOrgForm] = useState(null)
+  const [newTag, setNewTag] = useState({ name: '', color: '#7c6af7' })
+
+  const orgFormValue = orgForm ?? { name: org?.name ?? '', logo_url: org?.logo_url ?? '' }
+
+  const handleSaveOrg = async () => {
+    try {
+      await updateOrg.mutateAsync({ id: org.id, ...orgFormValue })
+      addToast('Datos de la organización actualizados')
+    } catch {
+      addToast('No se pudieron guardar los cambios', 'error')
+    }
+  }
+
+  const handleRoleChange = async (userId, role) => {
+    try {
+      await updateUserRole.mutateAsync({ id: userId, role })
+      addToast('Rol actualizado')
+    } catch {
+      addToast('No se pudo actualizar el rol', 'error')
+    }
+  }
+
+  const handleCreateTag = async (e) => {
+    e.preventDefault()
+    if (!newTag.name.trim()) return
+    try {
+      await createTag.mutateAsync(newTag)
+      setNewTag({ name: '', color: '#7c6af7' })
+      addToast('Tag creado')
+    } catch {
+      addToast('No se pudo crear el tag', 'error')
+    }
+  }
+
+  const handleDeleteTag = async (id) => {
+    try {
+      await deleteTag.mutateAsync(id)
+      addToast('Tag eliminado')
+    } catch {
+      addToast('No se pudo eliminar el tag', 'error')
+    }
+  }
+
+  const orgChanged =
+    org &&
+    (orgFormValue.name !== (org.name ?? '') || orgFormValue.logo_url !== (org.logo_url ?? ''))
+
+  return (
+    <div className="page">
+      <div className="page-header">
+        <h1 className="page-title">Configuración</h1>
+      </div>
+
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Organización</h2>
+        <div className="card">
+          {loadingOrg ? (
+            <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>
+          ) : (
+            <>
+              <div className={styles.field}>
+                <label className={styles.label}>Nombre</label>
+                <input
+                  value={orgFormValue.name}
+                  onChange={(e) => setOrgForm({ ...orgFormValue, name: e.target.value })}
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Logo (URL)</label>
+                <input
+                  value={orgFormValue.logo_url}
+                  onChange={(e) => setOrgForm({ ...orgFormValue, logo_url: e.target.value })}
+                  placeholder="https://..."
+                />
+              </div>
+              {orgFormValue.logo_url && (
+                <img src={orgFormValue.logo_url} alt="Logo" className={styles.logoPreview} />
+              )}
+              <div style={{ marginTop: 'var(--space-md)' }}>
+                <Button onClick={handleSaveOrg} disabled={!orgChanged || updateOrg.isPending}>
+                  {updateOrg.isPending ? 'Guardando...' : 'Guardar cambios'}
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Usuarios</h2>
+        <div className="card">
+          {loadingUsers && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+          {!loadingUsers && (!users || users.length === 0) && (
+            <EmptyState icon="◆" title="No hay usuarios" />
+          )}
+          {!loadingUsers &&
+            users?.map((user) => (
+              <div key={user.id} className={styles.row}>
+                <div className={styles.userInfo}>
+                  <div className={styles.avatar}>{user.full_name?.charAt(0).toUpperCase()}</div>
+                  <div>
+                    <div className={styles.userName}>{user.full_name}</div>
+                  </div>
+                </div>
+                <select value={user.role} onChange={(e) => handleRoleChange(user.id, e.target.value)}>
+                  {ROLE_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+        </div>
+      </div>
+
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Tags</h2>
+        <div className="card">
+          {loadingTags && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+          {!loadingTags && (!tags || tags.length === 0) && (
+            <EmptyState icon="#" title="No hay tags creados" />
+          )}
+          {!loadingTags &&
+            tags?.map((tag) => (
+              <div key={tag.id} className={styles.row}>
+                <div className={styles.tagRow}>
+                  <span className={styles.swatch} style={{ background: tag.color }} />
+                  <span>{tag.name}</span>
+                </div>
+                <Button size="sm" variant="danger" onClick={() => handleDeleteTag(tag.id)}>
+                  Eliminar
+                </Button>
+              </div>
+            ))}
+
+          <form className={styles.tagForm} onSubmit={handleCreateTag}>
+            <input
+              value={newTag.name}
+              onChange={(e) => setNewTag((f) => ({ ...f, name: e.target.value }))}
+              placeholder="Nombre del tag"
+              required
+            />
+            <input
+              type="color"
+              className={styles.colorInput}
+              value={newTag.color}
+              onChange={(e) => setNewTag((f) => ({ ...f, color: e.target.value }))}
+            />
+            <Button type="submit" disabled={createTag.isPending}>
+              + Agregar
+            </Button>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+}

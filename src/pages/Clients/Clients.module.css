@@ -1,0 +1,152 @@
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 14px;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tabActive {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tableWrapper {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 12px var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.table td {
+  padding: 14px var(--space-md);
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.row:hover {
+  background: var(--bg-hover);
+}
+
+.row:last-child td {
+  border-bottom: none;
+}
+
+.clientName {
+  font-weight: 500;
+}
+
+.muted {
+  color: var(--text-secondary);
+}
+
+/* ClientDetail */
+.detailGrid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+}
+
+.contactRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+}
+
+.contactRow:last-child {
+  border-bottom: none;
+}
+
+.contactName {
+  font-weight: 500;
+}
+
+.contactMeta {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.notesArea {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+}
+
+.projectRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+}
+
+.projectRow:hover {
+  background: var(--bg-hover);
+}
+
+.projectList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.backLink {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+  display: inline-block;
+}
+
+.backLink:hover {
+  color: var(--text-primary);
+}

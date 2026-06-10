@@ -1,0 +1,52 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.company {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.metaRow {
+  display: flex;
+  gap: 6px;
+}
+
+.metaLabel {
+  color: var(--text-muted);
+  min-width: 100px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+  font-size: 16px;
+  color: var(--warning);
+}
+
+.starEmpty {
+  color: var(--border);
+}

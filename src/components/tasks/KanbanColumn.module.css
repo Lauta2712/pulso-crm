@@ -1,0 +1,39 @@
+.column {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  width: 280px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  overflow-y: auto;
+  min-height: 80px;
+  flex: 1;
+}
