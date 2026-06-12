@@ -3,6 +3,8 @@
   gap: 4px;
   margin-bottom: var(--space-lg);
   border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .filter {
@@ -13,6 +15,8 @@
   font-size: 13px;
   font-weight: 500;
   padding: 10px 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .filter:hover {
@@ -138,6 +142,8 @@
   gap: 4px;
   margin-bottom: var(--space-md);
   border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tab {
@@ -148,6 +154,8 @@
   font-size: 13px;
   font-weight: 500;
   padding: 10px 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .tab:hover {

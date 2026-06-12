@@ -67,6 +67,16 @@ textarea::placeholder {
   color: var(--text-muted);
 }
 
+/* iOS Safari zooms the page when focusing inputs with font-size < 16px,
+   and that zoom persists across SPA navigation */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 h1,
 h2,
 h3,
@@ -95,12 +105,19 @@ h4 {
   max-width: 1400px;
 }
 
+@media (max-width: 768px) {
+  .page {
+    padding: var(--space-md);
+  }
+}
+
 .page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--space-lg);
   gap: var(--space-md);
+  flex-wrap: wrap;
 }
 
 .page-title {
