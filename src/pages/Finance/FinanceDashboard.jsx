@@ -98,7 +98,7 @@ export default function FinanceDashboard() {
                   <tr
                     key={invoice.id}
                     className={styles.tableRow}
-                    onClick={() => navigate(`/finance/invoices/${invoice.id}`)}
+                    onClick={() => navigate(`/app/finance/invoices/${invoice.id}`)}
                   >
                     <td>{invoice.number}</td>
                     <td className={styles.muted}>{invoice.clients?.name ?? '—'}</td>

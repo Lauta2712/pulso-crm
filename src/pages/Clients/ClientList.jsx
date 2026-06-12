@@ -79,7 +79,7 @@ export default function ClientList() {
                   <tr
                     key={client.id}
                     className={styles.row}
-                    onClick={() => navigate(`/clients/${client.id}`)}
+                    onClick={() => navigate(`/app/clients/${client.id}`)}
                   >
                     <td className={styles.clientName}>{client.name}</td>
                     <td className={styles.muted}>{client.company || '—'}</td>

@@ -74,7 +74,7 @@ export default function ProjectList() {
             <div
               key={project.id}
               className={['card', styles.projectCard].join(' ')}
-              onClick={() => navigate(`/projects/${project.id}`)}
+              onClick={() => navigate(`/app/projects/${project.id}`)}
               style={{ cursor: 'pointer' }}
             >
               <div className={styles.projectHeader}>

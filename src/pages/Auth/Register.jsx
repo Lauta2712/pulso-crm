@@ -15,7 +15,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-  if (session) return <Navigate to="/" replace />
+  if (session) return <Navigate to="/app" replace />
 
   const handleSubmit = async (e) => {
     e.preventDefault()

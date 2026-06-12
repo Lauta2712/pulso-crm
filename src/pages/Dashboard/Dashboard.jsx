@@ -113,7 +113,7 @@ export default function Dashboard() {
           ) : (
             <div className={styles.list}>
               {activeProjects.map((project) => (
-                <Link key={project.id} to={`/projects/${project.id}`} className={styles.listItem}>
+                <Link key={project.id} to={`/app/projects/${project.id}`} className={styles.listItem}>
                   <div>
                     <div className={styles.itemTitle}>{project.name}</div>
                     <div className={styles.itemMeta}>{project.clients?.name ?? 'Sin cliente'}</div>

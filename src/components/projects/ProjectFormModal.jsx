@@ -61,7 +61,7 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
       addToast('Proyecto creado correctamente')
       onClose()
       if (onCreated) onCreated(project)
-      else navigate(`/projects/${project.id}`)
+      else navigate(`/app/projects/${project.id}`)
     } catch {
       addToast('No se pudo crear el proyecto', 'error')
     }

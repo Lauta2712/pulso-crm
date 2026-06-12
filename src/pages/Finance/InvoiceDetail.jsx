@@ -39,7 +39,7 @@ export default function InvoiceDetail() {
 
   return (
     <div className="page">
-      <Link to="/finance" className={styles.backLink}>
+      <Link to="/app/finance" className={styles.backLink}>
         ← Volver a finanzas
       </Link>
 

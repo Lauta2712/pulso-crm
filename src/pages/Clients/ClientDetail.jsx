@@ -56,7 +56,7 @@ export default function ClientDetail() {
 
   return (
     <div className="page">
-      <Link to="/clients" className={styles.backLink}>
+      <Link to="/app/clients" className={styles.backLink}>
         ← Volver a clientes
       </Link>
 
@@ -96,7 +96,7 @@ export default function ClientDetail() {
             {client.projects?.length ? (
               <div className={styles.projectList}>
                 {client.projects.map((project) => (
-                  <Link key={project.id} to={`/projects/${project.id}`} className={styles.projectRow}>
+                  <Link key={project.id} to={`/app/projects/${project.id}`} className={styles.projectRow}>
                     <div>
                       <div className={styles.contactName}>{project.name}</div>
                       <div className={styles.contactMeta}>

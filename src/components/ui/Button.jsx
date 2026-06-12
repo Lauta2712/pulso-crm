@@ -7,7 +7,7 @@ export default function Button({
   className = '',
   ...props
 }) {
-  const classes = [styles.btn, styles[variant], size === 'sm' ? styles.sm : '', className]
+  const classes = [styles.btn, styles[variant], size ? styles[size] : '', className]
     .filter(Boolean)
     .join(' ')
 

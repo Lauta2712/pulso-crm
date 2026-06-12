@@ -3,14 +3,14 @@ import { useUIStore } from '../../store/useUIStore'
 import styles from './Sidebar.module.css'
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Dashboard', icon: '⌂', end: true },
-  { to: '/clients', label: 'Clientes', icon: '◆' },
-  { to: '/projects', label: 'Proyectos', icon: '▣' },
-  { to: '/board', label: 'Board', icon: '☰' },
-  { to: '/finance', label: 'Finanzas', icon: '$' },
-  { to: '/accounts', label: 'Cuentas', icon: '🔑' },
-  { to: '/docs', label: 'Docs', icon: '📄' },
-  { to: '/settings', label: 'Configuración', icon: '⚙' },
+  { to: '/app', label: 'Dashboard', icon: '⌂', end: true },
+  { to: '/app/clients', label: 'Clientes', icon: '◆' },
+  { to: '/app/projects', label: 'Proyectos', icon: '▣' },
+  { to: '/app/board', label: 'Board', icon: '☰' },
+  { to: '/app/finance', label: 'Finanzas', icon: '$' },
+  { to: '/app/accounts', label: 'Cuentas', icon: '🔑' },
+  { to: '/app/docs', label: 'Docs', icon: '📄' },
+  { to: '/app/settings', label: 'Configuración', icon: '⚙' },
 ]
 
 export default function Sidebar() {

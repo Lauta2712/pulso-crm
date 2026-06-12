@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './store/useAuthStore'
 import AppLayout from './components/layout/AppLayout'
 import Toast from './components/ui/Toast'
+import Landing from './pages/Landing/Landing'
 import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import Dashboard from './pages/Dashboard/Dashboard'
@@ -36,26 +37,28 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
+          path="/app"
           element={
             <PrivateRoute>
               <AppLayout />
             </PrivateRoute>
           }
         >
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/clients" element={<ClientList />} />
-          <Route path="/clients/:id" element={<ClientDetail />} />
-          <Route path="/projects" element={<ProjectList />} />
-          <Route path="/projects/:id" element={<ProjectDetail />} />
-          <Route path="/board" element={<KanbanBoard />} />
-          <Route path="/finance" element={<FinanceDashboard />} />
-          <Route path="/finance/invoices/:id" element={<InvoiceDetail />} />
-          <Route path="/accounts" element={<AccountList />} />
-          <Route path="/docs" element={<DocList />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route index element={<Dashboard />} />
+          <Route path="clients" element={<ClientList />} />
+          <Route path="clients/:id" element={<ClientDetail />} />
+          <Route path="projects" element={<ProjectList />} />
+          <Route path="projects/:id" element={<ProjectDetail />} />
+          <Route path="board" element={<KanbanBoard />} />
+          <Route path="finance" element={<FinanceDashboard />} />
+          <Route path="finance/invoices/:id" element={<InvoiceDetail />} />
+          <Route path="accounts" element={<AccountList />} />
+          <Route path="docs" element={<DocList />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

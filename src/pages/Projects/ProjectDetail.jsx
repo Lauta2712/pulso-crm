@@ -53,7 +53,7 @@ export default function ProjectDetail() {
 
   return (
     <div className="page">
-      <Link to="/projects" className={styles.backLink}>
+      <Link to="/app/projects" className={styles.backLink}>
         ← Volver a proyectos
       </Link>
 
@@ -61,7 +61,7 @@ export default function ProjectDetail() {
         <div>
           <h1 className="page-title">{project.name}</h1>
           {project.clients && (
-            <Link to={`/clients/${project.clients.id}`} className={styles.projectClient}>
+            <Link to={`/app/clients/${project.clients.id}`} className={styles.projectClient}>
               {project.clients.name}
             </Link>
           )}
