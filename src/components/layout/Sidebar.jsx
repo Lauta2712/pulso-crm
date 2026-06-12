@@ -3,14 +3,14 @@ import { useUIStore } from '../../store/useUIStore'
 import styles from './Sidebar.module.css'
 
 const NAV_ITEMS = [
-  { to: '/app', label: 'Dashboard', icon: '⌂', end: true },
-  { to: '/app/clients', label: 'Clientes', icon: '◆' },
-  { to: '/app/projects', label: 'Proyectos', icon: '▣' },
-  { to: '/app/board', label: 'Board', icon: '☰' },
-  { to: '/app/finance', label: 'Finanzas', icon: '$' },
-  { to: '/app/accounts', label: 'Cuentas', icon: '🔑' },
-  { to: '/app/docs', label: 'Docs', icon: '📄' },
-  { to: '/app/settings', label: 'Configuración', icon: '⚙' },
+  { to: '/app', label: 'Dashboard', end: true },
+  { to: '/app/clients', label: 'Clientes' },
+  { to: '/app/projects', label: 'Proyectos' },
+  { to: '/app/board', label: 'Board' },
+  { to: '/app/finance', label: 'Finanzas' },
+  { to: '/app/accounts', label: 'Cuentas' },
+  { to: '/app/docs', label: 'Docs' },
+  { to: '/app/settings', label: 'Configuración' },
 ]
 
 export default function Sidebar() {
@@ -33,7 +33,6 @@ export default function Sidebar() {
                 [styles.link, isActive ? styles.linkActive : ''].join(' ')
               }
             >
-              <span className={styles.icon}>{item.icon}</span>
               {item.label}
             </NavLink>
           ))}

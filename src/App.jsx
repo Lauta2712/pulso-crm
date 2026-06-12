@@ -5,7 +5,6 @@ import AppLayout from './components/layout/AppLayout'
 import Toast from './components/ui/Toast'
 import Landing from './pages/Landing/Landing'
 import Login from './pages/Auth/Login'
-import Register from './pages/Auth/Register'
 import Dashboard from './pages/Dashboard/Dashboard'
 import ClientList from './pages/Clients/ClientList'
 import ClientDetail from './pages/Clients/ClientDetail'
@@ -39,7 +38,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route
           path="/app"
           element={

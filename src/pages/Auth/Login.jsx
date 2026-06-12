@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useAuthStore } from '../../store/useAuthStore'
 import Button from '../../components/ui/Button'
@@ -82,10 +82,6 @@ export default function Login() {
           <Button type="submit" className={styles.submit} disabled={loading}>
             {loading ? 'Ingresando...' : 'Ingresar'}
           </Button>
-
-          <p className={styles.subtitle} style={{ margin: 0, textAlign: 'center' }}>
-            ¿No tenés cuenta? <Link to="/register">Creá una</Link>
-          </p>
         </form>
       </div>
     </div>
