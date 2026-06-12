@@ -17,13 +17,9 @@
 }
 
 .logo {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.logo span {
-  color: var(--accent);
+  height: 36px;
+  width: auto;
+  margin-bottom: var(--space-sm);
 }
 
 .subtitle {
@@ -61,4 +57,33 @@
 .submit {
   margin-top: var(--space-sm);
   width: 100%;
+}
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+}
+
+.passwordWrapper input {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.togglePassword {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.togglePassword:hover {
+  color: var(--text-primary);
 }

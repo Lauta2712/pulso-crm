@@ -6,9 +6,13 @@
   --bg-hover: #2a2a33;
 
   /* Accent */
-  --accent: #7c6af7;
-  --accent-hover: #9585f9;
-  --accent-subtle: #7c6af71a;
+  --accent: #2f6fed;
+  --accent-hover: #5b8ff7;
+  --accent-subtle: #2f6fed1a;
+
+  /* Secondary accent (brand orange) */
+  --accent-orange: #ff6100;
+  --accent-orange-subtle: #ff610026;
 
   /* Text */
   --text-primary: #f0eff5;

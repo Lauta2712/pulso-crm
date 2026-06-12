@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import styles from './Modal.module.css'
 
-export default function Modal({ title, onClose, children }) {
+export default function Modal({ title, onClose, children, size }) {
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === 'Escape') onClose()
@@ -10,9 +10,11 @@ export default function Modal({ title, onClose, children }) {
     return () => window.removeEventListener('keydown', handleKey)
   }, [onClose])
 
+  const modalClass = [styles.modal, size === 'lg' ? styles.lg : ''].filter(Boolean).join(' ')
+
   return (
     <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={modalClass} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
           <button className={styles.closeBtn} onClick={onClose} aria-label="Cerrar">

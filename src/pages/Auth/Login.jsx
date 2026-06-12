@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useAuthStore } from '../../store/useAuthStore'
 import Button from '../../components/ui/Button'
+import { EyeIcon, EyeOffIcon } from '../../components/ui/PasswordIcons'
 import styles from './Login.module.css'
 
 export default function Login() {
@@ -11,6 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   if (session) return <Navigate to="/" replace />
 
@@ -30,9 +32,7 @@ export default function Login() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
-        <div className={styles.logo}>
-          Pulso<span>.</span>
-        </div>
+        <img className={styles.logo} src="/img/logo_pulso_transparent.png" alt="Pulso Studio" />
         <p className={styles.subtitle}>Iniciá sesión para entrar al panel de Pulso Studio</p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -57,20 +57,35 @@ export default function Login() {
             <label className={styles.label} htmlFor="password">
               Contraseña
             </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              autoComplete="current-password"
-            />
+            <div className={styles.passwordWrapper}>
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                className={styles.togglePassword}
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+              </button>
+            </div>
           </div>
 
           <Button type="submit" className={styles.submit} disabled={loading}>
             {loading ? 'Ingresando...' : 'Ingresar'}
           </Button>
+
+          <p className={styles.subtitle} style={{ margin: 0, textAlign: 'center' }}>
+            ¿No tenés cuenta? <Link to="/register">Creá una</Link>
+          </p>
         </form>
       </div>
     </div>

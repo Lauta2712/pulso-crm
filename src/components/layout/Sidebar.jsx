@@ -8,6 +8,8 @@ const NAV_ITEMS = [
   { to: '/projects', label: 'Proyectos', icon: '▣' },
   { to: '/board', label: 'Board', icon: '☰' },
   { to: '/finance', label: 'Finanzas', icon: '$' },
+  { to: '/accounts', label: 'Cuentas', icon: '🔑' },
+  { to: '/docs', label: 'Docs', icon: '📄' },
   { to: '/settings', label: 'Configuración', icon: '⚙' },
 ]
 
@@ -19,9 +21,7 @@ export default function Sidebar() {
     <>
       {sidebarOpen && <div className={styles.overlay} onClick={closeSidebar} />}
       <aside className={[styles.sidebar, sidebarOpen ? styles.open : ''].join(' ')}>
-        <div className={styles.logo}>
-          Pulso<span>.</span>
-        </div>
+        <img className={styles.logo} src="/img/logo_pulso_transparent.png" alt="Pulso Studio" />
         <nav className={styles.nav}>
           {NAV_ITEMS.map((item) => (
             <NavLink

@@ -4,6 +4,7 @@ import { useAuthStore } from './store/useAuthStore'
 import AppLayout from './components/layout/AppLayout'
 import Toast from './components/ui/Toast'
 import Login from './pages/Auth/Login'
+import Register from './pages/Auth/Register'
 import Dashboard from './pages/Dashboard/Dashboard'
 import ClientList from './pages/Clients/ClientList'
 import ClientDetail from './pages/Clients/ClientDetail'
@@ -12,6 +13,8 @@ import ProjectDetail from './pages/Projects/ProjectDetail'
 import KanbanBoard from './pages/Board/KanbanBoard'
 import FinanceDashboard from './pages/Finance/FinanceDashboard'
 import InvoiceDetail from './pages/Finance/InvoiceDetail'
+import AccountList from './pages/Accounts/AccountList'
+import DocList from './pages/Docs/DocList'
 import Settings from './pages/Settings/Settings'
 
 function PrivateRoute({ children }) {
@@ -34,6 +37,7 @@ function App() {
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           element={
             <PrivateRoute>
@@ -49,6 +53,8 @@ function App() {
           <Route path="/board" element={<KanbanBoard />} />
           <Route path="/finance" element={<FinanceDashboard />} />
           <Route path="/finance/invoices/:id" element={<InvoiceDetail />} />
+          <Route path="/accounts" element={<AccountList />} />
+          <Route path="/docs" element={<DocList />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

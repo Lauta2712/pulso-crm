@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Modal from '../ui/Modal'
 import Button from '../ui/Button'
+import TaskChecklist from './TaskChecklist'
 import { useCreateTask, useUpdateTask, useDeleteTask, useSetTaskTags } from '../../hooks/useTasks'
 import { useUsers } from '../../hooks/useUsers'
 import { useTags } from '../../hooks/useTags'
@@ -105,7 +106,7 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
   const isPending = createTask.isPending || updateTask.isPending || setTaskTags.isPending
 
   return (
-    <Modal title={isEditing ? 'Editar tarea' : 'Nueva tarea'} onClose={onClose}>
+    <Modal title={isEditing ? 'Editar tarea' : 'Nueva tarea'} onClose={onClose} size="lg">
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.field}>
           <label className={styles.label}>Título</label>
@@ -210,6 +211,8 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
             </div>
           </div>
         )}
+
+        {isEditing && <TaskChecklist taskId={task.id} />}
 
         <div className={styles.actions}>
           <div>

@@ -33,35 +33,38 @@
   min-height: 80px;
 }
 
-.tagList {
+.passwordWrapper {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
 }
 
-.tagOption {
-  font-size: 12px;
-  font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg-elevated);
+.passwordWrapper input {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.togglePassword {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
   color: var(--text-secondary);
+  cursor: pointer;
 }
 
-.tagOptionActive {
-  border-color: transparent;
+.togglePassword:hover {
+  color: var(--text-primary);
 }
 
 .actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
   gap: var(--space-sm);
   margin-top: var(--space-sm);
-}
-
-.actionsRight {
-  display: flex;
-  gap: var(--space-sm);
 }

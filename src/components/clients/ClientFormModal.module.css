@@ -10,6 +10,12 @@
   gap: var(--space-md);
 }
 
+@media (max-width: 480px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .field {
   display: flex;
   flex-direction: column;

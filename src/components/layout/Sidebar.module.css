@@ -14,14 +14,10 @@
 }
 
 .logo {
-  font-size: 20px;
-  font-weight: 600;
+  height: 28px;
+  width: auto;
   padding: 0 var(--space-sm);
   margin-bottom: var(--space-xl);
-}
-
-.logo span {
-  color: var(--accent);
 }
 
 .nav {

@@ -21,6 +21,10 @@
   flex-direction: column;
 }
 
+.modal.lg {
+  max-width: 760px;
+}
+
 .header {
   display: flex;
   align-items: center;
