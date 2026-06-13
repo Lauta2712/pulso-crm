@@ -67,6 +67,40 @@ textarea::placeholder {
   color: var(--text-muted);
 }
 
+/* Custom dropdown arrow (native arrow looks unstyled on dark backgrounds) */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%239896a4' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+}
+
+/* Option list styling (Chromium/Firefox pick up these on the popup) */
+select option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* Recolor the native date/time picker icon to match the dark theme */
+input[type='date']::-webkit-calendar-picker-indicator,
+input[type='time']::-webkit-calendar-picker-indicator,
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(0.8);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+input[type='date']:hover::-webkit-calendar-picker-indicator,
+input[type='time']:hover::-webkit-calendar-picker-indicator,
+input[type='datetime-local']:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
 /* iOS Safari zooms the page when focusing inputs with font-size < 16px,
    and that zoom persists across SPA navigation */
 @media (max-width: 768px) {
