@@ -2,8 +2,11 @@ import { useState } from 'react'
 import { useOrg, useUpdateOrg } from '../../hooks/useOrg'
 import { useUsers, useUpdateUserRole } from '../../hooks/useUsers'
 import { useCreateTag, useDeleteTag, useTags } from '../../hooks/useTags'
+import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
+import Select from '../../components/ui/Select'
+import { useAuthStore } from '../../store/useAuthStore'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Settings.module.css'
 
@@ -15,14 +18,33 @@ const ROLE_OPTIONS = [
   { value: 'viewer', label: 'Viewer' },
 ]
 
+const ROLE_LABELS = {
+  owner: 'Owner',
+  developer: 'Developer',
+  designer: 'Designer',
+  pm: 'PM',
+  viewer: 'Viewer',
+}
+
+const ROLE_VARIANTS = {
+  owner: 'accent',
+  developer: 'info',
+  designer: 'warning',
+  pm: 'success',
+  viewer: 'muted',
+}
+
 export default function Settings() {
   const addToast = useUIStore((state) => state.addToast)
+  const session = useAuthStore((state) => state.session)
 
   const { data: org, isLoading: loadingOrg } = useOrg()
   const updateOrg = useUpdateOrg()
 
   const { data: users, isLoading: loadingUsers } = useUsers()
   const updateUserRole = useUpdateUserRole()
+  const currentUser = users?.find((u) => u.id === session?.user?.id)
+  const isOwner = currentUser?.role === 'owner'
 
   const { data: tags, isLoading: loadingTags } = useTags()
   const createTag = useCreateTag()
@@ -133,13 +155,23 @@ export default function Settings() {
                     <div className={styles.userName}>{user.full_name}</div>
                   </div>
                 </div>
-                <select value={user.role} onChange={(e) => handleRoleChange(user.id, e.target.value)}>
-                  {ROLE_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                {isOwner ? (
+                  <Select
+                    value={user.role}
+                    onChange={(value) => handleRoleChange(user.id, value)}
+                    className={styles.roleSelect}
+                  >
+                    {ROLE_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </Select>
+                ) : (
+                  <Badge variant={ROLE_VARIANTS[user.role] ?? 'muted'}>
+                    {ROLE_LABELS[user.role] ?? user.role}
+                  </Badge>
+                )}
               </div>
             ))}
         </div>

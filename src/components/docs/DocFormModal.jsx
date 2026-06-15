@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Modal from '../ui/Modal'
 import Button from '../ui/Button'
+import Select from '../ui/Select'
 import { useCreateDocument, useUpdateDocument } from '../../hooks/useDocuments'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './DocFormModal.module.css'
@@ -21,6 +22,7 @@ export default function DocFormModal({ document, onClose }) {
   })
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
+  const handleSelectChange = (field) => (value) => setForm((f) => ({ ...f, [field]: value }))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -50,13 +52,13 @@ export default function DocFormModal({ document, onClose }) {
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Categoría</label>
-            <select value={form.category} onChange={handleChange('category')}>
+            <Select value={form.category} onChange={handleSelectChange('category')}>
               {DOC_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
 

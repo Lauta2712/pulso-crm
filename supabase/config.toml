@@ -1,0 +1,2 @@
+[functions.create-team-member]
+verify_jwt = false

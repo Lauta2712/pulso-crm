@@ -6,10 +6,11 @@ const NAV_ITEMS = [
   { to: '/app', label: 'Dashboard', end: true },
   { to: '/app/clients', label: 'Clientes' },
   { to: '/app/projects', label: 'Proyectos' },
-  { to: '/app/board', label: 'Board' },
-  { to: '/app/finance', label: 'Finanzas' },
+  { to: '/app/board', label: 'Board', badge: 'BETA' },
+  { to: '/app/finance', label: 'Finanzas', badge: 'BETA' },
   { to: '/app/accounts', label: 'Cuentas' },
   { to: '/app/docs', label: 'Docs' },
+  { to: '/app/team', label: 'Equipo', badge: 'NEW' },
   { to: '/app/settings', label: 'Configuración' },
 ]
 
@@ -33,7 +34,12 @@ export default function Sidebar() {
                 [styles.link, isActive ? styles.linkActive : ''].join(' ')
               }
             >
-              {item.label}
+              <span>{item.label}</span>
+              {item.badge && (
+                <span className={[styles.badge, styles[item.badge.toLowerCase()]].join(' ')}>
+                  {item.badge}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>

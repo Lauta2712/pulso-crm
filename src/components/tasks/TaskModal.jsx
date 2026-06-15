@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import Modal from '../ui/Modal'
 import Button from '../ui/Button'
+import Select from '../ui/Select'
 import TaskChecklist from './TaskChecklist'
 import { useCreateTask, useUpdateTask, useDeleteTask, useSetTaskTags } from '../../hooks/useTasks'
 import { useUsers } from '../../hooks/useUsers'
 import { useTags } from '../../hooks/useTags'
+import { useProjects } from '../../hooks/useProjects'
 import { useSprints } from '../../hooks/useSprints'
 import { useUIStore } from '../../store/useUIStore'
 import { COLUMNS } from './columns'
@@ -28,7 +30,7 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
 
   const { data: users } = useUsers()
   const { data: tags } = useTags()
-  const { data: sprints } = useSprints(projectId)
+  const { data: projects } = useProjects()
 
   const [form, setForm] = useState({
     title: task?.title ?? '',
@@ -39,13 +41,18 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
     due_date: task?.due_date ?? '',
     story_points: task?.story_points ?? '',
     sprint_id: task?.sprint_id ?? '',
+    project_id: projectId ?? '',
   })
+
+  const effectiveProjectId = form.project_id || projectId
+  const { data: sprints } = useSprints(effectiveProjectId)
 
   const [selectedTags, setSelectedTags] = useState(
     new Set(task?.task_tags?.map(({ tags: t }) => t?.id).filter(Boolean) ?? [])
   )
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
+  const handleSelectChange = (field) => (value) => setForm((f) => ({ ...f, [field]: value }))
 
   const toggleTag = (tagId) => {
     setSelectedTags((prev) => {
@@ -69,6 +76,10 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!isEditing && !effectiveProjectId) {
+      addToast('Seleccioná un proyecto', 'error')
+      return
+    }
     try {
       let taskId = task?.id
 
@@ -77,7 +88,7 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
       } else {
         const created = await createTask.mutateAsync({
           ...buildPayload(),
-          project_id: projectId,
+          project_id: effectiveProjectId,
           position: 0,
         })
         taskId = created.id
@@ -108,6 +119,23 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
   return (
     <Modal title={isEditing ? 'Editar tarea' : 'Nueva tarea'} onClose={onClose} size="lg">
       <form className={styles.form} onSubmit={handleSubmit}>
+        {!isEditing && !projectId && (
+          <div className={styles.field}>
+            <label className={styles.label}>Proyecto</label>
+            <Select
+              value={form.project_id}
+              onChange={handleSelectChange('project_id')}
+              placeholder="Seleccionar proyecto"
+            >
+              {projects?.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
+
         <div className={styles.field}>
           <label className={styles.label}>Título</label>
           <input value={form.title} onChange={handleChange('title')} required autoFocus />
@@ -125,37 +153,37 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
         <div className={styles.row}>
           <div className={styles.field}>
             <label className={styles.label}>Estado</label>
-            <select value={form.status} onChange={handleChange('status')}>
+            <Select value={form.status} onChange={handleSelectChange('status')}>
               {COLUMNS.map((col) => (
                 <option key={col.id} value={col.id}>
                   {col.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Prioridad</label>
-            <select value={form.priority} onChange={handleChange('priority')}>
+            <Select value={form.priority} onChange={handleSelectChange('priority')}>
               {PRIORITY_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.field}>
             <label className={styles.label}>Asignado a</label>
-            <select value={form.assigned_to} onChange={handleChange('assigned_to')}>
+            <Select value={form.assigned_to} onChange={handleSelectChange('assigned_to')} placeholder="Sin asignar">
               <option value="">Sin asignar</option>
               {users?.map((user) => (
                 <option key={user.id} value={user.id}>
                   {user.full_name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Fecha límite</label>
@@ -176,14 +204,14 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
           {sprints?.length > 0 && (
             <div className={styles.field}>
               <label className={styles.label}>Sprint</label>
-              <select value={form.sprint_id} onChange={handleChange('sprint_id')}>
+              <Select value={form.sprint_id} onChange={handleSelectChange('sprint_id')} placeholder="Sin sprint">
                 <option value="">Sin sprint</option>
                 {sprints.map((sprint) => (
                   <option key={sprint.id} value={sprint.id}>
                     {sprint.name}
                   </option>
                 ))}
-              </select>
+              </Select>
             </div>
           )}
         </div>

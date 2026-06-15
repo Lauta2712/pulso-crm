@@ -29,6 +29,7 @@
 .link {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-sm);
   padding: 10px var(--space-sm);
   border-radius: var(--radius-sm);
@@ -36,6 +37,25 @@
   font-size: 14px;
   font-weight: 500;
   transition: background 0.15s ease, color 0.15s ease;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 999px;
+  line-height: 1.4;
+}
+
+.beta {
+  background: var(--warning-subtle);
+  color: var(--warning);
+}
+
+.new {
+  background: var(--success-subtle);
+  color: var(--success);
 }
 
 .link:hover {

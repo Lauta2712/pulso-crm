@@ -5,6 +5,8 @@ import { useUsers } from '../../hooks/useUsers'
 import { useSprints } from '../../hooks/useSprints'
 import TaskBoard from '../../components/tasks/TaskBoard'
 import TaskModal from '../../components/tasks/TaskModal'
+import Select from '../../components/ui/Select'
+import SprintBar from '../../components/sprints/SprintBar'
 import styles from './Board.module.css'
 
 export default function KanbanBoard() {
@@ -12,6 +14,7 @@ export default function KanbanBoard() {
   const [assignedTo, setAssignedTo] = useState('')
   const [sprintId, setSprintId] = useState('')
   const [activeTask, setActiveTask] = useState(null)
+  const [creatingStatus, setCreatingStatus] = useState(null)
 
   const { data: projects } = useProjects()
   const { data: users } = useUsers()
@@ -35,12 +38,13 @@ export default function KanbanBoard() {
       </div>
 
       <div className={styles.filters}>
-        <select
+        <Select
           value={projectId}
-          onChange={(e) => {
-            setProjectId(e.target.value)
+          onChange={(value) => {
+            setProjectId(value)
             setSprintId('')
           }}
+          className={styles.filterSelect}
         >
           <option value="">Todos los proyectos</option>
           {projects?.map((p) => (
@@ -48,34 +52,41 @@ export default function KanbanBoard() {
               {p.name}
             </option>
           ))}
-        </select>
+        </Select>
 
-        <select value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)}>
+        <Select value={assignedTo} onChange={setAssignedTo} className={styles.filterSelect}>
           <option value="">Todos los asignados</option>
           {users?.map((u) => (
             <option key={u.id} value={u.id}>
               {u.full_name}
             </option>
           ))}
-        </select>
+        </Select>
 
         {projectId && sprints?.length > 0 && (
-          <select value={sprintId} onChange={(e) => setSprintId(e.target.value)}>
+          <Select value={sprintId} onChange={setSprintId} className={styles.filterSelect}>
             <option value="">Todos los sprints</option>
             {sprints.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
               </option>
             ))}
-          </select>
+          </Select>
         )}
       </div>
+
+      {projectId && <SprintBar projectId={projectId} />}
 
       {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
       {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar las tareas.</p>}
 
       {!isLoading && !isError && (
-        <TaskBoard tasks={tasks ?? []} queryKey={queryKey} onTaskClick={setActiveTask} />
+        <TaskBoard
+          tasks={tasks ?? []}
+          queryKey={queryKey}
+          onTaskClick={setActiveTask}
+          onAddTask={setCreatingStatus}
+        />
       )}
 
       {activeTask && (
@@ -83,6 +94,14 @@ export default function KanbanBoard() {
           task={activeTask}
           projectId={activeTask.project_id}
           onClose={() => setActiveTask(null)}
+        />
+      )}
+
+      {creatingStatus && (
+        <TaskModal
+          defaultStatus={creatingStatus}
+          projectId={projectId || undefined}
+          onClose={() => setCreatingStatus(null)}
         />
       )}
     </div>

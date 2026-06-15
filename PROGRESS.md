@@ -20,6 +20,33 @@ verde:
 UI components (Button, Modal, Badge, EmptyState, Toast) y componentes de dominio (ClientCard,
 ProjectFormModal, TaskBoard/TaskCard/TaskModal, InvoiceCard, TransactionRow) implementados.
 
+## Mejoras recientes (completo)
+
+- [x] **Select propio** (`src/components/ui/Select.jsx`): dropdown con menú flotante vía portal,
+      reemplaza los `<select>` nativos en Board, TaskModal, Finanzas, Proyectos, Clientes,
+      Cuentas, Docs y Configuración para un look consistente con el resto del sistema.
+- [x] **Board ágil**: crear tareas desde el "+" de cada columna (con selector de proyecto si no
+      hay uno filtrado), marcar tareas como finalizadas con un botón check rápido, y barra de
+      sprint activo (`SprintBar`) con progreso y alta de nuevo sprint (`SprintFormModal`).
+- [x] **Finanzas**: limpieza de CSS (`Finance.module.css`) — secciones con wrap, dropdowns
+      consistentes, contenedor para el estado vacío de facturas.
+- [x] **Página "Equipo"** (`src/pages/Team/Team.jsx`): overview de integrantes, rol, tareas
+      activas y proyectos asignados (con cliente).
+- [x] **Sidebar**: etiquetas "BETA" (Board, Finanzas) y "NEW" (Equipo) para señalar estado de cada
+      pantalla.
+- [x] **Alta de integrantes desde "Equipo"** (solo owner):
+      - `supabase/functions/create-team-member/index.ts` — Edge Function que invita por email
+        (`auth.admin.inviteUserByEmail`) y asigna rol, validando que quien llama sea `owner`.
+      - `supabase/migrations/0005_role_update_restriction.sql` — trigger que bloquea cambios de
+        `role` en `users` si quien actualiza no es `owner`.
+      - `src/components/team/InviteMemberModal.jsx` + `useCreateTeamMember` (`useTeam.js`).
+      - Configuración → Usuarios: el selector de rol ahora es solo para `owner`s (el resto ve un
+        badge de solo lectura).
+- [ ] **Pendiente**: deployar la edge function (`supabase functions deploy create-team-member`),
+      correr `0005_role_update_restriction.sql`, asegurarse de que tu usuario tenga `role = owner`
+      **antes** de correr 0005, y revisar Site URL / Redirect URLs en Auth para el email de
+      invitación.
+
 ## Backend / Infraestructura (en curso)
 
 - [x] Decisión de hosting: nueva organización de Supabase ("Pulso Studio Org") creada para tener

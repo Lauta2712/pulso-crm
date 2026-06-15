@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Modal from '../ui/Modal'
 import Button from '../ui/Button'
+import Select from '../ui/Select'
 import { useCreateClient } from '../../hooks/useClients'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './ClientFormModal.module.css'
@@ -28,6 +29,7 @@ export default function ClientFormModal({ onClose }) {
   })
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
+  const handleSelectChange = (field) => (value) => setForm((f) => ({ ...f, [field]: value }))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -55,13 +57,13 @@ export default function ClientFormModal({ onClose }) {
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Estado</label>
-            <select value={form.status} onChange={handleChange('status')}>
+            <Select value={form.status} onChange={handleSelectChange('status')}>
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
 

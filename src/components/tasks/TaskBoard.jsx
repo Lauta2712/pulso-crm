@@ -13,7 +13,7 @@ import { COLUMNS } from './columns'
 import { useMoveTask } from '../../hooks/useTasks'
 import styles from './TaskBoard.module.css'
 
-export default function TaskBoard({ tasks, queryKey, onTaskClick }) {
+export default function TaskBoard({ tasks, queryKey, onTaskClick, onAddTask }) {
   const moveTask = useMoveTask()
   const [activeTask, setActiveTask] = useState(null)
   const sensors = useSensors(
@@ -60,6 +60,12 @@ export default function TaskBoard({ tasks, queryKey, onTaskClick }) {
     moveTask.mutate({ id: draggedTask.id, status: targetStatus, position: newPosition, queryKey })
   }
 
+  const handleComplete = (task) => {
+    if (task.status === 'done') return
+    const position = tasks.filter((t) => t.status === 'done').length
+    moveTask.mutate({ id: task.id, status: 'done', position, queryKey })
+  }
+
   return (
     <DndContext
       sensors={sensors}
@@ -69,7 +75,13 @@ export default function TaskBoard({ tasks, queryKey, onTaskClick }) {
     >
       <div className={styles.board}>
         {columns.map((col) => (
-          <KanbanColumn key={col.id} column={col} onTaskClick={onTaskClick} />
+          <KanbanColumn
+            key={col.id}
+            column={col}
+            onTaskClick={onTaskClick}
+            onAddTask={onAddTask}
+            onComplete={handleComplete}
+          />
         ))}
       </div>
       <DragOverlay>{activeTask && <TaskCard task={activeTask} overlay />}</DragOverlay>

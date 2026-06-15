@@ -47,3 +47,37 @@ export function useCreateSprint() {
     },
   })
 }
+
+export function useUpdateSprint() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, ...updates }) => {
+      const { data, error } = await supabase
+        .from('sprints')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single()
+      if (error) throw error
+      return data
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['sprints', data.project_id] })
+    },
+  })
+}
+
+export function useSprintTasks(sprintId) {
+  return useQuery({
+    queryKey: ['sprints', sprintId, 'tasks'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('id, status, story_points')
+        .eq('sprint_id', sprintId)
+      if (error) throw error
+      return data
+    },
+    enabled: !!sprintId,
+  })
+}

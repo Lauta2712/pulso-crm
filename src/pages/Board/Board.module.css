@@ -5,6 +5,7 @@
   margin-bottom: var(--space-lg);
 }
 
-.filters select {
+.filterSelect {
   min-width: 160px;
+  width: auto;
 }

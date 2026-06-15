@@ -11,7 +11,7 @@ const PRIORITY_VARIANT = {
   urgent: 'danger',
 }
 
-export default function TaskCard({ task, onClick, overlay = false }) {
+export default function TaskCard({ task, onClick, onComplete, overlay = false }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: task.id,
     disabled: overlay,
@@ -34,7 +34,24 @@ export default function TaskCard({ task, onClick, overlay = false }) {
       className={[styles.card, overlay ? styles.overlay : ''].join(' ')}
       onClick={onClick}
     >
-      <div className={styles.title}>{task.title}</div>
+      <div className={styles.titleRow}>
+        <div className={styles.title}>{task.title}</div>
+        {!overlay && task.status !== 'done' && (
+          <button
+            type="button"
+            className={styles.completeBtn}
+            title="Marcar como finalizada"
+            aria-label="Marcar como finalizada"
+            onClick={(e) => {
+              e.stopPropagation()
+              onComplete?.()
+            }}
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            ✓
+          </button>
+        )}
+      </div>
 
       {task.task_tags?.length > 0 && (
         <div className={styles.tags}>

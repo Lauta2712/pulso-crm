@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Modal from '../ui/Modal'
 import Button from '../ui/Button'
+import Select from '../ui/Select'
 import { useCreateProject } from '../../hooks/useProjects'
 import { useClients } from '../../hooks/useClients'
 import { useUIStore } from '../../store/useUIStore'
@@ -46,6 +47,7 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
   })
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
+  const handleSelectChange = (field) => (value) => setForm((f) => ({ ...f, [field]: value }))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -87,37 +89,37 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
         <div className={styles.row}>
           <div className={styles.field}>
             <label className={styles.label}>Cliente</label>
-            <select value={form.client_id} onChange={handleChange('client_id')}>
+            <Select value={form.client_id} onChange={handleSelectChange('client_id')}>
               <option value="">Sin cliente</option>
               {clients?.map((client) => (
                 <option key={client.id} value={client.id}>
                   {client.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Tipo</label>
-            <select value={form.type} onChange={handleChange('type')}>
+            <Select value={form.type} onChange={handleSelectChange('type')}>
               {TYPE_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.field}>
             <label className={styles.label}>Estado</label>
-            <select value={form.status} onChange={handleChange('status')}>
+            <Select value={form.status} onChange={handleSelectChange('status')}>
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className={styles.field}>
             <label className={styles.label}>Presupuesto (ARS)</label>

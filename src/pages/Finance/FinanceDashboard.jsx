@@ -13,6 +13,7 @@ import TransactionRow from '../../components/finance/TransactionRow'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
+import Select from '../../components/ui/Select'
 import { useUIStore } from '../../store/useUIStore'
 import { formatCurrency, formatDate } from '../../lib/format'
 import styles from './Finance.module.css'
@@ -77,7 +78,9 @@ export default function FinanceDashboard() {
         {loadingInvoices && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
 
         {!loadingInvoices && (!invoices || invoices.length === 0) && (
-          <EmptyState icon="$" title="No hay facturas cargadas" />
+          <div className={styles.cardSection}>
+            <EmptyState icon="$" title="No hay facturas cargadas" />
+          </div>
         )}
 
         {!loadingInvoices && invoices?.length > 0 && (
@@ -129,19 +132,19 @@ export default function FinanceDashboard() {
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Transacciones</h2>
             <div className={styles.filters}>
-              <select value={txProject} onChange={(e) => setTxProject(e.target.value)}>
+              <Select value={txProject} onChange={setTxProject} className={styles.filterSelect}>
                 <option value="">Todos los proyectos</option>
                 {projects?.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
                   </option>
                 ))}
-              </select>
-              <select value={txType} onChange={(e) => setTxType(e.target.value)}>
+              </Select>
+              <Select value={txType} onChange={setTxType} className={styles.filterSelect}>
                 <option value="">Todos</option>
                 <option value="income">Ingresos</option>
                 <option value="expense">Egresos</option>
-              </select>
+              </Select>
             </div>
           </div>
 
