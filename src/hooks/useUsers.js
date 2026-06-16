@@ -12,6 +12,26 @@ export function useUsers() {
   })
 }
 
+export function useUpdateUser() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, ...updates }) => {
+      const { data, error } = await supabase
+        .from('users')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single()
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      queryClient.invalidateQueries({ queryKey: ['team-overview'] })
+    },
+  })
+}
+
 export function useUpdateUserRole() {
   const queryClient = useQueryClient()
   return useMutation({

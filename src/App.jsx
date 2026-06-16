@@ -16,6 +16,7 @@ import InvoiceDetail from './pages/Finance/InvoiceDetail'
 import AccountList from './pages/Accounts/AccountList'
 import DocList from './pages/Docs/DocList'
 import Team from './pages/Team/Team'
+import Profile from './pages/Profile/Profile'
 import Settings from './pages/Settings/Settings'
 
 function PrivateRoute({ children }) {
@@ -58,6 +59,7 @@ function App() {
           <Route path="accounts" element={<AccountList />} />
           <Route path="docs" element={<DocList />} />
           <Route path="team" element={<Team />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: '/app/accounts', label: 'Cuentas' },
   { to: '/app/docs', label: 'Docs' },
   { to: '/app/team', label: 'Equipo', badge: 'NEW' },
+  { to: '/app/profile', label: 'Perfil' },
   { to: '/app/settings', label: 'Configuración' },
 ]
 

@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { useTeamOverview } from '../../hooks/useTeam'
+import { useTeamOverview, useDeleteTeamMember } from '../../hooks/useTeam'
 import { useAuthStore } from '../../store/useAuthStore'
+import { useUIStore } from '../../store/useUIStore'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
 import InviteMemberModal from '../../components/team/InviteMemberModal'
+import EditMemberModal from '../../components/team/EditMemberModal'
 import styles from './Team.module.css'
 
 const ROLE_LABELS = {
@@ -26,10 +28,23 @@ const ROLE_VARIANTS = {
 export default function Team() {
   const { data: team, isLoading, isError } = useTeamOverview()
   const session = useAuthStore((state) => state.session)
+  const addToast = useUIStore((state) => state.addToast)
+  const deleteTeamMember = useDeleteTeamMember()
   const [inviting, setInviting] = useState(false)
+  const [editingMember, setEditingMember] = useState(null)
 
   const currentMember = team?.find((member) => member.id === session?.user?.id)
   const isOwner = currentMember?.role === 'owner'
+
+  const handleDelete = async (member) => {
+    if (!window.confirm(`¿Eliminar a ${member.full_name} del equipo?`)) return
+    try {
+      await deleteTeamMember.mutateAsync(member.id)
+      addToast('Integrante eliminado')
+    } catch (err) {
+      addToast(err.message || 'No se pudo eliminar al integrante', 'error')
+    }
+  }
 
   return (
     <div className="page">
@@ -39,6 +54,9 @@ export default function Team() {
       </div>
 
       {inviting && <InviteMemberModal onClose={() => setInviting(false)} />}
+      {editingMember && (
+        <EditMemberModal member={editingMember} onClose={() => setEditingMember(null)} />
+      )}
 
       {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
       {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar el equipo.</p>}
@@ -60,6 +78,24 @@ export default function Team() {
                   </Badge>
                 </div>
               </div>
+
+              {isOwner && (
+                <div className={styles.actions}>
+                  <Button size="sm" variant="ghost" onClick={() => setEditingMember(member)}>
+                    Editar
+                  </Button>
+                  {member.id !== session?.user?.id && (
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      onClick={() => handleDelete(member)}
+                      disabled={deleteTeamMember.isPending}
+                    >
+                      Eliminar
+                    </Button>
+                  )}
+                </div>
+              )}
 
               <div className={styles.tasksCount}>
                 Tareas activas: <span className={styles.tasksValue}>{member.openTasks}</span>

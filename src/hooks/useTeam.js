@@ -47,3 +47,21 @@ export function useCreateTeamMember() {
     },
   })
 }
+
+export function useDeleteTeamMember() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (userId) => {
+      const { data, error } = await supabase.functions.invoke('delete-team-member', {
+        body: { user_id: userId },
+      })
+      if (error) throw error
+      if (data?.error) throw new Error(data.error)
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['team-overview'] })
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+    },
+  })
+}

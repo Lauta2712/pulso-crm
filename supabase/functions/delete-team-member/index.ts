@@ -1,20 +1,18 @@
-// Supabase Edge Function: create-team-member
+// Supabase Edge Function: delete-team-member
 //
-// Invita un nuevo integrante a la org de Pulso Studio. Solo puede ser llamada
-// por un usuario con rol 'owner' (verificado contra public.users con su propio
+// Elimina un integrante de la org de Pulso Studio. Solo puede ser llamada por
+// un usuario con rol 'owner' (verificado contra public.users con su propio
 // JWT). Usa la service role key (secret de la función, nunca expuesto al
-// frontend) para invitar al usuario vía Supabase Auth y asignarle el rol
-// elegido.
+// frontend) para borrar al usuario vía Supabase Auth; la fila en public.users
+// se elimina en cascada (on delete cascade).
 //
 // Deploy:
-//   supabase functions deploy create-team-member
+//   supabase functions deploy delete-team-member
 //
 // La función ya tiene acceso a SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY como
 // secrets automáticos del proyecto.
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
-
-const VALID_ROLES = ['owner', 'developer', 'designer', 'pm', 'viewer']
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -63,12 +61,12 @@ Deno.serve(async (req) => {
 
   const { data: callerProfile, error: profileError } = await callerClient
     .from('users')
-    .select('role')
+    .select('role, org_id')
     .eq('id', user.id)
     .single()
 
   if (profileError || callerProfile?.role !== 'owner') {
-    return jsonResponse({ error: 'Solo el owner puede crear integrantes' }, 403)
+    return jsonResponse({ error: 'Solo el owner puede eliminar integrantes' }, 403)
   }
 
   let body
@@ -78,38 +76,33 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: 'JSON inválido' }, 400)
   }
 
-  const { email, full_name, role } = body ?? {}
+  const { user_id } = body ?? {}
 
-  if (!email || !full_name || !role) {
-    return jsonResponse({ error: 'Faltan datos (email, nombre o rol)' }, 400)
+  if (!user_id) {
+    return jsonResponse({ error: 'Falta el id del integrante' }, 400)
   }
 
-  if (!VALID_ROLES.includes(role)) {
-    return jsonResponse({ error: 'Rol inválido' }, 400)
+  if (user_id === user.id) {
+    return jsonResponse({ error: 'No podés eliminarte a ti mismo' }, 400)
   }
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey)
 
-  const { data: invited, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(
-    email,
-    { data: { full_name } }
-  )
-
-  if (inviteError) {
-    return jsonResponse({ error: inviteError.message }, 400)
-  }
-
-  // El trigger on_auth_user_created ya insertó la fila en public.users con
-  // org_id y rol por defecto ('developer'). Acá la actualizamos con el
-  // nombre y el rol elegidos.
-  const { error: updateError } = await adminClient
+  const { data: targetProfile, error: targetError } = await adminClient
     .from('users')
-    .update({ full_name, role })
-    .eq('id', invited.user.id)
+    .select('org_id')
+    .eq('id', user_id)
+    .single()
 
-  if (updateError) {
-    return jsonResponse({ error: updateError.message }, 400)
+  if (targetError || !targetProfile || targetProfile.org_id !== callerProfile.org_id) {
+    return jsonResponse({ error: 'Integrante no encontrado' }, 404)
   }
 
-  return jsonResponse({ user: { id: invited.user.id, email, full_name, role } })
+  const { error: deleteError } = await adminClient.auth.admin.deleteUser(user_id)
+
+  if (deleteError) {
+    return jsonResponse({ error: deleteError.message }, 400)
+  }
+
+  return jsonResponse({ success: true })
 })
