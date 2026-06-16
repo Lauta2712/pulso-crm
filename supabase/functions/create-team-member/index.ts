@@ -78,38 +78,43 @@ Deno.serve(async (req) => {
     return jsonResponse({ error: 'JSON inválido' }, 400)
   }
 
-  const { email, full_name, role } = body ?? {}
+  const { email, full_name, role, password } = body ?? {}
 
-  if (!email || !full_name || !role) {
-    return jsonResponse({ error: 'Faltan datos (email, nombre o rol)' }, 400)
+  if (!email || !full_name || !role || !password) {
+    return jsonResponse({ error: 'Faltan datos (email, nombre, rol o contraseña)' }, 400)
   }
 
   if (!VALID_ROLES.includes(role)) {
     return jsonResponse({ error: 'Rol inválido' }, 400)
   }
 
-  const adminClient = createClient(supabaseUrl, serviceRoleKey)
-
-  const { data: invited, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(
-    email,
-    { data: { full_name } }
-  )
-
-  if (inviteError) {
-    return jsonResponse({ error: inviteError.message }, 400)
+  if (password.length < 6) {
+    return jsonResponse({ error: 'La contraseña debe tener al menos 6 caracteres' }, 400)
   }
 
-  // El trigger on_auth_user_created ya insertó la fila en public.users con
-  // org_id y rol por defecto ('developer'). Acá la actualizamos con el
-  // nombre y el rol elegidos.
+  const adminClient = createClient(supabaseUrl, serviceRoleKey)
+
+  const { data: created, error: createError } = await adminClient.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    user_metadata: { full_name },
+  })
+
+  if (createError) {
+    return jsonResponse({ error: createError.message }, 400)
+  }
+
+  // El trigger on_auth_user_created insertó la fila en public.users.
+  // Actualizamos con el nombre y rol elegidos.
   const { error: updateError } = await adminClient
     .from('users')
     .update({ full_name, role })
-    .eq('id', invited.user.id)
+    .eq('id', created.user.id)
 
   if (updateError) {
     return jsonResponse({ error: updateError.message }, 400)
   }
 
-  return jsonResponse({ user: { id: invited.user.id, email, full_name, role } })
+  return jsonResponse({ user: { id: created.user.id, email, full_name, role } })
 })

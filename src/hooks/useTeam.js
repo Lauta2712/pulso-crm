@@ -33,9 +33,9 @@ export function useTeamOverview() {
 export function useCreateTeamMember() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ email, full_name, role }) => {
+    mutationFn: async ({ email, full_name, role, password }) => {
       const { data, error } = await supabase.functions.invoke('create-team-member', {
-        body: { email, full_name, role },
+        body: { email, full_name, role, password },
       })
       if (error) throw error
       if (data?.error) throw new Error(data.error)

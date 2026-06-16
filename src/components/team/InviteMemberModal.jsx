@@ -18,19 +18,27 @@ export default function InviteMemberModal({ onClose }) {
   const addToast = useUIStore((state) => state.addToast)
   const createTeamMember = useCreateTeamMember()
 
-  const [form, setForm] = useState({ email: '', full_name: '', role: 'developer' })
+  const [form, setForm] = useState({ email: '', full_name: '', role: 'developer', password: '', confirmPassword: '' })
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
   const handleSelectChange = (field) => (value) => setForm((f) => ({ ...f, [field]: value }))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (form.password.length < 6) {
+      addToast('La contraseña debe tener al menos 6 caracteres', 'error')
+      return
+    }
+    if (form.password !== form.confirmPassword) {
+      addToast('Las contraseñas no coinciden', 'error')
+      return
+    }
     try {
-      await createTeamMember.mutateAsync(form)
-      addToast('Invitación enviada correctamente')
+      await createTeamMember.mutateAsync({ email: form.email, full_name: form.full_name, role: form.role, password: form.password })
+      addToast('Integrante creado correctamente')
       onClose()
     } catch (err) {
-      addToast(err.message || 'No se pudo invitar al integrante', 'error')
+      addToast(err.message || 'No se pudo crear al integrante', 'error')
     }
   }
 
@@ -48,6 +56,16 @@ export default function InviteMemberModal({ onClose }) {
         </div>
 
         <div className={styles.field}>
+          <label className={styles.label}>Contraseña</label>
+          <input type="password" value={form.password} onChange={handleChange('password')} required placeholder="Mínimo 6 caracteres" />
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Confirmar contraseña</label>
+          <input type="password" value={form.confirmPassword} onChange={handleChange('confirmPassword')} required />
+        </div>
+
+        <div className={styles.field}>
           <label className={styles.label}>Rol</label>
           <Select value={form.role} onChange={handleSelectChange('role')}>
             {ROLE_OPTIONS.map((opt) => (
@@ -58,16 +76,12 @@ export default function InviteMemberModal({ onClose }) {
           </Select>
         </div>
 
-        <p className={styles.hint}>
-          Se le enviará un email de invitación para que configure su contraseña.
-        </p>
-
         <div className={styles.actions}>
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
           <Button type="submit" disabled={createTeamMember.isPending}>
-            {createTeamMember.isPending ? 'Invitando...' : 'Invitar'}
+            {createTeamMember.isPending ? 'Creando...' : 'Crear integrante'}
           </Button>
         </div>
       </form>
