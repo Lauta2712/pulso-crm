@@ -1,23 +1,29 @@
 import { NavLink } from 'react-router-dom'
 import { useUIStore } from '../../store/useUIStore'
+import { useCurrentUser } from '../../hooks/useCurrentUser'
 import styles from './Sidebar.module.css'
 
 const NAV_ITEMS = [
   { to: '/app', label: 'Dashboard', end: true },
-  { to: '/app/clients', label: 'Clientes' },
+  { to: '/app/clients', label: 'Clientes', roles: ['owner', 'pm'] },
   { to: '/app/projects', label: 'Proyectos' },
   { to: '/app/board', label: 'Board', badge: 'BETA' },
-  { to: '/app/finance', label: 'Finanzas', badge: 'BETA' },
-  { to: '/app/accounts', label: 'Cuentas' },
+  { to: '/app/finance', label: 'Finanzas', badge: 'BETA', roles: ['owner'] },
+  { to: '/app/accounts', label: 'Cuentas', roles: ['owner'] },
   { to: '/app/docs', label: 'Docs' },
-  { to: '/app/team', label: 'Equipo', badge: 'NEW' },
+  { to: '/app/team', label: 'Equipo', badge: 'NEW', roles: ['owner', 'pm'] },
   { to: '/app/profile', label: 'Perfil' },
-  { to: '/app/settings', label: 'Configuración' },
+  { to: '/app/settings', label: 'Configuración', roles: ['owner'] },
 ]
 
 export default function Sidebar() {
   const sidebarOpen = useUIStore((state) => state.sidebarOpen)
   const closeSidebar = useUIStore((state) => state.closeSidebar)
+  const { data: currentUser } = useCurrentUser()
+
+  const visibleItems = NAV_ITEMS.filter(
+    (item) => !item.roles || item.roles.includes(currentUser?.role)
+  )
 
   return (
     <>
@@ -25,7 +31,7 @@ export default function Sidebar() {
       <aside className={[styles.sidebar, sidebarOpen ? styles.open : ''].join(' ')}>
         <img className={styles.logo} src="/img/logo_pulso_transparent.png" alt="Pulso Studio" />
         <nav className={styles.nav}>
-          {NAV_ITEMS.map((item) => (
+          {visibleItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}

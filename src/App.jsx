@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './store/useAuthStore'
+import { useCurrentUser } from './hooks/useCurrentUser'
 import AppLayout from './components/layout/AppLayout'
 import Toast from './components/ui/Toast'
 import Landing from './pages/Landing/Landing'
@@ -28,6 +29,16 @@ function PrivateRoute({ children }) {
   return children
 }
 
+function RoleRoute({ roles, children }) {
+  const { data: currentUser, isLoading } = useCurrentUser()
+
+  if (isLoading) return <div className="page">Cargando...</div>
+  if (!currentUser || !roles.includes(currentUser.role)) {
+    return <Navigate to="/app" replace />
+  }
+  return children
+}
+
 function App() {
   const init = useAuthStore((state) => state.init)
 
@@ -49,18 +60,18 @@ function App() {
           }
         >
           <Route index element={<Dashboard />} />
-          <Route path="clients" element={<ClientList />} />
-          <Route path="clients/:id" element={<ClientDetail />} />
+          <Route path="clients" element={<RoleRoute roles={['owner', 'pm']}><ClientList /></RoleRoute>} />
+          <Route path="clients/:id" element={<RoleRoute roles={['owner', 'pm']}><ClientDetail /></RoleRoute>} />
           <Route path="projects" element={<ProjectList />} />
           <Route path="projects/:id" element={<ProjectDetail />} />
           <Route path="board" element={<KanbanBoard />} />
-          <Route path="finance" element={<FinanceDashboard />} />
-          <Route path="finance/invoices/:id" element={<InvoiceDetail />} />
-          <Route path="accounts" element={<AccountList />} />
+          <Route path="finance" element={<RoleRoute roles={['owner']}><FinanceDashboard /></RoleRoute>} />
+          <Route path="finance/invoices/:id" element={<RoleRoute roles={['owner']}><InvoiceDetail /></RoleRoute>} />
+          <Route path="accounts" element={<RoleRoute roles={['owner']}><AccountList /></RoleRoute>} />
           <Route path="docs" element={<DocList />} />
-          <Route path="team" element={<Team />} />
+          <Route path="team" element={<RoleRoute roles={['owner', 'pm']}><Team /></RoleRoute>} />
           <Route path="profile" element={<Profile />} />
-          <Route path="settings" element={<Settings />} />
+          <Route path="settings" element={<RoleRoute roles={['owner']}><Settings /></RoleRoute>} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
