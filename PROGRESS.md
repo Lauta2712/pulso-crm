@@ -47,6 +47,26 @@ ProjectFormModal, TaskBoard/TaskCard/TaskModal, InvoiceCard, TransactionRow) imp
       **antes** de correr 0005, y revisar Site URL / Redirect URLs en Auth para el email de
       invitación.
 
+## Módulos de agencia creativa (completo)
+
+- [x] **Calendario de contenido** (`/app/content`): planificación de publicaciones para redes
+      sociales por cliente. Vista calendario mensual con posts por día + vista lista. Filtros por
+      cliente, estado y plataforma (Instagram, Facebook, TikTok, LinkedIn, Twitter/X, YouTube).
+      Estados: idea → borrador → en revisión → aprobado → publicado.
+- [x] **Campañas** (`/app/campaigns`): seguimiento de campañas publicitarias (Meta Ads, Google Ads,
+      TikTok Ads, LinkedIn Ads). Tabla con barra de progreso presupuesto/gastado, resumen de gasto
+      total de campañas activas, filtros por cliente y estado. Estados: borrador, activa, pausada,
+      completada, cancelada.
+- [x] **Media Library** (`/app/media`): repositorio de assets (imágenes, videos, documentos,
+      diseños) organizados por cliente y proyecto. Vista grilla con cards + vista lista. Links a
+      archivos externos (Drive, Figma, etc.).
+- [x] **Migración SQL**: `0007_content_campaigns_media.sql` — 5 enums nuevos, 3 tablas
+      (`content_posts`, `campaigns`, `media_assets`) con RLS, índices y `org_id` default.
+- [x] **Hooks**: `useContent.js`, `useCampaigns.js`, `useMedia.js` — CRUD completo con TanStack
+      Query.
+- [x] **Sidebar**: 3 items nuevos con badge "NEW" (Contenido, Campañas, Media).
+- [ ] **Pendiente**: correr `0007_content_campaigns_media.sql` en el SQL Editor de Supabase.
+
 ## Backend / Infraestructura (en curso)
 
 - [x] Decisión de hosting: nueva organización de Supabase ("Pulso Studio Org") creada para tener
@@ -70,4 +90,4 @@ ProjectFormModal, TaskBoard/TaskCard/TaskModal, InvoiceCard, TransactionRow) imp
 
 ## Notas
 
-- Bundle de producción ~578KB (warning de chunk size de Vite, no resuelto — bajo prioridad).
+- Bundle de producción ~649KB (warning de chunk size de Vite, no resuelto — bajo prioridad).

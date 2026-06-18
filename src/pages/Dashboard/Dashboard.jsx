@@ -57,6 +57,16 @@ export default function Dashboard() {
       .sort((a, b) => (a.due_date || '9999').localeCompare(b.due_date || '9999'))
       .slice(0, 5) ?? []
 
+  const socialProjects = activeProjects.filter((p) => p.type === 'social')
+  const socialTasks = tasks?.filter(
+    (t) => t.status !== 'done' && socialProjects.some((p) => p.id === t.project_id)
+  ) ?? []
+
+  const webProjects = activeProjects.filter((p) => p.type === 'web' || p.type === 'system' || p.type === 'saas')
+  const webTasks = tasks?.filter(
+    (t) => t.status !== 'done' && webProjects.some((p) => p.id === t.project_id)
+  ) ?? []
+
   return (
     <div className="page">
       <div className="page-header">
@@ -79,6 +89,16 @@ export default function Dashboard() {
         <div className={['card', styles.metricCard].join(' ')}>
           <span className={styles.metricLabel}>Ingresos del mes</span>
           <span className={styles.metricValue}>{formatCurrency(summary?.income)}</span>
+        </div>
+        <div className={['card', styles.metricCard].join(' ')}>
+          <span className={styles.metricLabel}>Redes / Social</span>
+          <span className={styles.metricValue}>{socialProjects.length}</span>
+          <span className={styles.metricDetail}>{socialTasks.length} tareas pendientes</span>
+        </div>
+        <div className={['card', styles.metricCard].join(' ')}>
+          <span className={styles.metricLabel}>Sistemas / Web</span>
+          <span className={styles.metricValue}>{webProjects.length}</span>
+          <span className={styles.metricDetail}>{webTasks.length} tareas pendientes</span>
         </div>
       </div>
 

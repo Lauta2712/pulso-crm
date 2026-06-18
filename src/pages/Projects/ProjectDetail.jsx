@@ -29,6 +29,7 @@ export default function ProjectDetail() {
   const [tab, setTab] = useState('board')
   const [activeTask, setActiveTask] = useState(null)
   const [showNewTask, setShowNewTask] = useState(false)
+  const [creatingStatus, setCreatingStatus] = useState(null)
 
   if (isLoading) {
     return (
@@ -158,7 +159,7 @@ export default function ProjectDetail() {
       {loadingTasks ? (
         <p style={{ color: 'var(--text-secondary)' }}>Cargando tareas...</p>
       ) : (
-        <TaskBoard tasks={visibleTasks} queryKey={queryKey} onTaskClick={setActiveTask} />
+        <TaskBoard tasks={visibleTasks} queryKey={queryKey} onTaskClick={setActiveTask} onAddTask={setCreatingStatus} />
       )}
 
       {activeTask && (
@@ -167,6 +168,10 @@ export default function ProjectDetail() {
 
       {showNewTask && (
         <TaskModal projectId={id} defaultStatus="backlog" onClose={() => setShowNewTask(false)} />
+      )}
+
+      {creatingStatus && (
+        <TaskModal projectId={id} defaultStatus={creatingStatus} onClose={() => setCreatingStatus(null)} />
       )}
     </div>
   )

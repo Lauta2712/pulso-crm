@@ -21,6 +21,11 @@
   font-weight: 600;
 }
 
+.metricDetail {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
 .sections {
   display: grid;
   grid-template-columns: 1fr 1fr;

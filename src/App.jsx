@@ -19,6 +19,9 @@ import DocList from './pages/Docs/DocList'
 import Team from './pages/Team/Team'
 import Profile from './pages/Profile/Profile'
 import Settings from './pages/Settings/Settings'
+import ContentCalendar from './pages/Content/ContentCalendar'
+import CampaignList from './pages/Campaigns/CampaignList'
+import MediaLibrary from './pages/Media/MediaLibrary'
 
 function PrivateRoute({ children }) {
   const session = useAuthStore((state) => state.session)
@@ -68,6 +71,9 @@ function App() {
           <Route path="finance" element={<RoleRoute roles={['owner']}><FinanceDashboard /></RoleRoute>} />
           <Route path="finance/invoices/:id" element={<RoleRoute roles={['owner']}><InvoiceDetail /></RoleRoute>} />
           <Route path="accounts" element={<RoleRoute roles={['owner']}><AccountList /></RoleRoute>} />
+          <Route path="content" element={<ContentCalendar />} />
+          <Route path="campaigns" element={<CampaignList />} />
+          <Route path="media" element={<MediaLibrary />} />
           <Route path="docs" element={<DocList />} />
           <Route path="team" element={<RoleRoute roles={['owner', 'pm']}><Team /></RoleRoute>} />
           <Route path="profile" element={<Profile />} />
