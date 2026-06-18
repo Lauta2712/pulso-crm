@@ -92,6 +92,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-lg);
+  align-items: start;
 }
 
 @media (max-width: 900px) {
@@ -104,6 +105,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
+  align-items: center;
 }
 
 .filterSelect {
@@ -115,6 +117,13 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
+}
+
+.listCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
 }
 
 .recurrentBadge {

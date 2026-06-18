@@ -112,13 +112,13 @@ export default function ContentCalendar() {
 
       <div className={styles.toolbar}>
         <div className={styles.filters}>
-          <Select value={clientId} onChange={setClientId}>
+          <Select value={clientId} onChange={setClientId} className={styles.filterSelect}>
             <option value="">Todos los clientes</option>
             {clients?.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </Select>
-          <Select value={statusFilter} onChange={setStatusFilter}>
+          <Select value={statusFilter} onChange={setStatusFilter} className={styles.filterSelect}>
             <option value="">Todos los estados</option>
             {Object.entries(STATUS_LABEL).map(([k, v]) => (
               <option key={k} value={k}>{v}</option>
@@ -142,9 +142,8 @@ export default function ContentCalendar() {
       </div>
 
       {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
-      {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar las publicaciones.</p>}
 
-      {!isLoading && !isError && posts?.length === 0 && (
+      {!isLoading && (isError || posts?.length === 0) && (
         <EmptyState
           icon="📅"
           title="No hay publicaciones"

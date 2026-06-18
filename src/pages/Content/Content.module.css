@@ -11,6 +11,12 @@
   display: flex;
   gap: var(--space-sm);
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.filterSelect {
+  width: auto;
+  min-width: 160px;
 }
 
 .viewToggle {

@@ -131,25 +131,25 @@ export default function FinanceDashboard() {
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Transacciones</h2>
-            <div className={styles.filters}>
-              <Select value={txProject} onChange={setTxProject} className={styles.filterSelect}>
-                <option value="">Todos los proyectos</option>
-                {projects?.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
-                  </option>
-                ))}
-              </Select>
-              <Select value={txType} onChange={setTxType} className={styles.filterSelect}>
-                <option value="">Todos</option>
-                <option value="income">Ingresos</option>
-                <option value="expense">Egresos</option>
-              </Select>
-            </div>
+          </div>
+          <div className={styles.filters} style={{ marginBottom: 'var(--space-md)' }}>
+            <Select value={txProject} onChange={setTxProject} className={styles.filterSelect}>
+              <option value="">Todos los proyectos</option>
+              {projects?.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </Select>
+            <Select value={txType} onChange={setTxType} className={styles.filterSelect}>
+              <option value="">Todos</option>
+              <option value="income">Ingresos</option>
+              <option value="expense">Egresos</option>
+            </Select>
           </div>
 
-          <div className="card">
-            {loadingTx && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+          <div className={styles.listCard}>
+            {loadingTx && <p style={{ color: 'var(--text-secondary)', padding: 'var(--space-sm) 0' }}>Cargando...</p>}
             {!loadingTx && (!transactions || transactions.length === 0) && (
               <EmptyState icon="$" title="No hay transacciones" />
             )}
@@ -163,8 +163,8 @@ export default function FinanceDashboard() {
             <h2 className={styles.sectionTitle}>Gastos</h2>
           </div>
 
-          <div className="card">
-            {loadingExpenses && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+          <div className={styles.listCard}>
+            {loadingExpenses && <p style={{ color: 'var(--text-secondary)', padding: 'var(--space-sm) 0' }}>Cargando...</p>}
             {!loadingExpenses && (!expenses || expenses.length === 0) && (
               <EmptyState icon="$" title="No hay gastos cargados" />
             )}

@@ -71,13 +71,13 @@ export default function MediaLibrary() {
 
       <div className={styles.toolbar}>
         <div className={styles.filters}>
-          <Select value={clientId} onChange={setClientId}>
+          <Select value={clientId} onChange={setClientId} className={styles.filterSelect}>
             <option value="">Todos los clientes</option>
             {clients?.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </Select>
-          <Select value={typeFilter} onChange={setTypeFilter}>
+          <Select value={typeFilter} onChange={setTypeFilter} className={styles.filterSelect}>
             <option value="">Todos los tipos</option>
             {Object.entries(TYPE_LABEL).map(([k, v]) => (
               <option key={k} value={k}>{v}</option>
@@ -101,9 +101,8 @@ export default function MediaLibrary() {
       </div>
 
       {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
-      {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar los assets.</p>}
 
-      {!isLoading && !isError && assets?.length === 0 && (
+      {!isLoading && (isError || assets?.length === 0) && (
         <EmptyState
           icon="🗂️"
           title="No hay assets"
