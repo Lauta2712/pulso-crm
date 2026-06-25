@@ -113,6 +113,10 @@ export default function ProjectDetail() {
             )}
           </span>
         </div>
+        <div className={styles.infoItem}>
+          <span className={styles.infoLabel}>Responsable</span>
+          <span className={styles.infoValue}>{project.users?.full_name ?? '—'}</span>
+        </div>
       </div>
 
       {project.project_members?.length > 0 && (

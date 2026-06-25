@@ -5,6 +5,7 @@ import Button from '../ui/Button'
 import Select from '../ui/Select'
 import { useCreateProject } from '../../hooks/useProjects'
 import { useClients } from '../../hooks/useClients'
+import { useUsers } from '../../hooks/useUsers'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './ProjectFormModal.module.css'
 
@@ -30,6 +31,7 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
   const addToast = useUIStore((state) => state.addToast)
   const createProject = useCreateProject()
   const { data: clients } = useClients()
+  const { data: users } = useUsers()
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
@@ -44,6 +46,7 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
     end_date: '',
     repo_url: '',
     deploy_url: '',
+    assigned_to: '',
   })
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
@@ -59,6 +62,7 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
         start_date: form.start_date || null,
         end_date: form.end_date || null,
       }
+      if (!form.assigned_to) delete payload.assigned_to
       const project = await createProject.mutateAsync(payload)
       addToast('Proyecto creado correctamente')
       onClose()
@@ -136,6 +140,16 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
             <label className={styles.label}>Fecha de fin</label>
             <input type="date" value={form.end_date} onChange={handleChange('end_date')} />
           </div>
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Responsable</label>
+          <Select value={form.assigned_to} onChange={handleSelectChange('assigned_to')}>
+            <option value="">Sin asignar</option>
+            {users?.map((u) => (
+              <option key={u.id} value={u.id}>{u.full_name}</option>
+            ))}
+          </Select>
         </div>
 
         <div className={styles.row}>

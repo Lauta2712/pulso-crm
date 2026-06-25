@@ -67,6 +67,7 @@ export default function ClientList() {
                 <th>Nombre</th>
                 <th>Empresa</th>
                 <th>Estado</th>
+                <th>Responsable</th>
                 <th>Primer contacto</th>
                 <th>Proyectos activos</th>
               </tr>
@@ -86,6 +87,7 @@ export default function ClientList() {
                     <td>
                       <ClientStatusBadge status={client.status} />
                     </td>
+                    <td className={styles.muted}>{client.users?.full_name ?? '—'}</td>
                     <td className={styles.muted}>{formatDate(client.first_contact)}</td>
                     <td className={styles.muted}>{activeProjects}</td>
                   </tr>

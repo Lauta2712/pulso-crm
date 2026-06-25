@@ -91,6 +91,12 @@ export default function ProjectList() {
                 <Badge variant="accent">{project.type}</Badge>
               </div>
 
+              {project.users?.full_name && (
+                <div className={styles.projectMeta}>
+                  <Badge variant="muted">{project.users.full_name}</Badge>
+                </div>
+              )}
+
               <div className={styles.projectFooter}>
                 <span>
                   {formatDate(project.start_date)} → {formatDate(project.end_date)}

@@ -135,13 +135,13 @@ h4 {
 
 /* Shared layout helpers */
 .page {
-  padding: var(--space-lg);
+  padding: var(--space-md);
   max-width: 1400px;
 }
 
 @media (max-width: 768px) {
   .page {
-    padding: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
   }
 }
 
@@ -149,13 +149,13 @@ h4 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-lg);
-  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  gap: var(--space-sm);
   flex-wrap: wrap;
 }
 
 .page-title {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
 }
 

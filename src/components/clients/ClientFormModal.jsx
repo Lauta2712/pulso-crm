@@ -3,6 +3,7 @@ import Modal from '../ui/Modal'
 import Button from '../ui/Button'
 import Select from '../ui/Select'
 import { useCreateClient } from '../../hooks/useClients'
+import { useUsers } from '../../hooks/useUsers'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './ClientFormModal.module.css'
 
@@ -16,6 +17,7 @@ const STATUS_OPTIONS = [
 export default function ClientFormModal({ onClose }) {
   const addToast = useUIStore((state) => state.addToast)
   const createClient = useCreateClient()
+  const { data: users } = useUsers()
 
   const [form, setForm] = useState({
     name: '',
@@ -26,6 +28,7 @@ export default function ClientFormModal({ onClose }) {
     instagram: '',
     source: '',
     first_contact: new Date().toISOString().slice(0, 10),
+    assigned_to: '',
   })
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
@@ -34,7 +37,9 @@ export default function ClientFormModal({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await createClient.mutateAsync(form)
+      const payload = { ...form }
+      if (!payload.assigned_to) delete payload.assigned_to
+      await createClient.mutateAsync(payload)
       addToast('Cliente creado correctamente')
       onClose()
     } catch {
@@ -93,13 +98,24 @@ export default function ClientFormModal({ onClose }) {
           </div>
         </div>
 
-        <div className={styles.field}>
-          <label className={styles.label}>Primer contacto</label>
-          <input
-            type="date"
-            value={form.first_contact}
-            onChange={handleChange('first_contact')}
-          />
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label className={styles.label}>Primer contacto</label>
+            <input
+              type="date"
+              value={form.first_contact}
+              onChange={handleChange('first_contact')}
+            />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Responsable</label>
+            <Select value={form.assigned_to} onChange={handleSelectChange('assigned_to')}>
+              <option value="">Sin asignar</option>
+              {users?.map((u) => (
+                <option key={u.id} value={u.id}>{u.full_name}</option>
+              ))}
+            </Select>
+          </div>
         </div>
 
         <div className={styles.actions}>

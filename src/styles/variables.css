@@ -43,8 +43,8 @@
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
 
   /* Layout */
-  --sidebar-width: 240px;
-  --topbar-height: 64px;
+  --sidebar-width: 220px;
+  --topbar-height: 48px;
 
   /* Spacing */
   --space-xs: 4px;

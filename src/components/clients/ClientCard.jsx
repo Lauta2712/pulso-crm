@@ -56,6 +56,12 @@ export default function ClientCard({ client }) {
           <span className={styles.metaLabel}>Primer contacto</span>
           <span>{formatDate(client.first_contact)}</span>
         </div>
+        {client.users?.full_name && (
+          <div className={styles.metaRow}>
+            <span className={styles.metaLabel}>Responsable</span>
+            <span>{client.users.full_name}</span>
+          </div>
+        )}
       </div>
     </div>
   )
