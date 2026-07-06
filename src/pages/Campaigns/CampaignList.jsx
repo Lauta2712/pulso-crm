@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useCampaigns, useDeleteCampaign } from '../../hooks/useCampaigns'
 import { useClients } from '../../hooks/useClients'
 import CampaignFormModal from '../../components/campaigns/CampaignFormModal'
@@ -7,32 +8,9 @@ import Badge from '../../components/ui/Badge'
 import Select from '../../components/ui/Select'
 import EmptyState from '../../components/ui/EmptyState'
 import { formatCurrency } from '../../lib/format'
+import { CAMPAIGN_STATUS_CONFIG, CAMPAIGN_PLATFORM_LABEL } from '../../lib/campaignMeta'
 import { useUIStore } from '../../store/useUIStore'
 import styles from '../Content/Content.module.css'
-
-const STATUS_VARIANT = {
-  draft: 'muted',
-  active: 'success',
-  paused: 'warning',
-  completed: 'info',
-  cancelled: 'danger',
-}
-
-const STATUS_LABEL = {
-  draft: 'Borrador',
-  active: 'Activa',
-  paused: 'Pausada',
-  completed: 'Completada',
-  cancelled: 'Cancelada',
-}
-
-const PLATFORM_LABEL = {
-  meta: 'Meta Ads',
-  google: 'Google Ads',
-  tiktok: 'TikTok Ads',
-  linkedin: 'LinkedIn Ads',
-  other: 'Otra',
-}
 
 export default function CampaignList() {
   const [clientId, setClientId] = useState('')
@@ -83,8 +61,8 @@ export default function CampaignList() {
           </Select>
           <Select value={statusFilter} onChange={setStatusFilter} className={styles.filterSelect}>
             <option value="">Todos los estados</option>
-            {Object.entries(STATUS_LABEL).map(([k, v]) => (
-              <option key={k} value={k}>{v}</option>
+            {Object.entries(CAMPAIGN_STATUS_CONFIG).map(([k, config]) => (
+              <option key={k} value={k}>{config.label}</option>
             ))}
           </Select>
         </div>
@@ -143,9 +121,13 @@ export default function CampaignList() {
                         <div className={styles.muted} style={{ fontSize: 11 }}>{campaign.objective}</div>
                       )}
                     </td>
-                    <td><Badge variant="info">{PLATFORM_LABEL[campaign.platform]}</Badge></td>
+                    <td><Badge variant="info">{CAMPAIGN_PLATFORM_LABEL[campaign.platform]}</Badge></td>
                     <td className={styles.muted}>{campaign.clients?.name ?? '—'}</td>
-                    <td><Badge variant={STATUS_VARIANT[campaign.status]}>{STATUS_LABEL[campaign.status]}</Badge></td>
+                    <td>
+                      <Badge variant={CAMPAIGN_STATUS_CONFIG[campaign.status]?.variant}>
+                        {CAMPAIGN_STATUS_CONFIG[campaign.status]?.label}
+                      </Badge>
+                    </td>
                     <td className={styles.muted}>{campaign.budget ? formatCurrency(campaign.budget) : '—'}</td>
                     <td>
                       {campaign.budget ? (
@@ -169,6 +151,9 @@ export default function CampaignList() {
                         : '—'}
                     </td>
                     <td className={styles.actions}>
+                      <Link to={`/app/ads/${campaign.id}`}>
+                        <Button variant="ghost" size="sm">Métricas</Button>
+                      </Link>
                       {campaign.url && (
                         <a href={campaign.url} target="_blank" rel="noreferrer">
                           <Button variant="ghost" size="sm">Abrir</Button>

@@ -23,6 +23,7 @@ const NAV_GROUPS = [
     items: [
       { to: '/app/content', label: 'Publicaciones', badge: 'NEW' },
       { to: '/app/campaigns', label: 'Campañas', badge: 'NEW' },
+      { to: '/app/ads', label: 'Publicidades', badge: 'NEW' },
       { to: '/app/media', label: 'Media', badge: 'NEW' },
     ],
   },

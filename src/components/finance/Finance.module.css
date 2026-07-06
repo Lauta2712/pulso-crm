@@ -47,6 +47,15 @@
   gap: var(--space-md);
 }
 
+.invoiceCardClickable {
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.invoiceCardClickable:hover {
+  border-color: var(--text-muted);
+}
+
 .invoiceHeader {
   display: flex;
   align-items: flex-start;

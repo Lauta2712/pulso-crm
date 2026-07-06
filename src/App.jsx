@@ -23,6 +23,8 @@ import ContentCalendar from './pages/Content/ContentCalendar'
 import CampaignList from './pages/Campaigns/CampaignList'
 import MediaLibrary from './pages/Media/MediaLibrary'
 import CalendarPage from './pages/Calendar/CalendarPage'
+import AdsOverview from './pages/Ads/AdsOverview'
+import CampaignMetricsDetail from './pages/Ads/CampaignMetricsDetail'
 
 function PrivateRoute({ children }) {
   const session = useAuthStore((state) => state.session)
@@ -74,6 +76,8 @@ function App() {
           <Route path="accounts" element={<RoleRoute roles={['owner']}><AccountList /></RoleRoute>} />
           <Route path="content" element={<ContentCalendar />} />
           <Route path="campaigns" element={<CampaignList />} />
+          <Route path="ads" element={<AdsOverview />} />
+          <Route path="ads/:id" element={<CampaignMetricsDetail />} />
           <Route path="media" element={<MediaLibrary />} />
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="docs" element={<DocList />} />

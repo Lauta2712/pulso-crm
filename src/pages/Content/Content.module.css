@@ -19,6 +19,18 @@
   min-width: 160px;
 }
 
+@media (max-width: 640px) {
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .filterSelect {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
 .viewToggle {
   display: flex;
   background: var(--bg-elevated);
@@ -276,4 +288,56 @@
   display: flex;
   gap: 4px;
   margin-top: auto;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .calendarGrid {
+    gap: 0;
+  }
+
+  .dayCell {
+    min-height: 60px;
+    padding: 4px;
+  }
+
+  .dayHeader {
+    font-size: 11px;
+    padding: 6px 2px;
+  }
+
+  .dayNumber {
+    font-size: 11px;
+  }
+
+  .calendarPost {
+    font-size: 10px;
+    padding: 1px 3px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .dayCell {
+    min-height: 46px;
+    padding: 2px;
+  }
+
+  .calendarPostTitle {
+    display: none;
+  }
+
+  .calendarPost {
+    padding: 2px;
+    justify-content: center;
+  }
+
+  .calendarNav {
+    gap: var(--space-sm);
+  }
 }

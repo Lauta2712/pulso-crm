@@ -67,3 +67,62 @@
   gap: 4px;
   justify-content: flex-end;
 }
+
+.accountCards {
+  display: none;
+}
+
+.accountCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.accountCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.accountCardRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-size: 13px;
+}
+
+.accountCardLabel {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.accountCardUrl {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.accountCardActions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+  margin-top: var(--space-xs);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--space-sm);
+}
+
+@media (max-width: 640px) {
+  .tableWrapper {
+    display: none;
+  }
+
+  .accountCards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+}

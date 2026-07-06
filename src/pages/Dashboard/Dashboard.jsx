@@ -7,6 +7,8 @@ import { useFinanceSummary } from '../../hooks/useFinance'
 import { formatCurrency, formatDate } from '../../lib/format'
 import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
+import BarChart from '../../components/dashboard/BarChart'
+import { COLUMNS } from '../../components/tasks/columns'
 import styles from './Dashboard.module.css'
 
 const PRIORITY_VARIANT = {
@@ -14,6 +16,16 @@ const PRIORITY_VARIANT = {
   medium: 'info',
   high: 'warning',
   urgent: 'danger',
+}
+
+const TYPE_LABEL = {
+  web: 'Web',
+  system: 'Sistema',
+  automation: 'Automatización',
+  social: 'Social',
+  consulting: 'Consultoría',
+  saas: 'SaaS',
+  other: 'Otro',
 }
 
 function isWithinNextWeek(dateStr) {
@@ -57,15 +69,19 @@ export default function Dashboard() {
       .sort((a, b) => (a.due_date || '9999').localeCompare(b.due_date || '9999'))
       .slice(0, 5) ?? []
 
-  const socialProjects = activeProjects.filter((p) => p.type === 'social')
-  const socialTasks = tasks?.filter(
-    (t) => t.status !== 'done' && socialProjects.some((p) => p.id === t.project_id)
-  ) ?? []
+  const tasksByStage = COLUMNS.map((col) => ({
+    label: col.label,
+    value: tasks?.filter((t) => t.status === col.id).length ?? 0,
+  }))
 
-  const webProjects = activeProjects.filter((p) => p.type === 'web' || p.type === 'system' || p.type === 'saas')
-  const webTasks = tasks?.filter(
-    (t) => t.status !== 'done' && webProjects.some((p) => p.id === t.project_id)
-  ) ?? []
+  const projectsByType = Object.entries(TYPE_LABEL)
+    .map(([type, label]) => ({
+      label,
+      value: activeProjects.filter((p) => p.type === type).length,
+    }))
+    .filter((row) => row.value > 0)
+
+  const balance = summary?.balance ?? 0
 
   return (
     <div className="page">
@@ -89,17 +105,32 @@ export default function Dashboard() {
         <div className={['card', styles.metricCard].join(' ')}>
           <span className={styles.metricLabel}>Ingresos del mes</span>
           <span className={styles.metricValue}>{formatCurrency(summary?.income)}</span>
+          <span
+            className={styles.metricDetail}
+            style={{ color: balance >= 0 ? 'var(--success)' : 'var(--danger)' }}
+          >
+            Balance {formatCurrency(balance)}
+          </span>
         </div>
-        <div className={['card', styles.metricCard].join(' ')}>
-          <span className={styles.metricLabel}>Redes / Social</span>
-          <span className={styles.metricValue}>{socialProjects.length}</span>
-          <span className={styles.metricDetail}>{socialTasks.length} tareas pendientes</span>
-        </div>
-        <div className={['card', styles.metricCard].join(' ')}>
-          <span className={styles.metricLabel}>Sistemas / Web</span>
-          <span className={styles.metricValue}>{webProjects.length}</span>
-          <span className={styles.metricDetail}>{webTasks.length} tareas pendientes</span>
-        </div>
+      </div>
+
+      <div className={styles.charts}>
+        <BarChart title="Tareas por etapa" data={tasksByStage} color="var(--accent)" />
+        <BarChart
+          title="Proyectos activos por tipo"
+          data={projectsByType}
+          color="var(--accent-orange)"
+          emptyLabel="No hay proyectos activos"
+        />
+        <BarChart
+          title="Ingresos vs gastos (mes)"
+          data={[
+            { label: 'Ingresos', value: summary?.income ?? 0 },
+            { label: 'Gastos', value: summary?.expense ?? 0 },
+          ]}
+          color="var(--info)"
+          formatValue={formatCurrency}
+        />
       </div>
 
       <div className={styles.sections}>

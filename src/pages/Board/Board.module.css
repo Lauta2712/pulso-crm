@@ -9,3 +9,15 @@
   min-width: 160px;
   width: auto;
 }
+
+@media (max-width: 640px) {
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .filterSelect {
+    min-width: 0;
+    width: 100%;
+  }
+}

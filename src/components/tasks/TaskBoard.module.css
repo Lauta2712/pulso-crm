@@ -5,3 +5,61 @@
   padding-bottom: var(--space-md);
   align-items: start;
 }
+
+.mobileTabs {
+  display: none;
+}
+
+.columnWrap {
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .mobileTabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+  }
+
+  .mobileTab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+
+  .mobileTab:hover {
+    color: var(--text-primary);
+  }
+
+  .mobileTabActive {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .mobileTabCount {
+    font-size: 11px;
+    opacity: 0.8;
+  }
+
+  .board {
+    display: block;
+  }
+
+  .columnWrap {
+    display: none;
+  }
+
+  .columnWrapActive {
+    display: block;
+  }
+}

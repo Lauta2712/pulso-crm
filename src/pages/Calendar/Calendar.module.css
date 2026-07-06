@@ -256,6 +256,12 @@
 /* Responsive */
 
 @media (max-width: 768px) {
+  .calendarNav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+
   .calendarGrid {
     gap: 0;
   }

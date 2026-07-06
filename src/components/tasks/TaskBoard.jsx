@@ -16,6 +16,7 @@ import styles from './TaskBoard.module.css'
 export default function TaskBoard({ tasks, queryKey, onTaskClick, onAddTask }) {
   const moveTask = useMoveTask()
   const [activeTask, setActiveTask] = useState(null)
+  const [activeColumn, setActiveColumn] = useState(COLUMNS[0].id)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   )
@@ -73,15 +74,33 @@ export default function TaskBoard({ tasks, queryKey, onTaskClick, onAddTask }) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+      <div className={styles.mobileTabs}>
+        {columns.map((col) => (
+          <button
+            key={col.id}
+            type="button"
+            className={[styles.mobileTab, col.id === activeColumn ? styles.mobileTabActive : ''].join(' ')}
+            onClick={() => setActiveColumn(col.id)}
+          >
+            {col.label}
+            <span className={styles.mobileTabCount}>{col.tasks.length}</span>
+          </button>
+        ))}
+      </div>
+
       <div className={styles.board}>
         {columns.map((col) => (
-          <KanbanColumn
+          <div
             key={col.id}
-            column={col}
-            onTaskClick={onTaskClick}
-            onAddTask={onAddTask}
-            onComplete={handleComplete}
-          />
+            className={[styles.columnWrap, col.id === activeColumn ? styles.columnWrapActive : ''].join(' ')}
+          >
+            <KanbanColumn
+              column={col}
+              onTaskClick={onTaskClick}
+              onAddTask={onAddTask}
+              onComplete={handleComplete}
+            />
+          </div>
         ))}
       </div>
       <DragOverlay>{activeTask && <TaskCard task={activeTask} overlay />}</DragOverlay>

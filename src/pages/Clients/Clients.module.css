@@ -1,10 +1,9 @@
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   margin-bottom: var(--space-md);
   border-bottom: 1px solid var(--border-subtle);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 .tab {
@@ -74,6 +73,49 @@
 
 .muted {
   color: var(--text-secondary);
+}
+
+.clientCards {
+  display: none;
+}
+
+.clientCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  cursor: pointer;
+}
+
+.clientCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.clientCardRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-size: 13px;
+}
+
+.clientCardLabel {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .tableWrapper {
+    display: none;
+  }
+
+  .clientCards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
 }
 
 /* ClientDetail */

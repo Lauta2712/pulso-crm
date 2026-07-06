@@ -45,6 +45,13 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.userInfo > div:last-child {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .avatar {
@@ -63,6 +70,9 @@
 
 .userName {
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .userEmail {
@@ -104,4 +114,22 @@
   object-fit: cover;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
+}
+
+@media (max-width: 480px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .roleSelect {
+    width: 100%;
+  }
+
+  .tagForm {
+    flex-wrap: wrap;
+  }
+
+  .tagForm input[type='text'] {
+    flex: 1 1 100%;
+  }
 }

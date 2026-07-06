@@ -9,11 +9,14 @@ export function InvoiceStatusBadge({ status }) {
   return <Badge variant={config.variant}>{config.label}</Badge>
 }
 
-export default function InvoiceCard({ invoice, onMarkPaid, isMarking }) {
+export default function InvoiceCard({ invoice, onMarkPaid, isMarking, onClick }) {
   const canMarkPaid = invoice.status !== 'paid' && invoice.status !== 'cancelled'
 
   return (
-    <div className={['card', styles.invoiceCard].join(' ')}>
+    <div
+      className={['card', styles.invoiceCard, onClick ? styles.invoiceCardClickable : ''].join(' ')}
+      onClick={onClick}
+    >
       <div className={styles.invoiceHeader}>
         <div>
           <div className={styles.invoiceNumber}>Factura {invoice.number}</div>
@@ -51,7 +54,13 @@ export default function InvoiceCard({ invoice, onMarkPaid, isMarking }) {
       </div>
 
       {canMarkPaid && onMarkPaid && (
-        <Button onClick={onMarkPaid} disabled={isMarking}>
+        <Button
+          onClick={(e) => {
+            e.stopPropagation()
+            onMarkPaid()
+          }}
+          disabled={isMarking}
+        >
           {isMarking ? 'Actualizando...' : 'Marcar como pagada'}
         </Button>
       )}

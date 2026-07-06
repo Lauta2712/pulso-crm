@@ -60,42 +60,79 @@ export default function ClientList() {
       )}
 
       {!isLoading && !isError && filtered.length > 0 && (
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Empresa</th>
-                <th>Estado</th>
-                <th>Responsable</th>
-                <th>Primer contacto</th>
-                <th>Proyectos activos</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((client) => {
-                const activeProjects =
-                  client.projects?.filter((p) => p.status === 'active').length ?? 0
-                return (
-                  <tr
-                    key={client.id}
-                    className={styles.row}
-                    onClick={() => navigate(`/app/clients/${client.id}`)}
-                  >
-                    <td className={styles.clientName}>{client.name}</td>
-                    <td className={styles.muted}>{client.company || '—'}</td>
-                    <td>
-                      <ClientStatusBadge status={client.status} />
-                    </td>
-                    <td className={styles.muted}>{client.users?.full_name ?? '—'}</td>
-                    <td className={styles.muted}>{formatDate(client.first_contact)}</td>
-                    <td className={styles.muted}>{activeProjects}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Empresa</th>
+                  <th>Estado</th>
+                  <th>Responsable</th>
+                  <th>Primer contacto</th>
+                  <th>Proyectos activos</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((client) => {
+                  const activeProjects =
+                    client.projects?.filter((p) => p.status === 'active').length ?? 0
+                  return (
+                    <tr
+                      key={client.id}
+                      className={styles.row}
+                      onClick={() => navigate(`/app/clients/${client.id}`)}
+                    >
+                      <td className={styles.clientName}>{client.name}</td>
+                      <td className={styles.muted}>{client.company || '—'}</td>
+                      <td>
+                        <ClientStatusBadge status={client.status} />
+                      </td>
+                      <td className={styles.muted}>{client.users?.full_name ?? '—'}</td>
+                      <td className={styles.muted}>{formatDate(client.first_contact)}</td>
+                      <td className={styles.muted}>{activeProjects}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className={styles.clientCards}>
+            {filtered.map((client) => {
+              const activeProjects =
+                client.projects?.filter((p) => p.status === 'active').length ?? 0
+              return (
+                <div
+                  key={client.id}
+                  className={['card', styles.clientCard].join(' ')}
+                  onClick={() => navigate(`/app/clients/${client.id}`)}
+                >
+                  <div className={styles.clientCardHeader}>
+                    <span className={styles.clientName}>{client.name}</span>
+                    <ClientStatusBadge status={client.status} />
+                  </div>
+                  <div className={styles.clientCardRow}>
+                    <span className={styles.clientCardLabel}>Empresa</span>
+                    <span className={styles.muted}>{client.company || '—'}</span>
+                  </div>
+                  <div className={styles.clientCardRow}>
+                    <span className={styles.clientCardLabel}>Responsable</span>
+                    <span className={styles.muted}>{client.users?.full_name ?? '—'}</span>
+                  </div>
+                  <div className={styles.clientCardRow}>
+                    <span className={styles.clientCardLabel}>Primer contacto</span>
+                    <span className={styles.muted}>{formatDate(client.first_contact)}</span>
+                  </div>
+                  <div className={styles.clientCardRow}>
+                    <span className={styles.clientCardLabel}>Proyectos activos</span>
+                    <span className={styles.muted}>{activeProjects}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </>
       )}
 
       {showModal && <ClientFormModal onClose={() => setShowModal(false)} />}

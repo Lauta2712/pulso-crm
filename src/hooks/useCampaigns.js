@@ -21,6 +21,22 @@ export function useCampaigns(filters = {}) {
   })
 }
 
+export function useCampaign(id) {
+  return useQuery({
+    queryKey: ['campaigns', id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('campaigns')
+        .select('*, clients(id, name), projects(id, name)')
+        .eq('id', id)
+        .single()
+      if (error) throw error
+      return data
+    },
+    enabled: !!id,
+  })
+}
+
 export function useCreateCampaign() {
   const queryClient = useQueryClient()
   return useMutation({
