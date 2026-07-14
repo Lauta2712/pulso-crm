@@ -6,12 +6,14 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'supabase': ['@supabase/supabase-js'],
-          'query': ['@tanstack/react-query'],
-          'dnd': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
-          'zustand': ['zustand'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (/react-router-dom|\/react\/|\/react-dom\//.test(id)) return 'react-vendor'
+            if (id.includes('@supabase/supabase-js')) return 'supabase'
+            if (id.includes('@tanstack/react-query')) return 'query'
+            if (id.includes('@dnd-kit')) return 'dnd'
+            if (id.includes('zustand')) return 'zustand'
+          }
         },
       },
     },
