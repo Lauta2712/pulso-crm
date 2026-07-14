@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Select from '../../components/ui/Select'
 import EmptyState from '../../components/ui/EmptyState'
+import { IconImage, IconVideo, IconFileText, IconPalette, IconPaperclip, IconFolder } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from '../Content/Content.module.css'
 
@@ -18,11 +19,11 @@ const TYPE_LABEL = {
 }
 
 const TYPE_ICON = {
-  image: '🖼️',
-  video: '🎬',
-  document: '📄',
-  design: '🎨',
-  other: '📎',
+  image: <IconImage />,
+  video: <IconVideo />,
+  document: <IconFileText />,
+  design: <IconPalette />,
+  other: <IconPaperclip />,
 }
 
 const TYPE_VARIANT = {
@@ -104,7 +105,7 @@ export default function MediaLibrary() {
 
       {!isLoading && (isError || assets?.length === 0) && (
         <EmptyState
-          icon="🗂️"
+          icon={<IconFolder />}
           title="No hay assets"
           description="Organizá los archivos de diseño, videos e imágenes por cliente y proyecto."
           action={<Button onClick={() => setShowModal(true)}>+ Nuevo asset</Button>}
@@ -151,7 +152,7 @@ export default function MediaLibrary() {
             <tbody>
               {assets.map((asset) => (
                 <tr key={asset.id}>
-                  <td className={styles.name}>
+                  <td className={[styles.name, styles.nameWithIcon].join(' ')}>
                     {TYPE_ICON[asset.type]} {asset.name}
                   </td>
                   <td><Badge variant={TYPE_VARIANT[asset.type]}>{TYPE_LABEL[asset.type]}</Badge></td>

@@ -5,6 +5,7 @@ import ProjectFormModal from '../../components/projects/ProjectFormModal'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
+import { IconArrowRight } from '../../components/ui/icons'
 import { formatCurrency, formatDate } from '../../lib/format'
 import styles from './Projects.module.css'
 
@@ -98,8 +99,8 @@ export default function ProjectList() {
               )}
 
               <div className={styles.projectFooter}>
-                <span>
-                  {formatDate(project.start_date)} → {formatDate(project.end_date)}
+                <span className={styles.dateRange}>
+                  {formatDate(project.start_date)} <IconArrowRight /> {formatDate(project.end_date)}
                 </span>
                 <span className={styles.budget}>
                   {project.budget ? formatCurrency(project.budget, project.currency) : '—'}

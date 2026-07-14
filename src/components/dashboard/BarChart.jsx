@@ -1,4 +1,5 @@
 import EmptyState from '../ui/EmptyState'
+import { IconChart } from '../ui/icons'
 import styles from './BarChart.module.css'
 
 export default function BarChart({ title, data, color = 'var(--accent)', formatValue, emptyLabel }) {
@@ -10,7 +11,7 @@ export default function BarChart({ title, data, color = 'var(--accent)', formatV
     <div className="card">
       <h2 className={styles.title}>{title}</h2>
       {total === 0 ? (
-        <EmptyState icon="📊" title={emptyLabel ?? 'Sin datos todavía'} />
+        <EmptyState icon={<IconChart />} title={emptyLabel ?? 'Sin datos todavía'} />
       ) : (
         <div className={styles.chart}>
           {data.map((d) => (

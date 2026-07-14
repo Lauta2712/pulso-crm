@@ -8,6 +8,7 @@ import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
 import BarChart from '../../components/dashboard/BarChart'
+import { IconChart } from '../../components/ui/icons'
 import { CAMPAIGN_STATUS_CONFIG, CAMPAIGN_PLATFORM_LABEL } from '../../lib/campaignMeta'
 import { formatCurrency } from '../../lib/format'
 import styles from './Ads.module.css'
@@ -111,7 +112,7 @@ export default function AdsOverview() {
 
       {!isLoading && campaignRows.length === 0 && (
         <EmptyState
-          icon="📊"
+          icon={<IconChart />}
           title="No hay publicidades para trackear"
           description="Creá una campaña para empezar a cargar sus métricas de rendimiento."
           action={<Link to="/app/campaigns"><Button>+ Nueva campaña</Button></Link>}

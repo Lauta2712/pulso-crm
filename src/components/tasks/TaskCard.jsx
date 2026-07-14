@@ -6,6 +6,7 @@ import { formatDate } from '../../lib/format'
 import { useUsers } from '../../hooks/useUsers'
 import { useUpdateTask } from '../../hooks/useTasks'
 import { useUIStore } from '../../store/useUIStore'
+import { IconCheck } from '../ui/icons'
 import styles from './TaskCard.module.css'
 
 const PRIORITY_VARIANT = {
@@ -118,7 +119,7 @@ export default function TaskCard({ task, onClick, onComplete, overlay = false })
             }}
             onPointerDown={(e) => e.stopPropagation()}
           >
-            ✓
+            <IconCheck />
           </button>
         )}
       </div>

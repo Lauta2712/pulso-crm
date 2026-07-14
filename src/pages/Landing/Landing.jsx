@@ -1,36 +1,37 @@
 import { Link, Navigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/useAuthStore'
 import Button from '../../components/ui/Button'
+import { IconUsers, IconLayers, IconColumns, IconWallet, IconKey, IconFileText } from '../../components/ui/icons'
 import styles from './Landing.module.css'
 
 const FEATURES = [
   {
-    icon: '◆',
+    icon: <IconUsers />,
     title: 'Clientes',
     description: 'Toda la info de cada cliente, estado de la relación y contactos clave en un solo lugar.',
   },
   {
-    icon: '▣',
+    icon: <IconLayers />,
     title: 'Proyectos',
     description: 'Seguimiento de cada proyecto: tipo, estado, presupuesto y entregables.',
   },
   {
-    icon: '☰',
+    icon: <IconColumns />,
     title: 'Board ágil',
     description: 'Kanban con drag & drop para organizar el trabajo del equipo sprint a sprint.',
   },
   {
-    icon: '$',
+    icon: <IconWallet />,
     title: 'Finanzas',
     description: 'Facturas, ingresos y egresos para tener el pulso financiero de la agencia siempre claro.',
   },
   {
-    icon: '🔑',
+    icon: <IconKey />,
     title: 'Cuentas',
     description: 'Accesos y credenciales de clientes y proveedores, centralizados y seguros.',
   },
   {
-    icon: '📄',
+    icon: <IconFileText />,
     title: 'Docs',
     description: 'Documentación interna y de proyectos, a un click de distancia.',
   },

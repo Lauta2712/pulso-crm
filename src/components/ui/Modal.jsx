@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { IconClose } from './icons'
 import styles from './Modal.module.css'
 
 export default function Modal({ title, onClose, children, size }) {
@@ -18,7 +19,7 @@ export default function Modal({ title, onClose, children, size }) {
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
           <button className={styles.closeBtn} onClick={onClose} aria-label="Cerrar">
-            ✕
+            <IconClose />
           </button>
         </div>
         <div className={styles.body}>{children}</div>

@@ -1,5 +1,6 @@
 import ClientStatusBadge from './ClientStatusBadge'
 import { formatDate } from '../../lib/format'
+import { IconStar } from '../ui/icons'
 import styles from './ClientCard.module.css'
 
 function SatisfactionStars({ value = 0 }) {
@@ -7,7 +8,7 @@ function SatisfactionStars({ value = 0 }) {
     <div className={styles.stars}>
       {[1, 2, 3, 4, 5].map((n) => (
         <span key={n} className={n > value ? styles.starEmpty : ''}>
-          ★
+          <IconStar />
         </span>
       ))}
     </div>

@@ -7,6 +7,7 @@ import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
 import BarChart from '../../components/dashboard/BarChart'
+import { IconArrowLeft, IconChart } from '../../components/ui/icons'
 import { CAMPAIGN_STATUS_CONFIG, CAMPAIGN_PLATFORM_LABEL } from '../../lib/campaignMeta'
 import { formatCurrency, formatDate } from '../../lib/format'
 import { useUIStore } from '../../store/useUIStore'
@@ -93,7 +94,7 @@ export default function CampaignMetricsDetail() {
 
   return (
     <div className="page">
-      <Link to="/app/ads" className={styles.backLink}>← Volver a publicidades</Link>
+      <Link to="/app/ads" className={styles.backLink}><IconArrowLeft /> Volver a publicidades</Link>
 
       <div className={styles.detailHeader}>
         <div>
@@ -112,7 +113,7 @@ export default function CampaignMetricsDetail() {
       {!metrics || metrics.length === 0 ? (
         <div style={{ marginTop: 'var(--space-lg)' }}>
           <EmptyState
-            icon="📊"
+            icon={<IconChart />}
             title="Todavía no cargaste métricas"
             description="Registrá impresiones, alcance, clicks, conversiones y gasto para ver la evolución."
             action={<Button onClick={openNew}>+ Cargar métricas</Button>}

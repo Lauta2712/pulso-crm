@@ -7,6 +7,7 @@ import ProjectFormModal from '../../components/projects/ProjectFormModal'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
+import { IconArrowLeft } from '../../components/ui/icons'
 import { formatCurrency } from '../../lib/format'
 import styles from './Clients.module.css'
 
@@ -57,7 +58,7 @@ export default function ClientDetail() {
   return (
     <div className="page">
       <Link to="/app/clients" className={styles.backLink}>
-        ← Volver a clientes
+        <IconArrowLeft /> Volver a clientes
       </Link>
 
       <div className="page-header">

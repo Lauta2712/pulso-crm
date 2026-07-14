@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Select from '../../components/ui/Select'
 import EmptyState from '../../components/ui/EmptyState'
+import { IconCalendar } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Content.module.css'
 
@@ -145,7 +146,7 @@ export default function ContentCalendar() {
 
       {!isLoading && (isError || posts?.length === 0) && (
         <EmptyState
-          icon="📅"
+          icon={<IconCalendar />}
           title="No hay publicaciones"
           description="Planificá el contenido de redes sociales de tus clientes."
           action={<Button onClick={() => setShowModal(true)}>+ Nueva publicación</Button>}

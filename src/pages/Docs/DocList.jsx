@@ -4,6 +4,7 @@ import DocFormModal from '../../components/docs/DocFormModal'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
+import { IconFileText } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Docs.module.css'
 
@@ -37,7 +38,7 @@ export default function DocList() {
 
       {!isLoading && !isError && documents?.length === 0 && (
         <EmptyState
-          icon="📄"
+          icon={<IconFileText />}
           title="No hay documentos registrados"
           description="Cargá los documentos importantes de Pulso Studio."
           action={<Button onClick={() => setShowModal(true)}>+ Nuevo documento</Button>}

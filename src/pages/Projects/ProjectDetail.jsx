@@ -7,6 +7,7 @@ import TaskBoard from '../../components/tasks/TaskBoard'
 import TaskModal from '../../components/tasks/TaskModal'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
+import { IconArrowLeft, IconArrowRight } from '../../components/ui/icons'
 import { formatCurrency, formatDate } from '../../lib/format'
 import styles from './Projects.module.css'
 
@@ -55,7 +56,7 @@ export default function ProjectDetail() {
   return (
     <div className="page">
       <Link to="/app/projects" className={styles.backLink}>
-        ← Volver a proyectos
+        <IconArrowLeft /> Volver a proyectos
       </Link>
 
       <div className={styles.detailHeader}>
@@ -155,7 +156,7 @@ export default function ProjectDetail() {
           <div className={styles.sprintTitle}>{activeSprint.name}</div>
           <div className={styles.sprintMeta}>
             {activeSprint.goal && <span>{activeSprint.goal} · </span>}
-            {formatDate(activeSprint.start_date)} → {formatDate(activeSprint.end_date)}
+            {formatDate(activeSprint.start_date)} <IconArrowRight /> {formatDate(activeSprint.end_date)}
           </div>
         </div>
       )}

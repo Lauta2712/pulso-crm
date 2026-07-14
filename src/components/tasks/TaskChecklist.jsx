@@ -6,6 +6,7 @@ import {
   useDeleteChecklistItem,
 } from '../../hooks/useChecklist'
 import { useUIStore } from '../../store/useUIStore'
+import { IconClose } from '../ui/icons'
 import styles from './TaskChecklist.module.css'
 
 export default function TaskChecklist({ taskId }) {
@@ -78,7 +79,7 @@ export default function TaskChecklist({ taskId }) {
               onClick={() => handleDelete(item)}
               aria-label="Eliminar item"
             >
-              ✕
+              <IconClose />
             </button>
           </li>
         ))}

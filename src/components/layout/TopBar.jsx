@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/useAuthStore'
 import { useUIStore } from '../../store/useUIStore'
 import Button from '../ui/Button'
+import { IconMenu } from '../ui/icons'
 import styles from './TopBar.module.css'
 
 export default function TopBar() {
@@ -22,7 +23,7 @@ export default function TopBar() {
     <header className={styles.topbar}>
       <div className={styles.left}>
         <button className={styles.menuBtn} onClick={toggleSidebar} aria-label="Abrir menú">
-          ☰
+          <IconMenu />
         </button>
       </div>
       <div className={styles.right}>

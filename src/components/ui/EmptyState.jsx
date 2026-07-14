@@ -1,6 +1,7 @@
+import { IconInbox } from './icons'
 import styles from './EmptyState.module.css'
 
-export default function EmptyState({ icon = '📭', title, description, action }) {
+export default function EmptyState({ icon = <IconInbox />, title, description, action }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.icon}>{icon}</div>

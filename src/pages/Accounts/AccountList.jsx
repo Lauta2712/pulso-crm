@@ -5,6 +5,7 @@ import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
 import { EyeIcon, EyeOffIcon } from '../../components/ui/PasswordIcons'
+import { IconKey } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Accounts.module.css'
 
@@ -48,7 +49,7 @@ export default function AccountList() {
 
       {!isLoading && !isError && accounts?.length === 0 && (
         <EmptyState
-          icon="🔑"
+          icon={<IconKey />}
           title="No hay cuentas registradas"
           description="Cargá las credenciales de las cuentas de Pulso Studio."
           action={<Button onClick={() => setShowModal(true)}>+ Nueva cuenta</Button>}

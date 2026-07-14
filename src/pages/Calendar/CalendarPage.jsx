@@ -209,7 +209,6 @@ export default function CalendarPage() {
       {/* {!isLoading && (!events || events.length === 0) && (
         <div style={{ marginTop: 'var(--space-lg)' }}>
           <EmptyState
-            icon="📅"
             title="Sin eventos"
             description="Agregá fechas importantes, entregas y reuniones al calendario."
             action={<Button onClick={() => openNew(null)}>+ Nuevo evento</Button>}

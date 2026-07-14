@@ -3,6 +3,7 @@ import { useInvoice, useMarkInvoicePaid } from '../../hooks/useFinance'
 import InvoiceCard from '../../components/finance/InvoiceCard'
 import TransactionRow from '../../components/finance/TransactionRow'
 import EmptyState from '../../components/ui/EmptyState'
+import { IconArrowLeft } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Finance.module.css'
 
@@ -40,7 +41,7 @@ export default function InvoiceDetail() {
   return (
     <div className="page">
       <Link to="/app/finance" className={styles.backLink}>
-        ← Volver a finanzas
+        <IconArrowLeft /> Volver a finanzas
       </Link>
 
       <div className="page-header">

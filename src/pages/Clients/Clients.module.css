@@ -190,7 +190,9 @@
   font-size: 13px;
   color: var(--text-secondary);
   margin-bottom: var(--space-sm);
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .backLink:hover {

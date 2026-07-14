@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Select from '../../components/ui/Select'
 import EmptyState from '../../components/ui/EmptyState'
+import { IconArrowRight, IconMegaphone } from '../../components/ui/icons'
 import { formatCurrency } from '../../lib/format'
 import { CAMPAIGN_STATUS_CONFIG, CAMPAIGN_PLATFORM_LABEL } from '../../lib/campaignMeta'
 import { useUIStore } from '../../store/useUIStore'
@@ -88,7 +89,7 @@ export default function CampaignList() {
 
       {!isLoading && (isError || campaigns?.length === 0) && (
         <EmptyState
-          icon="📢"
+          icon={<IconMegaphone />}
           title="No hay campañas"
           description="Gestioná las campañas publicitarias de tus clientes."
           action={<Button onClick={() => setShowModal(true)}>+ Nueva campaña</Button>}
@@ -146,9 +147,13 @@ export default function CampaignList() {
                       ) : '—'}
                     </td>
                     <td className={styles.muted}>
-                      {campaign.start_date && campaign.end_date
-                        ? `${new Date(campaign.start_date).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })} → ${new Date(campaign.end_date).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })}`
-                        : '—'}
+                      {campaign.start_date && campaign.end_date ? (
+                        <span className={styles.dateRange}>
+                          {new Date(campaign.start_date).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })}
+                          <IconArrowRight />
+                          {new Date(campaign.end_date).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })}
+                        </span>
+                      ) : '—'}
                     </td>
                     <td className={styles.actions}>
                       <Link to={`/app/ads/${campaign.id}`}>

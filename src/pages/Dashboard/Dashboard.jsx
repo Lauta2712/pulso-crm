@@ -9,6 +9,7 @@ import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
 import BarChart from '../../components/dashboard/BarChart'
 import { COLUMNS } from '../../components/tasks/columns'
+import { IconCheckCircle } from '../../components/ui/icons'
 import styles from './Dashboard.module.css'
 
 const PRIORITY_VARIANT = {
@@ -137,7 +138,7 @@ export default function Dashboard() {
         <div className="card">
           <h2 className={styles.sectionTitle}>Mis tareas</h2>
           {myTasks.length === 0 ? (
-            <EmptyState icon="✅" title="No tenés tareas pendientes" />
+            <EmptyState icon={<IconCheckCircle />} title="No tenés tareas pendientes" />
           ) : (
             <div className={styles.list}>
               {myTasks.map((task) => (
