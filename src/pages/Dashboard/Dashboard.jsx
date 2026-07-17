@@ -7,9 +7,10 @@ import { useFinanceSummary } from '../../hooks/useFinance'
 import { formatCurrency, formatDate } from '../../lib/format'
 import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
+import Skeleton, { SkeletonText } from '../../components/ui/Skeleton'
 import BarChart from '../../components/dashboard/BarChart'
 import { COLUMNS } from '../../components/tasks/columns'
-import { IconCheckCircle } from '../../components/ui/icons'
+import { IconCheckCircle, IconLayers } from '../../components/ui/icons'
 import styles from './Dashboard.module.css'
 
 const PRIORITY_VARIANT = {
@@ -55,7 +56,39 @@ export default function Dashboard() {
         <div className="page-header">
           <h1 className="page-title">Dashboard</h1>
         </div>
-        <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>
+
+        <div className={styles.metrics}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className={['card', styles.metricCard].join(' ')}>
+              <Skeleton width="60%" height="12px" />
+              <Skeleton width="40%" height="26px" />
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.charts}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="card">
+              <Skeleton width="50%" height="14px" style={{ marginBottom: 'var(--space-md)' }} />
+              <Skeleton height="140px" />
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.sections}>
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="card">
+              <Skeleton width="40%" height="15px" style={{ marginBottom: 'var(--space-md)' }} />
+              <div className={styles.list}>
+                {Array.from({ length: 3 }).map((_, j) => (
+                  <div key={j} className={styles.listItem}>
+                    <SkeletonText lines={2} width="70%" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -161,7 +194,7 @@ export default function Dashboard() {
         <div className="card">
           <h2 className={styles.sectionTitle}>Proyectos activos</h2>
           {activeProjects.length === 0 ? (
-            <EmptyState icon="▣" title="No hay proyectos activos" />
+            <EmptyState icon={<IconLayers />} title="No hay proyectos activos" />
           ) : (
             <div className={styles.list}>
               {activeProjects.map((project) => (

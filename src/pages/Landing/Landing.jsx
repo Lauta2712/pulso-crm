@@ -46,9 +46,6 @@ export default function Landing() {
     <div className={styles.page}>
       <header className={styles.header}>
         <img className={styles.logo} src="/img/logo_pulso_transparent.png" alt="Pulso Studio" />
-        <Link to="/login">
-          <Button>Ingresar al sistema</Button>
-        </Link>
       </header>
 
       <main>

@@ -5,6 +5,7 @@ import { useUIStore } from '../../store/useUIStore'
 import { supabase } from '../../lib/supabase'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
+import Skeleton from '../../components/ui/Skeleton'
 import styles from './Profile.module.css'
 
 const ROLE_LABELS = {
@@ -88,7 +89,14 @@ export default function Profile() {
         <h2 className={styles.sectionTitle}>Mis datos</h2>
         <div className="card">
           {isLoading ? (
-            <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>
+            <>
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className={styles.field}>
+                  <Skeleton width="60px" height="11px" style={{ marginBottom: 6 }} />
+                  <Skeleton height="36px" />
+                </div>
+              ))}
+            </>
           ) : (
             <>
               <div className={styles.field}>

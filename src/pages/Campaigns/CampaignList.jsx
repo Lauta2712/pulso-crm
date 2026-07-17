@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Select from '../../components/ui/Select'
 import EmptyState from '../../components/ui/EmptyState'
+import { SkeletonTableRows } from '../../components/ui/Skeleton'
 import { IconArrowRight, IconMegaphone } from '../../components/ui/icons'
 import { formatCurrency } from '../../lib/format'
 import { CAMPAIGN_STATUS_CONFIG, CAMPAIGN_PLATFORM_LABEL } from '../../lib/campaignMeta'
@@ -85,7 +86,27 @@ export default function CampaignList() {
         )}
       </div>
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Plataforma</th>
+                <th>Cliente</th>
+                <th>Estado</th>
+                <th>Presupuesto</th>
+                <th>Gastado</th>
+                <th>Período</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <SkeletonTableRows columns={8} />
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {!isLoading && (isError || campaigns?.length === 0) && (
         <EmptyState

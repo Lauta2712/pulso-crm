@@ -4,7 +4,7 @@ import TaskCard from './TaskCard'
 import styles from './KanbanColumn.module.css'
 
 export default function KanbanColumn({ column, onTaskClick, onAddTask, onComplete }) {
-  const { setNodeRef } = useDroppable({ id: column.id })
+  const { setNodeRef, isOver } = useDroppable({ id: column.id })
 
   return (
     <div className={styles.column}>
@@ -24,7 +24,10 @@ export default function KanbanColumn({ column, onTaskClick, onAddTask, onComplet
         </div>
       </div>
       <SortableContext items={column.tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
-        <div ref={setNodeRef} className={styles.taskList}>
+        <div
+          ref={setNodeRef}
+          className={[styles.taskList, isOver ? styles.taskListOver : ''].join(' ')}
+        >
           {column.tasks.map((task) => (
             <TaskCard
               key={task.id}

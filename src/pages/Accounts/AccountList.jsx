@@ -4,6 +4,7 @@ import AccountFormModal from '../../components/accounts/AccountFormModal'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
+import { SkeletonTableRows, SkeletonCard } from '../../components/ui/Skeleton'
 import { EyeIcon, EyeOffIcon } from '../../components/ui/PasswordIcons'
 import { IconKey } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
@@ -44,7 +45,32 @@ export default function AccountList() {
         <Button onClick={() => setShowModal(true)}>+ Nueva cuenta</Button>
       </div>
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && (
+        <>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th>Usuario</th>
+                  <th>Contraseña</th>
+                  <th>URL</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <SkeletonTableRows columns={6} />
+              </tbody>
+            </table>
+          </div>
+          <div className={styles.accountCards}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <SkeletonCard key={i} lines={4} className={styles.accountCard} />
+            ))}
+          </div>
+        </>
+      )}
       {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar las cuentas.</p>}
 
       {!isLoading && !isError && accounts?.length === 0 && (

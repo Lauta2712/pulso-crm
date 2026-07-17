@@ -5,6 +5,8 @@ import { useUIStore } from '../../store/useUIStore'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
+import { SkeletonCard } from '../../components/ui/Skeleton'
+import { IconUsers } from '../../components/ui/icons'
 import InviteMemberModal from '../../components/team/InviteMemberModal'
 import EditMemberModal from '../../components/team/EditMemberModal'
 import styles from './Team.module.css'
@@ -58,11 +60,17 @@ export default function Team() {
         <EditMemberModal member={editingMember} onClose={() => setEditingMember(null)} />
       )}
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && (
+        <div className={styles.grid}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <SkeletonCard key={i} lines={2} className={styles.card} />
+          ))}
+        </div>
+      )}
       {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar el equipo.</p>}
 
       {!isLoading && !isError && (!team || team.length === 0) && (
-        <EmptyState icon="◆" title="No hay integrantes" />
+        <EmptyState icon={<IconUsers />} title="No hay integrantes" />
       )}
 
       {!isLoading && !isError && team?.length > 0 && (

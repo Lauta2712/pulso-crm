@@ -218,6 +218,15 @@ export function IconColumns(props) {
   )
 }
 
+export function IconTag(props) {
+  return (
+    <IconBase {...props}>
+      <path d="M12.5 3H5a2 2 0 0 0-2 2v7.5a2 2 0 0 0 .59 1.41l8.5 8.5a2 2 0 0 0 2.82 0l6-6a2 2 0 0 0 0-2.82l-8.5-8.5A2 2 0 0 0 12.5 3Z" />
+      <circle cx="8" cy="8" r="1.3" fill="currentColor" stroke="none" />
+    </IconBase>
+  )
+}
+
 export function IconWallet(props) {
   return (
     <IconBase {...props}>

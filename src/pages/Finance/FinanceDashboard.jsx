@@ -14,11 +14,15 @@ import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
 import Select from '../../components/ui/Select'
+import Skeleton, { SkeletonTableRows, SkeletonCard } from '../../components/ui/Skeleton'
+import { IconWallet } from '../../components/ui/icons'
 import BarChart from '../../components/dashboard/BarChart'
 import { useUIStore } from '../../store/useUIStore'
 import { formatCurrency, formatDate } from '../../lib/format'
 import { INVOICE_STATUS_CONFIG } from '../../lib/invoiceStatus'
 import styles from './Finance.module.css'
+import itemStyles from '../../components/finance/Finance.module.css'
+import { interactiveRowProps } from '../../lib/a11y'
 
 export default function FinanceDashboard() {
   const navigate = useNavigate()
@@ -85,11 +89,36 @@ export default function FinanceDashboard() {
           <h2 className={styles.sectionTitle}>Facturas</h2>
         </div>
 
-        {loadingInvoices && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+        {loadingInvoices && (
+          <>
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Número</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Monto</th>
+                    <th>Vencimiento</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <SkeletonTableRows columns={6} />
+                </tbody>
+              </table>
+            </div>
+            <div className={styles.invoiceCards}>
+              {Array.from({ length: 3 }).map((_, i) => (
+                <SkeletonCard key={i} lines={4} className={itemStyles.invoiceCard} />
+              ))}
+            </div>
+          </>
+        )}
 
         {!loadingInvoices && (!invoices || invoices.length === 0) && (
           <div className={styles.cardSection}>
-            <EmptyState icon="$" title="No hay facturas cargadas" />
+            <EmptyState icon={<IconWallet />} title="No hay facturas cargadas" />
           </div>
         )}
 
@@ -113,6 +142,7 @@ export default function FinanceDashboard() {
                       key={invoice.id}
                       className={styles.tableRow}
                       onClick={() => navigate(`/app/finance/invoices/${invoice.id}`)}
+                      {...interactiveRowProps(() => navigate(`/app/finance/invoices/${invoice.id}`))}
                     >
                       <td>{invoice.number}</td>
                       <td className={styles.muted}>{invoice.clients?.name ?? '—'}</td>
@@ -173,9 +203,18 @@ export default function FinanceDashboard() {
           </div>
 
           <div className={styles.listCard}>
-            {loadingTx && <p style={{ color: 'var(--text-secondary)', padding: 'var(--space-sm) 0' }}>Cargando...</p>}
+            {loadingTx &&
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className={itemStyles.row}>
+                  <div className={itemStyles.rowMain}>
+                    <Skeleton width="140px" height="13px" />
+                    <Skeleton width="100px" height="12px" />
+                  </div>
+                  <Skeleton width="70px" height="14px" />
+                </div>
+              ))}
             {!loadingTx && (!transactions || transactions.length === 0) && (
-              <EmptyState icon="$" title="No hay transacciones" />
+              <EmptyState icon={<IconWallet />} title="No hay transacciones" />
             )}
             {!loadingTx &&
               transactions?.map((tx) => <TransactionRow key={tx.id} transaction={tx} />)}
@@ -188,9 +227,15 @@ export default function FinanceDashboard() {
           </div>
 
           <div className={styles.listCard}>
-            {loadingExpenses && <p style={{ color: 'var(--text-secondary)', padding: 'var(--space-sm) 0' }}>Cargando...</p>}
+            {loadingExpenses &&
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className={styles.expenseRow}>
+                  <Skeleton width="45%" height="13px" />
+                  <Skeleton width="70px" height="13px" />
+                </div>
+              ))}
             {!loadingExpenses && (!expenses || expenses.length === 0) && (
-              <EmptyState icon="$" title="No hay gastos cargados" />
+              <EmptyState icon={<IconWallet />} title="No hay gastos cargados" />
             )}
             {!loadingExpenses &&
               expenses?.map((expense) => (

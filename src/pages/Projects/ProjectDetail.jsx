@@ -4,9 +4,11 @@ import { useProject } from '../../hooks/useProjects'
 import { useTasks } from '../../hooks/useTasks'
 import { useActiveSprint } from '../../hooks/useSprints'
 import TaskBoard from '../../components/tasks/TaskBoard'
+import TaskBoardSkeleton from '../../components/tasks/TaskBoardSkeleton'
 import TaskModal from '../../components/tasks/TaskModal'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
+import Skeleton from '../../components/ui/Skeleton'
 import { IconArrowLeft, IconArrowRight } from '../../components/ui/icons'
 import { formatCurrency, formatDate } from '../../lib/format'
 import styles from './Projects.module.css'
@@ -35,7 +37,25 @@ export default function ProjectDetail() {
   if (isLoading) {
     return (
       <div className="page">
-        <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>
+        <Link to="/app/projects" className={styles.backLink}>
+          <IconArrowLeft /> Volver a proyectos
+        </Link>
+
+        <div className={styles.detailHeader}>
+          <div>
+            <Skeleton width="220px" height="24px" style={{ marginBottom: 'var(--space-sm)' }} />
+            <Skeleton width="140px" height="14px" />
+          </div>
+        </div>
+
+        <div className={styles.infoGrid}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className={styles.infoItem}>
+              <Skeleton width="70px" height="11px" />
+              <Skeleton width="90px" height="14px" />
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -162,7 +182,7 @@ export default function ProjectDetail() {
       )}
 
       {loadingTasks ? (
-        <p style={{ color: 'var(--text-secondary)' }}>Cargando tareas...</p>
+        <TaskBoardSkeleton />
       ) : (
         <TaskBoard tasks={visibleTasks} queryKey={queryKey} onTaskClick={setActiveTask} onAddTask={setCreatingStatus} />
       )}

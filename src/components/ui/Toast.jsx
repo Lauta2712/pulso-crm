@@ -1,4 +1,5 @@
 import { useUIStore } from '../../store/useUIStore'
+import { IconClose } from './icons'
 import styles from './Toast.module.css'
 
 export default function Toast() {
@@ -13,9 +14,18 @@ export default function Toast() {
         <div
           key={toast.id}
           className={[styles.toast, styles[toast.type] || ''].join(' ')}
-          onClick={() => removeToast(toast.id)}
+          role="status"
+          aria-live="polite"
         >
-          {toast.message}
+          <span className={styles.message}>{toast.message}</span>
+          <button
+            type="button"
+            className={styles.closeBtn}
+            onClick={() => removeToast(toast.id)}
+            aria-label="Cerrar notificación"
+          >
+            <IconClose />
+          </button>
         </div>
       ))}
     </div>

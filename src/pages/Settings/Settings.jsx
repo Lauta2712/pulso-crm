@@ -6,6 +6,8 @@ import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
 import Select from '../../components/ui/Select'
+import Skeleton from '../../components/ui/Skeleton'
+import { IconUsers, IconTag } from '../../components/ui/icons'
 import { useAuthStore } from '../../store/useAuthStore'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Settings.module.css'
@@ -108,7 +110,14 @@ export default function Settings() {
         <h2 className={styles.sectionTitle}>Organización</h2>
         <div className="card">
           {loadingOrg ? (
-            <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>
+            <>
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className={styles.field}>
+                  <Skeleton width="60px" height="11px" style={{ marginBottom: 6 }} />
+                  <Skeleton height="36px" />
+                </div>
+              ))}
+            </>
           ) : (
             <>
               <div className={styles.field}>
@@ -142,9 +151,18 @@ export default function Settings() {
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>Usuarios</h2>
         <div className="card">
-          {loadingUsers && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+          {loadingUsers &&
+            Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className={styles.row}>
+                <div className={styles.userInfo}>
+                  <Skeleton width="32px" height="32px" radius="50%" />
+                  <Skeleton width="140px" height="14px" />
+                </div>
+                <Skeleton width="90px" height="30px" />
+              </div>
+            ))}
           {!loadingUsers && (!users || users.length === 0) && (
-            <EmptyState icon="◆" title="No hay usuarios" />
+            <EmptyState icon={<IconUsers />} title="No hay usuarios" />
           )}
           {!loadingUsers &&
             users?.map((user) => (
@@ -180,9 +198,14 @@ export default function Settings() {
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>Tags</h2>
         <div className="card">
-          {loadingTags && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+          {loadingTags &&
+            Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className={styles.row}>
+                <Skeleton width="100px" height="20px" radius="999px" />
+              </div>
+            ))}
           {!loadingTags && (!tags || tags.length === 0) && (
-            <EmptyState icon="#" title="No hay tags creados" />
+            <EmptyState icon={<IconTag />} title="No hay tags creados" />
           )}
           {!loadingTags &&
             tags?.map((tag) => (

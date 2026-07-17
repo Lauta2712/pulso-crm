@@ -3,10 +3,12 @@ import {
   DndContext,
   DragOverlay,
   PointerSensor,
+  KeyboardSensor,
   closestCorners,
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable'
 import KanbanColumn from './KanbanColumn'
 import TaskCard from './TaskCard'
 import { COLUMNS } from './columns'
@@ -18,7 +20,8 @@ export default function TaskBoard({ tasks, queryKey, onTaskClick, onAddTask }) {
   const [activeTask, setActiveTask] = useState(null)
   const [activeColumn, setActiveColumn] = useState(COLUMNS[0].id)
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   )
 
   const columns = COLUMNS.map((col) => ({

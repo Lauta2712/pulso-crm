@@ -8,7 +8,9 @@ import Button from '../../components/ui/Button'
 import Select from '../../components/ui/Select'
 import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
+import Skeleton from '../../components/ui/Skeleton'
 import { useUIStore } from '../../store/useUIStore'
+import { interactiveRowProps } from '../../lib/a11y'
 import styles from './Calendar.module.css'
 
 const DAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
@@ -155,7 +157,27 @@ export default function CalendarPage() {
 
   return (
     <div className="page">
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && (
+        <div className={styles.calendarWrapper}>
+          <div className={styles.calendarNav}>
+            <Skeleton width="40px" height="28px" />
+            <Skeleton width="140px" height="18px" />
+            <Skeleton width="40px" height="28px" />
+            <Skeleton width="60px" height="28px" />
+            <Skeleton width="120px" height="28px" />
+          </div>
+          <div className={styles.calendarGrid}>
+            {DAYS.map((d) => (
+              <div key={d} className={styles.dayHeader}>{d}</div>
+            ))}
+            {Array.from({ length: 35 }).map((_, i) => (
+              <div key={i} className={styles.dayCell}>
+                <Skeleton width="16px" height="12px" />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {!isLoading && (
         <div className={styles.calendarWrapper}>
@@ -182,6 +204,7 @@ export default function CalendarPage() {
                   key={key}
                   className={[styles.dayCell, isToday ? styles.today : ''].join(' ')}
                   onClick={() => openNew(day)}
+                  {...interactiveRowProps(() => openNew(day))}
                 >
                   <span className={styles.dayNumber}>{day.getDate()}</span>
                   {dayEvents.slice(0, maxVisible).map((ev) => (

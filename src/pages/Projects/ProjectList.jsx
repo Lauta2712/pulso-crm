@@ -5,7 +5,9 @@ import ProjectFormModal from '../../components/projects/ProjectFormModal'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
-import { IconArrowRight } from '../../components/ui/icons'
+import { SkeletonCard } from '../../components/ui/Skeleton'
+import { IconArrowRight, IconLayers } from '../../components/ui/icons'
+import { interactiveRowProps } from '../../lib/a11y'
 import { formatCurrency, formatDate } from '../../lib/format'
 import styles from './Projects.module.css'
 
@@ -57,12 +59,18 @@ export default function ProjectList() {
         ))}
       </div>
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && (
+        <div className={styles.grid}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={i} lines={4} className={styles.projectCard} />
+          ))}
+        </div>
+      )}
       {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar los proyectos.</p>}
 
       {!isLoading && !isError && filtered.length === 0 && (
         <EmptyState
-          icon="▣"
+          icon={<IconLayers />}
           title="No hay proyectos"
           description="Todavía no hay proyectos en esta categoría."
           action={<Button onClick={() => setShowModal(true)}>+ Nuevo proyecto</Button>}
@@ -77,6 +85,7 @@ export default function ProjectList() {
               className={['card', styles.projectCard].join(' ')}
               onClick={() => navigate(`/app/projects/${project.id}`)}
               style={{ cursor: 'pointer' }}
+              {...interactiveRowProps(() => navigate(`/app/projects/${project.id}`))}
             >
               <div className={styles.projectHeader}>
                 <div>

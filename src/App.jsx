@@ -4,6 +4,7 @@ import { useAuthStore } from './store/useAuthStore'
 import { useCurrentUser } from './hooks/useCurrentUser'
 import AppLayout from './components/layout/AppLayout'
 import Toast from './components/ui/Toast'
+import Skeleton from './components/ui/Skeleton'
 import Landing from './pages/Landing/Landing'
 import Login from './pages/Auth/Login'
 import Dashboard from './pages/Dashboard/Dashboard'
@@ -26,11 +27,19 @@ import CalendarPage from './pages/Calendar/CalendarPage'
 import AdsOverview from './pages/Ads/AdsOverview'
 import CampaignMetricsDetail from './pages/Ads/CampaignMetricsDetail'
 
+function FullPageLoading() {
+  return (
+    <div className="page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+      <Skeleton width="120px" height="14px" />
+    </div>
+  )
+}
+
 function PrivateRoute({ children }) {
   const session = useAuthStore((state) => state.session)
   const loading = useAuthStore((state) => state.loading)
 
-  if (loading) return <div className="page">Cargando...</div>
+  if (loading) return <FullPageLoading />
   if (!session) return <Navigate to="/login" replace />
   return children
 }
@@ -38,7 +47,7 @@ function PrivateRoute({ children }) {
 function RoleRoute({ roles, children }) {
   const { data: currentUser, isLoading } = useCurrentUser()
 
-  if (isLoading) return <div className="page">Cargando...</div>
+  if (isLoading) return <FullPageLoading />
   if (!currentUser || !roles.includes(currentUser.role)) {
     return <Navigate to="/app" replace />
   }

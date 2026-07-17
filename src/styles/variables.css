@@ -56,3 +56,13 @@
   /* Font */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+
+/*
+ * Breakpoint convention (CSS custom properties don't work inside @media
+ * conditions without a PostCSS plugin, so these are documented, not
+ * enforced — match one of these values when adding a new media query):
+ *   768px  -> layout/nav (sidebar, topbar, board tabs, dropdowns)
+ *   640px  -> filters/toolbars collapse, table -> card list
+ *   480px  -> modal forms collapse to a single column
+ *   900px  -> two-column summary grids collapse to one column
+ */

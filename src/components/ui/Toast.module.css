@@ -23,6 +23,30 @@
   animation: slideIn 0.2s ease;
 }
 
+.message {
+  flex: 1;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.closeBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
 .success {
   border-left-color: var(--success);
 }

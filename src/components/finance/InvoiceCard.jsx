@@ -2,6 +2,7 @@ import Badge from '../ui/Badge'
 import Button from '../ui/Button'
 import { formatCurrency, formatDate } from '../../lib/format'
 import { INVOICE_STATUS_CONFIG } from '../../lib/invoiceStatus'
+import { interactiveRowProps } from '../../lib/a11y'
 import styles from './Finance.module.css'
 
 export function InvoiceStatusBadge({ status }) {
@@ -16,6 +17,7 @@ export default function InvoiceCard({ invoice, onMarkPaid, isMarking, onClick })
     <div
       className={['card', styles.invoiceCard, onClick ? styles.invoiceCardClickable : ''].join(' ')}
       onClick={onClick}
+      {...(onClick ? interactiveRowProps(onClick) : {})}
     >
       <div className={styles.invoiceHeader}>
         <div>

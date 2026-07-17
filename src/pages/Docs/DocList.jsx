@@ -4,6 +4,7 @@ import DocFormModal from '../../components/docs/DocFormModal'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
+import { SkeletonTableRows } from '../../components/ui/Skeleton'
 import { IconFileText } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Docs.module.css'
@@ -33,7 +34,24 @@ export default function DocList() {
         <Button onClick={() => setShowModal(true)}>+ Nuevo documento</Button>
       </div>
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Categoría</th>
+                <th>Link</th>
+                <th>Notas</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <SkeletonTableRows columns={5} />
+            </tbody>
+          </table>
+        </div>
+      )}
       {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar los documentos.</p>}
 
       {!isLoading && !isError && documents?.length === 0 && (

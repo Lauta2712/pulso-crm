@@ -5,7 +5,10 @@ import ClientStatusBadge from '../../components/clients/ClientStatusBadge'
 import ClientFormModal from '../../components/clients/ClientFormModal'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
+import { SkeletonTableRows, SkeletonCard } from '../../components/ui/Skeleton'
+import { IconUsers } from '../../components/ui/icons'
 import { formatDate } from '../../lib/format'
+import { interactiveRowProps } from '../../lib/a11y'
 import styles from './Clients.module.css'
 
 const TABS = [
@@ -47,12 +50,37 @@ export default function ClientList() {
         ))}
       </div>
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && (
+        <>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Empresa</th>
+                  <th>Estado</th>
+                  <th>Responsable</th>
+                  <th>Primer contacto</th>
+                  <th>Proyectos activos</th>
+                </tr>
+              </thead>
+              <tbody>
+                <SkeletonTableRows columns={6} />
+              </tbody>
+            </table>
+          </div>
+          <div className={styles.clientCards}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <SkeletonCard key={i} lines={4} className={styles.clientCard} />
+            ))}
+          </div>
+        </>
+      )}
       {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar los clientes.</p>}
 
       {!isLoading && !isError && filtered.length === 0 && (
         <EmptyState
-          icon="◆"
+          icon={<IconUsers />}
           title="No hay clientes"
           description="Todavía no cargaste clientes en esta categoría."
           action={<Button onClick={() => setShowModal(true)}>+ Nuevo cliente</Button>}
@@ -82,6 +110,7 @@ export default function ClientList() {
                       key={client.id}
                       className={styles.row}
                       onClick={() => navigate(`/app/clients/${client.id}`)}
+                      {...interactiveRowProps(() => navigate(`/app/clients/${client.id}`))}
                     >
                       <td className={styles.clientName}>{client.name}</td>
                       <td className={styles.muted}>{client.company || '—'}</td>
@@ -107,6 +136,7 @@ export default function ClientList() {
                   key={client.id}
                   className={['card', styles.clientCard].join(' ')}
                   onClick={() => navigate(`/app/clients/${client.id}`)}
+                  {...interactiveRowProps(() => navigate(`/app/clients/${client.id}`))}
                 >
                   <div className={styles.clientCardHeader}>
                     <span className={styles.clientName}>{client.name}</span>

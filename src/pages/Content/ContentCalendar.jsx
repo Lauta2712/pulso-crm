@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Select from '../../components/ui/Select'
 import EmptyState from '../../components/ui/EmptyState'
+import Skeleton, { SkeletonTableRows } from '../../components/ui/Skeleton'
 import { IconCalendar } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Content.module.css'
@@ -142,7 +143,45 @@ export default function ContentCalendar() {
         </div>
       </div>
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && view === 'calendar' && (
+        <div className={styles.calendarWrapper}>
+          <div className={styles.calendarNav}>
+            <Skeleton width="60px" height="28px" />
+            <Skeleton width="140px" height="18px" />
+            <Skeleton width="60px" height="28px" />
+          </div>
+          <div className={styles.calendarGrid}>
+            {DAYS.map((d) => (
+              <div key={d} className={styles.dayHeader}>{d}</div>
+            ))}
+            {Array.from({ length: 35 }).map((_, i) => (
+              <div key={i} className={styles.dayCell}>
+                <Skeleton width="16px" height="12px" />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {isLoading && view === 'list' && (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Plataforma</th>
+                <th>Cliente</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <SkeletonTableRows columns={6} />
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {!isLoading && (isError || posts?.length === 0) && (
         <EmptyState

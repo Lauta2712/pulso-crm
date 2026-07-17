@@ -7,7 +7,9 @@ import Select from '../../components/ui/Select'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
+import Skeleton, { SkeletonTableRows, SkeletonCard } from '../../components/ui/Skeleton'
 import BarChart from '../../components/dashboard/BarChart'
+import { interactiveRowProps } from '../../lib/a11y'
 import { IconChart } from '../../components/ui/icons'
 import { CAMPAIGN_STATUS_CONFIG, CAMPAIGN_PLATFORM_LABEL } from '../../lib/campaignMeta'
 import { formatCurrency } from '../../lib/format'
@@ -108,7 +110,53 @@ export default function AdsOverview() {
         </Select>
       </div>
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && (
+        <>
+          <div className={styles.metrics}>
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className={['card', styles.metricCard].join(' ')}>
+                <Skeleton width="60%" height="12px" />
+                <Skeleton width="40%" height="26px" />
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.charts}>
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="card">
+                <Skeleton width="50%" height="14px" style={{ marginBottom: 'var(--space-md)' }} />
+                <Skeleton height="140px" />
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Cliente</th>
+                  <th>Plataforma</th>
+                  <th>Estado</th>
+                  <th>Alcance</th>
+                  <th>Clicks</th>
+                  <th>CTR</th>
+                  <th>Conversiones</th>
+                  <th>Gasto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <SkeletonTableRows columns={9} />
+              </tbody>
+            </table>
+          </div>
+          <div className={styles.cardList}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <SkeletonCard key={i} lines={4} className={styles.rowCard} />
+            ))}
+          </div>
+        </>
+      )}
 
       {!isLoading && campaignRows.length === 0 && (
         <EmptyState
@@ -182,6 +230,7 @@ export default function AdsOverview() {
                       key={campaign.id}
                       className={styles.tableRow}
                       onClick={() => navigate(`/app/ads/${campaign.id}`)}
+                      {...interactiveRowProps(() => navigate(`/app/ads/${campaign.id}`))}
                     >
                       <td className={styles.name}>{campaign.name}</td>
                       <td className={styles.muted}>{campaign.clients?.name ?? '—'}</td>
@@ -208,6 +257,7 @@ export default function AdsOverview() {
                   key={campaign.id}
                   className={['card', styles.rowCard, styles.rowCardClickable].join(' ')}
                   onClick={() => navigate(`/app/ads/${campaign.id}`)}
+                  {...interactiveRowProps(() => navigate(`/app/ads/${campaign.id}`))}
                 >
                   <div className={styles.rowCardHeader}>
                     <span className={styles.name}>{campaign.name}</span>

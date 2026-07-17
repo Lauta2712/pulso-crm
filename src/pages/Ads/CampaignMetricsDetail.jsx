@@ -6,6 +6,7 @@ import AdMetricFormModal from '../../components/ads/AdMetricFormModal'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
+import Skeleton from '../../components/ui/Skeleton'
 import BarChart from '../../components/dashboard/BarChart'
 import { IconArrowLeft, IconChart } from '../../components/ui/icons'
 import { CAMPAIGN_STATUS_CONFIG, CAMPAIGN_PLATFORM_LABEL } from '../../lib/campaignMeta'
@@ -59,7 +60,32 @@ export default function CampaignMetricsDetail() {
   if (isLoading) {
     return (
       <div className="page">
-        <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>
+        <Link to="/app/ads" className={styles.backLink}><IconArrowLeft /> Volver a publicidades</Link>
+
+        <div className={styles.detailHeader}>
+          <div>
+            <Skeleton width="220px" height="24px" style={{ marginBottom: 'var(--space-sm)' }} />
+            <Skeleton width="160px" height="14px" />
+          </div>
+        </div>
+
+        <div className={styles.metrics} style={{ marginTop: 'var(--space-lg)' }}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className={['card', styles.metricCard].join(' ')}>
+              <Skeleton width="60%" height="12px" />
+              <Skeleton width="40%" height="26px" />
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.charts}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="card">
+              <Skeleton width="50%" height="14px" style={{ marginBottom: 'var(--space-md)' }} />
+              <Skeleton height="140px" />
+            </div>
+          ))}
+        </div>
       </div>
     )
   }

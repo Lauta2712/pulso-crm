@@ -3,9 +3,11 @@ import { useInvoice, useMarkInvoicePaid } from '../../hooks/useFinance'
 import InvoiceCard from '../../components/finance/InvoiceCard'
 import TransactionRow from '../../components/finance/TransactionRow'
 import EmptyState from '../../components/ui/EmptyState'
-import { IconArrowLeft } from '../../components/ui/icons'
+import Skeleton, { SkeletonText } from '../../components/ui/Skeleton'
+import { IconArrowLeft, IconWallet } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Finance.module.css'
+import itemStyles from '../../components/finance/Finance.module.css'
 
 export default function InvoiceDetail() {
   const { id } = useParams()
@@ -16,7 +18,19 @@ export default function InvoiceDetail() {
   if (isLoading) {
     return (
       <div className="page">
-        <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>
+        <Skeleton width="140px" height="14px" style={{ marginBottom: 'var(--space-sm)' }} />
+        <div className="page-header">
+          <Skeleton width="200px" height="24px" />
+        </div>
+        <div className={styles.columns}>
+          <div className={['card', itemStyles.invoiceCard].join(' ')}>
+            <SkeletonText lines={3} />
+          </div>
+          <div className="card">
+            <Skeleton width="180px" height="15px" style={{ marginBottom: 'var(--space-md)' }} />
+            <SkeletonText lines={3} />
+          </div>
+        </div>
       </div>
     )
   }
@@ -58,7 +72,7 @@ export default function InvoiceDetail() {
           {invoice.transactions?.length ? (
             invoice.transactions.map((tx) => <TransactionRow key={tx.id} transaction={tx} />)
           ) : (
-            <EmptyState icon="$" title="Sin transacciones asociadas" />
+            <EmptyState icon={<IconWallet />} title="Sin transacciones asociadas" />
           )}
         </div>
       </div>

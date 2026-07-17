@@ -4,6 +4,7 @@ import { useProjects } from '../../hooks/useProjects'
 import { useUsers } from '../../hooks/useUsers'
 import { useSprints } from '../../hooks/useSprints'
 import TaskBoard from '../../components/tasks/TaskBoard'
+import TaskBoardSkeleton from '../../components/tasks/TaskBoardSkeleton'
 import TaskModal from '../../components/tasks/TaskModal'
 import Select from '../../components/ui/Select'
 import SprintBar from '../../components/sprints/SprintBar'
@@ -77,7 +78,7 @@ export default function KanbanBoard() {
 
       {projectId && <SprintBar projectId={projectId} />}
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && <TaskBoardSkeleton />}
       {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar las tareas.</p>}
 
       {!isLoading && !isError && (

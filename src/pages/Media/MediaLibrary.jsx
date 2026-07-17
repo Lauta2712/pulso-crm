@@ -6,6 +6,8 @@ import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Select from '../../components/ui/Select'
 import EmptyState from '../../components/ui/EmptyState'
+import Skeleton, { SkeletonTableRows, SkeletonText } from '../../components/ui/Skeleton'
+import { interactiveRowProps } from '../../lib/a11y'
 import { IconImage, IconVideo, IconFileText, IconPalette, IconPaperclip, IconFolder } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from '../Content/Content.module.css'
@@ -101,7 +103,36 @@ export default function MediaLibrary() {
         </div>
       </div>
 
-      {isLoading && <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>}
+      {isLoading && view === 'grid' && (
+        <div className={styles.mediaGrid}>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className={styles.mediaCard}>
+              <Skeleton width="28px" height="28px" radius="6px" />
+              <SkeletonText lines={2} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isLoading && view === 'list' && (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Cliente</th>
+                <th>Proyecto</th>
+                <th>Notas</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <SkeletonTableRows columns={6} />
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {!isLoading && (isError || assets?.length === 0) && (
         <EmptyState
@@ -115,7 +146,12 @@ export default function MediaLibrary() {
       {!isLoading && !isError && assets?.length > 0 && view === 'grid' && (
         <div className={styles.mediaGrid}>
           {assets.map((asset) => (
-            <div key={asset.id} className={styles.mediaCard} onClick={() => setEditing(asset)}>
+            <div
+              key={asset.id}
+              className={styles.mediaCard}
+              onClick={() => setEditing(asset)}
+              {...interactiveRowProps(() => setEditing(asset))}
+            >
               <div className={styles.mediaIcon}>{TYPE_ICON[asset.type]}</div>
               <div className={styles.mediaName}>{asset.name}</div>
               <div className={styles.mediaMeta}>

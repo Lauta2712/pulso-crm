@@ -6,6 +6,7 @@ import {
   useDeleteChecklistItem,
 } from '../../hooks/useChecklist'
 import { useUIStore } from '../../store/useUIStore'
+import Skeleton from '../ui/Skeleton'
 import { IconClose } from '../ui/icons'
 import styles from './TaskChecklist.module.css'
 
@@ -59,7 +60,13 @@ export default function TaskChecklist({ taskId }) {
         )}
       </div>
 
-      {isLoading && <p className={styles.empty}>Cargando...</p>}
+      {isLoading && (
+        <div className={styles.list}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} height="16px" width={i === 2 ? '60%' : '90%'} />
+          ))}
+        </div>
+      )}
       {!isLoading && total === 0 && <p className={styles.empty}>Sin items todavía.</p>}
 
       <ul className={styles.list}>

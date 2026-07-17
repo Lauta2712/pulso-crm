@@ -7,7 +7,8 @@ import ProjectFormModal from '../../components/projects/ProjectFormModal'
 import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
-import { IconArrowLeft } from '../../components/ui/icons'
+import Skeleton, { SkeletonText } from '../../components/ui/Skeleton'
+import { IconArrowLeft, IconLayers } from '../../components/ui/icons'
 import { formatCurrency } from '../../lib/format'
 import styles from './Clients.module.css'
 
@@ -31,7 +32,35 @@ export default function ClientDetail() {
   if (isLoading) {
     return (
       <div className="page">
-        <p style={{ color: 'var(--text-secondary)' }}>Cargando...</p>
+        <Link to="/app/clients" className={styles.backLink}>
+          <IconArrowLeft /> Volver a clientes
+        </Link>
+
+        <div className="page-header">
+          <Skeleton width="220px" height="24px" />
+        </div>
+
+        <div className={styles.detailGrid}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+            <div className="card">
+              <SkeletonText lines={4} />
+            </div>
+            <div className="card">
+              <Skeleton width="120px" height="15px" style={{ marginBottom: 'var(--space-md)' }} />
+              <SkeletonText lines={2} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+            <div className="card">
+              <Skeleton width="100px" height="15px" style={{ marginBottom: 'var(--space-md)' }} />
+              <SkeletonText lines={3} />
+            </div>
+            <div className="card">
+              <Skeleton width="80px" height="15px" style={{ marginBottom: 'var(--space-md)' }} />
+              <Skeleton height="80px" />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -112,7 +141,7 @@ export default function ClientDetail() {
               </div>
             ) : (
               <EmptyState
-                icon="▣"
+                icon={<IconLayers />}
                 title="Sin proyectos"
                 description="Este cliente todavía no tiene proyectos asociados."
                 action={<Button onClick={() => setShowProjectModal(true)}>+ Nuevo proyecto</Button>}
