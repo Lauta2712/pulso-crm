@@ -42,7 +42,8 @@ export default function ClientFormModal({ onClose }) {
       await createClient.mutateAsync(payload)
       addToast('Cliente creado correctamente')
       onClose()
-    } catch {
+    } catch (err) {
+      console.error(err)
       addToast('No se pudo crear el cliente', 'error')
     }
   }
