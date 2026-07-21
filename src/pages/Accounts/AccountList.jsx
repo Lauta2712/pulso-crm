@@ -6,7 +6,7 @@ import Badge from '../../components/ui/Badge'
 import EmptyState from '../../components/ui/EmptyState'
 import { SkeletonTableRows, SkeletonCard } from '../../components/ui/Skeleton'
 import { EyeIcon, EyeOffIcon } from '../../components/ui/PasswordIcons'
-import { IconKey } from '../../components/ui/icons'
+import { IconKey, IconExternalLink } from '../../components/ui/icons'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './Accounts.module.css'
 
@@ -127,8 +127,15 @@ export default function AccountList() {
                       </td>
                       <td className={styles.muted}>
                         {account.url ? (
-                          <a href={account.url} target="_blank" rel="noreferrer">
-                            {account.url}
+                          <a
+                            className={styles.urlLink}
+                            href={account.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            title={account.url}
+                            aria-label={`Abrir URL de ${account.name}`}
+                          >
+                            <IconExternalLink /> Abrir
                           </a>
                         ) : (
                           '—'
@@ -188,8 +195,15 @@ export default function AccountList() {
                   <div className={styles.accountCardRow}>
                     <span className={styles.accountCardLabel}>URL</span>
                     {account.url ? (
-                      <a className={styles.accountCardUrl} href={account.url} target="_blank" rel="noreferrer">
-                        {account.url}
+                      <a
+                        className={styles.urlLink}
+                        href={account.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        title={account.url}
+                        aria-label={`Abrir URL de ${account.name}`}
+                      >
+                        <IconExternalLink /> Abrir
                       </a>
                     ) : (
                       <span className={styles.muted}>—</span>

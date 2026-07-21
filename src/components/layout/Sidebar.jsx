@@ -14,7 +14,7 @@ const NAV_GROUPS = [
     items: [
       { to: '/app/clients', label: 'Clientes', roles: ['owner', 'pm'] },
       { to: '/app/projects', label: 'Proyectos' },
-      { to: '/app/board', label: 'Board', badge: 'BETA' },
+      { to: '/app/board', label: 'Board' },
       { to: '/app/calendar', label: 'Calendario', badge: 'NEW' },
     ],
   },

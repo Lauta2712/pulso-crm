@@ -11,7 +11,7 @@
   padding: var(--space-md) var(--space-sm);
   z-index: 100;
   transition: transform 0.2s ease;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .logo {
@@ -27,6 +27,23 @@
   flex-direction: column;
   gap: 0;
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+
+.nav::-webkit-scrollbar {
+  width: 5px;
+}
+
+.nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 999px;
 }
 
 /* Groups */

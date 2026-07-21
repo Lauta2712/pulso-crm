@@ -98,12 +98,16 @@
   flex-shrink: 0;
 }
 
-.accountCardUrl {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.urlLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--text-secondary);
-  text-align: right;
+  white-space: nowrap;
+}
+
+.urlLink:hover {
+  color: var(--text-primary);
 }
 
 .accountCardActions {
