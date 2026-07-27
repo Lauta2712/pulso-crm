@@ -39,6 +39,7 @@ const NAV_GROUPS = [
     label: 'Equipo',
     items: [
       { to: '/app/team', label: 'Equipo', roles: ['owner', 'pm'] },
+      { to: '/app/candidates', label: 'Postulantes', roles: ['owner', 'pm'], badge: 'NEW' },
       { to: '/app/profile', label: 'Perfil' },
       { to: '/app/settings', label: 'Ajustes', roles: ['owner'] },
     ],

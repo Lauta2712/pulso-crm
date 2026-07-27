@@ -17,6 +17,7 @@ import FinanceDashboard from './pages/Finance/FinanceDashboard'
 import InvoiceDetail from './pages/Finance/InvoiceDetail'
 import AccountList from './pages/Accounts/AccountList'
 import DocList from './pages/Docs/DocList'
+import CandidateList from './pages/Candidates/CandidateList'
 import Team from './pages/Team/Team'
 import Profile from './pages/Profile/Profile'
 import Settings from './pages/Settings/Settings'
@@ -90,6 +91,7 @@ function App() {
           <Route path="media" element={<MediaLibrary />} />
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="docs" element={<DocList />} />
+          <Route path="candidates" element={<RoleRoute roles={['owner', 'pm']}><CandidateList /></RoleRoute>} />
           <Route path="team" element={<RoleRoute roles={['owner', 'pm']}><Team /></RoleRoute>} />
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<RoleRoute roles={['owner']}><Settings /></RoleRoute>} />

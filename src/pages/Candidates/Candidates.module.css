@@ -1,0 +1,143 @@
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tabActive {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.tableWrapper {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 12px var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 14px var(--space-md);
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.name {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.notes {
+  color: var(--text-secondary);
+  max-width: 280px;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.cvLink {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.candidateCards {
+  display: none;
+}
+
+.candidateCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.candidateCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.candidateCardRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-size: 13px;
+}
+
+.candidateCardLabel {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.candidateCardActions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+  margin-top: var(--space-xs);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--space-sm);
+}
+
+@media (max-width: 640px) {
+  .tableWrapper {
+    display: none;
+  }
+
+  .candidateCards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+}
+
