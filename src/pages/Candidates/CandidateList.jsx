@@ -152,6 +152,15 @@ export default function CandidateList() {
                         >
                           Ver CV
                         </button>
+                      ) : candidate.portfolio_url ? (
+                        <a
+                          href={candidate.portfolio_url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={styles.cvLink}
+                        >
+                          Portfolio
+                        </a>
                       ) : (
                         '—'
                       )}
@@ -199,6 +208,15 @@ export default function CandidateList() {
                     >
                       Ver CV
                     </button>
+                  ) : candidate.portfolio_url ? (
+                    <a
+                      href={candidate.portfolio_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={styles.cvLink}
+                    >
+                      Portfolio
+                    </a>
                   ) : (
                     <span className={styles.muted}>—</span>
                   )}

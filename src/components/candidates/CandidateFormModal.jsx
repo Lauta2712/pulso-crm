@@ -28,6 +28,7 @@ export default function CandidateFormModal({ candidate, onClose }) {
     status: candidate?.status ?? 'new',
     source: candidate?.source ?? '',
     notes: candidate?.notes ?? '',
+    portfolio_url: candidate?.portfolio_url ?? '',
   })
   const [cvFile, setCvFile] = useState(null)
 
@@ -109,6 +110,16 @@ export default function CandidateFormModal({ candidate, onClose }) {
             type="file"
             accept=".pdf,.doc,.docx"
             onChange={(e) => setCvFile(e.target.files?.[0] ?? null)}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label}>Portfolio (si no manda CV)</label>
+          <input
+            type="url"
+            value={form.portfolio_url}
+            onChange={handleChange('portfolio_url')}
+            placeholder="https://..."
           />
         </div>
 
