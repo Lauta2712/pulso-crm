@@ -33,8 +33,9 @@ export default function AccountList() {
     try {
       await deleteAccount.mutateAsync(account.id)
       addToast('Cuenta eliminada')
-    } catch {
-      addToast('No se pudo eliminar la cuenta', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar la cuenta', 'error')
     }
   }
 

@@ -22,8 +22,9 @@ export default function DocList() {
     try {
       await deleteDocument.mutateAsync(document.id)
       addToast('Documento eliminado')
-    } catch {
-      addToast('No se pudo eliminar el documento', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar el documento', 'error')
     }
   }
 

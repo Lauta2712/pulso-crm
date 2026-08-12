@@ -18,8 +18,9 @@ export default function SprintBar({ projectId }) {
     try {
       await updateSprint.mutateAsync({ id: activeSprint.id, is_active: false })
       addToast('Sprint completado')
-    } catch {
-      addToast('No se pudo completar el sprint', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo completar el sprint', 'error')
     }
   }
 

@@ -25,24 +25,27 @@ export default function TaskChecklist({ taskId }) {
     try {
       await addItem.mutateAsync({ taskId, title: title.trim(), position: items?.length ?? 0 })
       setTitle('')
-    } catch {
-      addToast('No se pudo agregar el item', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo agregar el item', 'error')
     }
   }
 
   const handleToggle = async (item) => {
     try {
       await toggleItem.mutateAsync({ id: item.id, isDone: !item.is_done })
-    } catch {
-      addToast('No se pudo actualizar el item', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo actualizar el item', 'error')
     }
   }
 
   const handleDelete = async (item) => {
     try {
       await deleteItem.mutateAsync({ id: item.id, taskId })
-    } catch {
-      addToast('No se pudo eliminar el item', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar el item', 'error')
     }
   }
 

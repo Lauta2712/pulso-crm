@@ -52,8 +52,9 @@ export default function CampaignMetricsDetail() {
     try {
       await deleteMetric.mutateAsync({ id: metric.id, campaign_id: id })
       addToast('Registro eliminado')
-    } catch {
-      addToast('No se pudo eliminar', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar', 'error')
     }
   }
 

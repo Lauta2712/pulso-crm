@@ -139,8 +139,9 @@ export default function CalendarPage() {
         addToast('Evento creado')
       }
       closeModal()
-    } catch {
-      addToast('No se pudo guardar el evento', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo guardar el evento', 'error')
     }
   }
 
@@ -150,8 +151,9 @@ export default function CalendarPage() {
       await deleteEvent.mutateAsync(editing.id)
       addToast('Evento eliminado')
       closeModal()
-    } catch {
-      addToast('No se pudo eliminar', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar', 'error')
     }
   }
 

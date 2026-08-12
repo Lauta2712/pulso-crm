@@ -72,8 +72,9 @@ export default function CampaignFormModal({ campaign, onClose }) {
         addToast('Campaña creada')
       }
       onClose()
-    } catch {
-      addToast('No se pudo guardar la campaña', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo guardar la campaña', 'error')
     }
   }
 

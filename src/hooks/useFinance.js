@@ -95,9 +95,10 @@ export function useExpenses() {
   })
 }
 
-export function useFinanceSummary() {
+export function useFinanceSummary({ enabled = true } = {}) {
   return useQuery({
     queryKey: ['finance-summary'],
+    enabled,
     queryFn: async () => {
       const { start, end } = monthRange()
 

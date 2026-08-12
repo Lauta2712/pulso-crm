@@ -68,8 +68,9 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
       onClose()
       if (onCreated) onCreated(project)
       else navigate(`/app/projects/${project.id}`)
-    } catch {
-      addToast('No se pudo crear el proyecto', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo crear el proyecto', 'error')
     }
   }
 

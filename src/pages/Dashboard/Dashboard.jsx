@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/useAuthStore'
+import { useCurrentUser } from '../../hooks/useCurrentUser'
 import { useClients } from '../../hooks/useClients'
 import { useProjects } from '../../hooks/useProjects'
 import { useTasks } from '../../hooks/useTasks'
@@ -42,13 +43,31 @@ function isWithinNextWeek(dateStr) {
 export default function Dashboard() {
   const session = useAuthStore((state) => state.session)
   const userId = session?.user?.id
+  const { data: currentUser } = useCurrentUser()
+  const canViewFinance = currentUser?.role === 'owner'
 
-  const { data: clients, isLoading: loadingClients } = useClients()
-  const { data: projects, isLoading: loadingProjects } = useProjects()
-  const { data: tasks, isLoading: loadingTasks } = useTasks()
-  const { data: summary, isLoading: loadingSummary } = useFinanceSummary()
+  const { data: clients, isLoading: loadingClients, isError: errorClients } = useClients()
+  const { data: projects, isLoading: loadingProjects, isError: errorProjects } = useProjects()
+  const { data: tasks, isLoading: loadingTasks, isError: errorTasks } = useTasks()
+  const {
+    data: summary,
+    isLoading: loadingSummary,
+    isError: errorSummary,
+  } = useFinanceSummary({ enabled: canViewFinance })
 
-  const isLoading = loadingClients || loadingProjects || loadingTasks || loadingSummary
+  const isLoading = loadingClients || loadingProjects || loadingTasks || (canViewFinance && loadingSummary)
+  const isError = errorClients || errorProjects || errorTasks || (canViewFinance && errorSummary)
+
+  if (isError) {
+    return (
+      <div className="page">
+        <div className="page-header">
+          <h1 className="page-title">Dashboard</h1>
+        </div>
+        <p style={{ color: 'var(--danger)' }}>No se pudo cargar el dashboard.</p>
+      </div>
+    )
+  }
 
   if (isLoading) {
     return (
@@ -136,16 +155,18 @@ export default function Dashboard() {
           <span className={styles.metricLabel}>Tareas pendientes esta semana</span>
           <span className={styles.metricValue}>{pendingThisWeek.length}</span>
         </div>
-        <div className={['card', styles.metricCard].join(' ')}>
-          <span className={styles.metricLabel}>Ingresos del mes</span>
-          <span className={styles.metricValue}>{formatCurrency(summary?.income)}</span>
-          <span
-            className={styles.metricDetail}
-            style={{ color: balance >= 0 ? 'var(--success)' : 'var(--danger)' }}
-          >
-            Balance {formatCurrency(balance)}
-          </span>
-        </div>
+        {canViewFinance && (
+          <div className={['card', styles.metricCard].join(' ')}>
+            <span className={styles.metricLabel}>Ingresos del mes</span>
+            <span className={styles.metricValue}>{formatCurrency(summary?.income)}</span>
+            <span
+              className={styles.metricDetail}
+              style={{ color: balance >= 0 ? 'var(--success)' : 'var(--danger)' }}
+            >
+              Balance {formatCurrency(balance)}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className={styles.charts}>
@@ -156,15 +177,17 @@ export default function Dashboard() {
           color="var(--accent-orange)"
           emptyLabel="No hay proyectos activos"
         />
-        <BarChart
-          title="Ingresos vs gastos (mes)"
-          data={[
-            { label: 'Ingresos', value: summary?.income ?? 0 },
-            { label: 'Gastos', value: summary?.expense ?? 0 },
-          ]}
-          color="var(--info)"
-          formatValue={formatCurrency}
-        />
+        {canViewFinance && (
+          <BarChart
+            title="Ingresos vs gastos (mes)"
+            data={[
+              { label: 'Ingresos', value: summary?.income ?? 0 },
+              { label: 'Gastos', value: summary?.expense ?? 0 },
+            ]}
+            color="var(--info)"
+            formatValue={formatCurrency}
+          />
+        )}
       </div>
 
       <div className={styles.sections}>

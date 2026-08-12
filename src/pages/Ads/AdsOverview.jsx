@@ -29,11 +29,20 @@ export default function AdsOverview() {
     return f
   }, [clientId, platform])
 
-  const { data: campaigns, isLoading: loadingCampaigns } = useCampaigns(filters)
-  const { data: metricRows, isLoading: loadingMetrics } = useAllCampaignMetrics(filters)
+  const {
+    data: campaigns,
+    isLoading: loadingCampaigns,
+    isError: errorCampaigns,
+  } = useCampaigns(filters)
+  const {
+    data: metricRows,
+    isLoading: loadingMetrics,
+    isError: errorMetrics,
+  } = useAllCampaignMetrics(filters)
   const { data: clients } = useClients()
 
   const isLoading = loadingCampaigns || loadingMetrics
+  const isError = errorCampaigns || errorMetrics
 
   const totalsByCampaign = useMemo(() => {
     const map = new Map()
@@ -158,7 +167,9 @@ export default function AdsOverview() {
         </>
       )}
 
-      {!isLoading && campaignRows.length === 0 && (
+      {isError && <p style={{ color: 'var(--danger)' }}>Error al cargar las publicidades.</p>}
+
+      {!isLoading && !isError && campaignRows.length === 0 && (
         <EmptyState
           icon={<IconChart />}
           title="No hay publicidades para trackear"
@@ -167,7 +178,7 @@ export default function AdsOverview() {
         />
       )}
 
-      {!isLoading && campaignRows.length > 0 && (
+      {!isLoading && !isError && campaignRows.length > 0 && (
         <>
           <div className={styles.metrics}>
             <div className={['card', styles.metricCard].join(' ')}>

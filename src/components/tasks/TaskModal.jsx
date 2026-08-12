@@ -98,8 +98,9 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
 
       addToast(isEditing ? 'Tarea actualizada' : 'Tarea creada')
       onClose()
-    } catch {
-      addToast('No se pudo guardar la tarea', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo guardar la tarea', 'error')
     }
   }
 
@@ -109,8 +110,9 @@ export default function TaskModal({ task, projectId, defaultStatus, onClose }) {
       await deleteTask.mutateAsync(task.id)
       addToast('Tarea eliminada')
       onClose()
-    } catch {
-      addToast('No se pudo eliminar la tarea', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar la tarea', 'error')
     }
   }
 

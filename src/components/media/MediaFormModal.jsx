@@ -56,8 +56,9 @@ export default function MediaFormModal({ asset, onClose }) {
         addToast('Asset creado')
       }
       onClose()
-    } catch {
-      addToast('No se pudo guardar el asset', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo guardar el asset', 'error')
     }
   }
 

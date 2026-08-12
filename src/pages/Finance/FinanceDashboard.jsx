@@ -46,8 +46,9 @@ export default function FinanceDashboard() {
     try {
       await markPaid.mutateAsync(id)
       addToast('Factura marcada como pagada')
-    } catch {
-      addToast('No se pudo actualizar la factura', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo actualizar la factura', 'error')
     }
   }
 

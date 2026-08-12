@@ -35,8 +35,9 @@ export default function DocFormModal({ document, onClose }) {
         addToast('Documento creado')
       }
       onClose()
-    } catch {
-      addToast('No se pudo guardar el documento', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo guardar el documento', 'error')
     }
   }
 

@@ -44,7 +44,7 @@ export default function ClientFormModal({ onClose }) {
       onClose()
     } catch (err) {
       console.error(err)
-      addToast('No se pudo crear el cliente', 'error')
+      addToast(err?.message || 'No se pudo crear el cliente', 'error')
     }
   }
 

@@ -72,8 +72,9 @@ export default function ContentFormModal({ post, onClose }) {
         addToast('Publicación creada')
       }
       onClose()
-    } catch {
-      addToast('No se pudo guardar la publicación', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo guardar la publicación', 'error')
     }
   }
 

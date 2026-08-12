@@ -47,8 +47,9 @@ export default function AccountFormModal({ account, onClose }) {
         addToast('Cuenta creada')
       }
       onClose()
-    } catch {
-      addToast('No se pudo guardar la cuenta', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo guardar la cuenta', 'error')
     }
   }
 

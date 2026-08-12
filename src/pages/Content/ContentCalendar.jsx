@@ -100,8 +100,9 @@ export default function ContentCalendar() {
     try {
       await deletePost.mutateAsync(post.id)
       addToast('Publicación eliminada')
-    } catch {
-      addToast('No se pudo eliminar', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar', 'error')
     }
   }
 

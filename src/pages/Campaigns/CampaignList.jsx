@@ -37,8 +37,9 @@ export default function CampaignList() {
     try {
       await deleteCampaign.mutateAsync(campaign.id)
       addToast('Campaña eliminada')
-    } catch {
-      addToast('No se pudo eliminar', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar', 'error')
     }
   }
 

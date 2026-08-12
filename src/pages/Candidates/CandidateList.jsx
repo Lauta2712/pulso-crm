@@ -35,8 +35,9 @@ export default function CandidateList() {
     try {
       await deleteCandidate.mutateAsync(candidate)
       addToast('Postulante eliminado')
-    } catch {
-      addToast('No se pudo eliminar el postulante', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar el postulante', 'error')
     }
   }
 
@@ -44,8 +45,9 @@ export default function CandidateList() {
     try {
       const url = await getCandidateCvUrl(candidate.cv_path)
       window.open(url, '_blank', 'noreferrer')
-    } catch {
-      addToast('No se pudo abrir el CV', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo abrir el CV', 'error')
     }
   }
 

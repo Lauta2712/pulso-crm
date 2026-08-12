@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { useClient, useUpdateClient } from '../../hooks/useClients'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useClient, useUpdateClient, useDeleteClient } from '../../hooks/useClients'
 import { useUIStore } from '../../store/useUIStore'
 import ClientCard from '../../components/clients/ClientCard'
 import ProjectFormModal from '../../components/projects/ProjectFormModal'
@@ -22,8 +22,10 @@ const PROJECT_STATUS_VARIANT = {
 
 export default function ClientDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { data: client, isLoading, isError } = useClient(id)
   const updateClient = useUpdateClient()
+  const deleteClient = useDeleteClient()
   const addToast = useUIStore((state) => state.addToast)
 
   const [notes, setNotes] = useState(null)
@@ -79,8 +81,26 @@ export default function ClientDetail() {
     try {
       await updateClient.mutateAsync({ id: client.id, notes: notesValue })
       addToast('Notas guardadas')
-    } catch {
-      addToast('No se pudieron guardar las notas', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudieron guardar las notas', 'error')
+    }
+  }
+
+  const handleDelete = async () => {
+    if (
+      !window.confirm(
+        `¿Eliminar a "${client.name}"? Sus proyectos no se van a borrar, pero quedan sin cliente asignado. Esta acción no se puede deshacer.`
+      )
+    )
+      return
+    try {
+      await deleteClient.mutateAsync(client.id)
+      addToast('Cliente eliminado')
+      navigate('/app/clients')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar el cliente', 'error')
     }
   }
 
@@ -92,7 +112,12 @@ export default function ClientDetail() {
 
       <div className="page-header">
         <h1 className="page-title">{client.name}</h1>
-        <Button onClick={() => setShowProjectModal(true)}>+ Nuevo proyecto</Button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Button onClick={() => setShowProjectModal(true)}>+ Nuevo proyecto</Button>
+          <Button variant="danger" size="sm" onClick={handleDelete} disabled={deleteClient.isPending}>
+            Eliminar
+          </Button>
+        </div>
       </div>
 
       <div className={styles.detailGrid}>

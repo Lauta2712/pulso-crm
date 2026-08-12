@@ -51,8 +51,9 @@ export default function Profile() {
     try {
       await updateUser.mutateAsync({ id: currentUser.id, ...profileFormValue })
       addToast('Perfil actualizado')
-    } catch {
-      addToast('No se pudo guardar el perfil', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo guardar el perfil', 'error')
     }
   }
 

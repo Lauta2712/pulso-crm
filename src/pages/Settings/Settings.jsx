@@ -61,8 +61,9 @@ export default function Settings() {
     try {
       await updateOrg.mutateAsync({ id: org.id, ...orgFormValue })
       addToast('Datos de la organización actualizados')
-    } catch {
-      addToast('No se pudieron guardar los cambios', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudieron guardar los cambios', 'error')
     }
   }
 
@@ -70,8 +71,9 @@ export default function Settings() {
     try {
       await updateUserRole.mutateAsync({ id: userId, role })
       addToast('Rol actualizado')
-    } catch {
-      addToast('No se pudo actualizar el rol', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo actualizar el rol', 'error')
     }
   }
 
@@ -82,8 +84,9 @@ export default function Settings() {
       await createTag.mutateAsync(newTag)
       setNewTag({ name: '', color: '#7c6af7' })
       addToast('Tag creado')
-    } catch {
-      addToast('No se pudo crear el tag', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo crear el tag', 'error')
     }
   }
 
@@ -91,8 +94,9 @@ export default function Settings() {
     try {
       await deleteTag.mutateAsync(id)
       addToast('Tag eliminado')
-    } catch {
-      addToast('No se pudo eliminar el tag', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar el tag', 'error')
     }
   }
 

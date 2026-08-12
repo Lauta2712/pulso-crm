@@ -60,8 +60,9 @@ export default function MediaLibrary() {
     try {
       await deleteAsset.mutateAsync(asset.id)
       addToast('Asset eliminado')
-    } catch {
-      addToast('No se pudo eliminar', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar', 'error')
     }
   }
 

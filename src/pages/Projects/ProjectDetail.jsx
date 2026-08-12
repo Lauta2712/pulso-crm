@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { useProject } from '../../hooks/useProjects'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useProject, useDeleteProject } from '../../hooks/useProjects'
 import { useTasks } from '../../hooks/useTasks'
 import { useActiveSprint } from '../../hooks/useSprints'
 import TaskBoard from '../../components/tasks/TaskBoard'
@@ -10,6 +10,7 @@ import Badge from '../../components/ui/Badge'
 import Button from '../../components/ui/Button'
 import Skeleton from '../../components/ui/Skeleton'
 import { IconArrowLeft, IconArrowRight } from '../../components/ui/icons'
+import { useUIStore } from '../../store/useUIStore'
 import { formatCurrency, formatDate } from '../../lib/format'
 import styles from './Projects.module.css'
 
@@ -23,8 +24,11 @@ const STATUS_VARIANT = {
 
 export default function ProjectDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const addToast = useUIStore((state) => state.addToast)
   const { data: project, isLoading, isError } = useProject(id)
   const { data: activeSprint } = useActiveSprint(id)
+  const deleteProject = useDeleteProject()
 
   const queryKey = useMemo(() => ['tasks', { projectId: id }], [id])
   const { data: tasks, isLoading: loadingTasks } = useTasks({ projectId: id })
@@ -73,6 +77,23 @@ export default function ProjectDetail() {
       ? (tasks ?? []).filter((t) => t.sprint_id === activeSprint.id)
       : tasks ?? []
 
+  const handleDelete = async () => {
+    if (
+      !window.confirm(
+        `¿Eliminar "${project.name}"? Se van a borrar también sus tareas, sprints y asignaciones. Esta acción no se puede deshacer.`
+      )
+    )
+      return
+    try {
+      await deleteProject.mutateAsync(project.id)
+      addToast('Proyecto eliminado')
+      navigate('/app/projects')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo eliminar el proyecto', 'error')
+    }
+  }
+
   return (
     <div className="page">
       <Link to="/app/projects" className={styles.backLink}>
@@ -92,6 +113,9 @@ export default function ProjectDetail() {
           <Badge variant={STATUS_VARIANT[project.status] ?? 'muted'}>{project.status}</Badge>
           <Badge variant="accent">{project.type}</Badge>
           <Button onClick={() => setShowNewTask(true)}>+ Nueva tarea</Button>
+          <Button variant="danger" size="sm" onClick={handleDelete} disabled={deleteProject.isPending}>
+            Eliminar
+          </Button>
         </div>
       </div>
 

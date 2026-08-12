@@ -36,8 +36,9 @@ function AssigneePicker({ task }) {
     setOpen(false)
     try {
       await updateTask.mutateAsync({ id: task.id, assigned_to: userId || null })
-    } catch {
-      addToast('No se pudo asignar', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo asignar', 'error')
     }
   }
 

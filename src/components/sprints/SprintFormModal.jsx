@@ -34,8 +34,9 @@ export default function SprintFormModal({ projectId, activeSprint, onClose }) {
       })
       addToast('Sprint creado')
       onClose()
-    } catch {
-      addToast('No se pudo crear el sprint', 'error')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo crear el sprint', 'error')
     }
   }
 
