@@ -14,12 +14,41 @@
   overflow: hidden;
 }
 
-.logo {
-  height: 24px;
-  width: auto;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
   padding: 0 var(--space-sm);
   margin-bottom: var(--space-lg);
   flex-shrink: 0;
+  min-width: 0;
+}
+
+.brandAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.brandAvatarFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.brandName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav {

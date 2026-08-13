@@ -1,27 +1,31 @@
 :root {
-  /* Backgrounds */
-  --bg-primary: #0f0f11;
-  --bg-surface: #17171b;
-  --bg-elevated: #1f1f26;
-  --bg-hover: #2a2a33;
+  /* Backgrounds — ink navy, not neutral gray: a night-chart cast that
+     reads as "instrument", not "generic dark mode" */
+  --bg-primary: #0a0d14;
+  --bg-surface: #10141d;
+  --bg-elevated: #171c28;
+  --bg-hover: #212736;
 
-  /* Accent */
-  --accent: #2f6fed;
-  --accent-hover: #5b8ff7;
-  --accent-subtle: #2f6fed1a;
+  /* Accent — violet, the needle */
+  --accent: #8171e8;
+  --accent-hover: #9585f0;
+  --accent-subtle: #8171e81a;
+  /* Text color for content sitting on top of --accent/--accent-hover fills —
+     white fails contrast here (3.8:1), dark ink clears AA (5.5:1) */
+  --accent-ink: #14100a;
 
-  /* Secondary accent (brand orange) */
-  --accent-orange: #ff6100;
-  --accent-orange-subtle: #ff610026;
+  /* Secondary accent (azimuth blue) — data/contrast pairing, used sparingly */
+  --accent-secondary: #3f8fd1;
+  --accent-secondary-subtle: #3f8fd126;
 
   /* Text */
-  --text-primary: #f0eff5;
+  --text-primary: #f2f0ea;
   --text-secondary: #9896a4;
   --text-muted: #5a5864;
 
   /* Borders */
-  --border: #2a2a33;
-  --border-subtle: #1f1f26;
+  --border: #242a3a;
+  --border-subtle: #171c28;
 
   /* Status */
   --success: #34d399;
@@ -55,6 +59,25 @@
 
   /* Font */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Light theme — applied via data-theme="light" on <html>, toggled from the
+   TopBar and persisted in localStorage. Dark (the bare :root above) is the
+   default. Only backgrounds/text/borders flip; accent and status colors
+   stay the same across both themes for brand consistency. */
+:root[data-theme='light'] {
+  --bg-primary: #f6f5fa;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f0eef7;
+  --bg-hover: #e5e1f0;
+
+  --text-primary: #1c1b24;
+  --text-secondary: #625f70;
+  --text-muted: #9491a3;
+
+  --border: #ddd9ea;
+  --border-subtle: #ece9f4;
 }
 
 /*

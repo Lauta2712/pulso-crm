@@ -28,6 +28,39 @@
   color: var(--text-secondary);
 }
 
+.moreToggle {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  color: var(--accent-hover);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.moreToggle:hover {
+  text-decoration: underline;
+}
+
+.extra {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.extraOpen {
+  grid-template-rows: 1fr;
+}
+
+.extraInner {
+  overflow: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;

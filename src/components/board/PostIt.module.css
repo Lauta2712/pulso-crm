@@ -1,111 +1,62 @@
-.note {
+.card {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 130px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: var(--space-lg) var(--space-sm) var(--space-sm);
+  min-height: 110px;
+  background: var(--note-color);
+  color: #241f18;
+  border-radius: 3px 3px 10px 3px;
+  padding: var(--space-sm);
   box-shadow: var(--shadow-sm);
   cursor: grab;
   touch-action: none;
   user-select: none;
+  transform: rotate(var(--rotate));
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.note:hover {
-  border-color: var(--border);
+.card:hover {
+  transform: rotate(0deg) translateY(-2px);
   box-shadow: var(--shadow-md);
   z-index: 2;
 }
 
-.note.done {
+.card.done {
   opacity: 0.55;
   cursor: default;
 }
 
-.pin {
-  position: absolute;
-  top: -7px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 14px;
-  padding: 0;
-  border: 2px solid var(--bg-primary);
-  border-radius: 50%;
-  background: var(--pin-color);
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
+.card.justCreated {
+  animation: stick 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-.colorPicker {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  display: flex;
-  gap: var(--space-xs);
-  padding: var(--space-xs);
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
-}
-
-.colorSwatch {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 0;
-  cursor: pointer;
-}
-
-.text {
-  flex: 1;
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 0.9rem;
-  line-height: 1.45;
-  white-space: pre-wrap;
-  word-break: break-word;
-  cursor: text;
-}
-
-.note.done .text {
-  text-decoration: line-through;
-  color: var(--text-secondary);
-}
-
-.textarea {
-  user-select: text;
-  flex: 1;
-  min-height: 60px;
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  border: none;
-  outline: none;
-  resize: none;
-  color: var(--text-primary);
-  font: inherit;
-  font-size: 0.9rem;
-  line-height: 1.45;
+@keyframes stick {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg) translateY(-28px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.06) rotate(var(--rotate)) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(var(--rotate)) translateY(0);
+  }
 }
 
 .actions {
+  position: absolute;
+  top: 6px;
+  right: 6px;
   display: flex;
-  justify-content: flex-end;
-  gap: var(--space-xs);
-  margin-top: var(--space-sm);
+  gap: 4px;
   opacity: 0;
   transition: opacity 0.12s ease;
 }
 
-.note:hover .actions,
-.note:focus-within .actions {
+.card:hover .actions,
+.card:focus-within .actions {
   opacity: 1;
 }
 
@@ -113,18 +64,48 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   padding: 0;
   border: none;
-  border-radius: var(--radius-sm);
-  background: var(--bg-hover);
-  color: var(--text-secondary);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.14);
+  color: inherit;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 .actionBtn:hover {
-  color: var(--text-primary);
-  background: var(--accent-subtle);
+  background: rgba(0, 0, 0, 0.26);
+}
+
+.text {
+  flex: 1;
+  margin: 0;
+  margin-top: 18px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  cursor: text;
+}
+
+.card.done .text {
+  text-decoration: line-through;
+}
+
+.textarea {
+  user-select: text;
+  flex: 1;
+  margin-top: 18px;
+  min-height: 60px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.45;
 }

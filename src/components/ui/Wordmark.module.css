@@ -1,0 +1,17 @@
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.md {
+  font-size: 20px;
+}
+
+.lg {
+  font-size: 30px;
+}

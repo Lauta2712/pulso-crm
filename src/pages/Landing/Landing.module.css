@@ -4,7 +4,7 @@
   flex-direction: column;
   background:
     radial-gradient(circle at 15% 0%, var(--accent-subtle), transparent 45%),
-    radial-gradient(circle at 85% 15%, var(--accent-orange-subtle), transparent 40%),
+    radial-gradient(circle at 85% 15%, var(--accent-secondary-subtle), transparent 40%),
     var(--bg-primary);
 }
 
@@ -19,6 +19,7 @@
   height: 32px;
   width: auto;
 }
+
 
 .hero {
   display: flex;
@@ -46,9 +47,10 @@
 }
 
 .title {
-  font-size: 44px;
-  line-height: 1.15;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 1.12;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
@@ -115,6 +117,130 @@
   color: var(--text-secondary);
   font-size: 13px;
   line-height: 1.6;
+}
+
+.pricing {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) calc(var(--space-xl) * 1.5);
+}
+
+.pricingHeader {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.pricingTitle {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-sm);
+}
+
+.pricingSubtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.planCard {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.planCardHighlighted {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.planBadge {
+  position: absolute;
+  top: -12px;
+  right: var(--space-lg);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.planName {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.planDescription {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: -8px;
+}
+
+.planPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.planPriceAmount {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.planPricePeriod {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.planPriceArs {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: -8px;
+}
+
+.planFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  list-style: none;
+  flex: 1;
+}
+
+.planFeatures li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.planFeatures li svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent-hover);
+}
+
+.planCtaLink {
+  display: block;
+}
+
+.planCta {
+  width: 100%;
 }
 
 .footer {

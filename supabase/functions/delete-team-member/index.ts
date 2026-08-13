@@ -1,6 +1,6 @@
 // Supabase Edge Function: delete-team-member
 //
-// Elimina un integrante de la org de Pulso Studio. Solo puede ser llamada por
+// Elimina un integrante de la org de quien la invoca. Solo puede ser llamada por
 // un usuario con rol 'owner' (verificado contra public.users con su propio
 // JWT). Usa la service role key (secret de la función, nunca expuesto al
 // frontend) para borrar al usuario vía Supabase Auth; la fila en public.users

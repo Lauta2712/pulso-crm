@@ -7,6 +7,7 @@ import Toast from './components/ui/Toast'
 import Skeleton from './components/ui/Skeleton'
 import Landing from './pages/Landing/Landing'
 import Login from './pages/Auth/Login'
+import Signup from './pages/Auth/Signup'
 import Dashboard from './pages/Dashboard/Dashboard'
 import ClientList from './pages/Clients/ClientList'
 import ClientDetail from './pages/Clients/ClientDetail'
@@ -67,6 +68,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route
           path="/app"
           element={

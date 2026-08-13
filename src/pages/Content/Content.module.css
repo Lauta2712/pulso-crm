@@ -54,7 +54,7 @@
 
 .viewBtnActive {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
 }
 
 /* Calendar */

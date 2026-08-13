@@ -175,7 +175,7 @@ export default function CampaignMetricsDetail() {
             <BarChart title="Alcance" data={reachChart} color="var(--info)" />
             <BarChart title="Clicks" data={clicksChart} color="var(--accent)" />
             <BarChart title="Conversiones" data={conversionsChart} color="var(--success)" />
-            <BarChart title="Gasto" data={spendChart} color="var(--accent-orange)" formatValue={formatCurrency} />
+            <BarChart title="Gasto" data={spendChart} color="var(--accent-secondary)" formatValue={formatCurrency} />
           </div>
 
           <div className={styles.section}>

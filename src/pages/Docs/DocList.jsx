@@ -59,7 +59,7 @@ export default function DocList() {
         <EmptyState
           icon={<IconFileText />}
           title="No hay documentos registrados"
-          description="Cargá los documentos importantes de Pulso Studio."
+          description="Cargá los documentos importantes de tu agencia."
           action={<Button onClick={() => setShowModal(true)}>+ Nuevo documento</Button>}
         />
       )}

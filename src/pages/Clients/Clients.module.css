@@ -1,8 +1,19 @@
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -30,8 +41,9 @@
 .tableWrapper {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow-x: auto;
+  animation: fadeUp 0.3s ease both;
 }
 
 .table {
@@ -56,11 +68,12 @@
 
 .row {
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.12s ease;
 }
 
 .row:hover {
   background: var(--bg-hover);
+  transform: translateX(2px);
 }
 
 .row:last-child td {
@@ -84,6 +97,12 @@
   flex-direction: column;
   gap: var(--space-sm);
   cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.clientCard:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
 }
 
 .clientCardHeader {
@@ -115,6 +134,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
+    animation: fadeUp 0.3s ease both;
   }
 }
 

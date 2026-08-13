@@ -1,11 +1,9 @@
 import CorkBoard from '../../components/board/CorkBoard'
+import styles from './KanbanBoard.module.css'
 
 export default function KanbanBoard() {
   return (
-    <div className="page">
-      <div className="page-header">
-        <h1 className="page-title">Board</h1>
-      </div>
+    <div className={styles.page}>
       <CorkBoard />
     </div>
   )

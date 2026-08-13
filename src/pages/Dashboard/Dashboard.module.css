@@ -1,8 +1,20 @@
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--space-md);
+  gap: var(--space-lg);
   margin-bottom: var(--space-xl);
+  animation: fadeUp 0.35s ease both;
 }
 
 .metricCard {
@@ -29,14 +41,16 @@
 .charts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--space-md);
+  gap: var(--space-lg);
   margin-bottom: var(--space-xl);
+  animation: fadeUp 0.35s ease 0.05s both;
 }
 
 .sections {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-lg);
+  gap: var(--space-xl);
+  animation: fadeUp 0.35s ease 0.1s both;
 }
 
 @media (max-width: 900px) {
@@ -65,10 +79,12 @@
   padding: 10px 12px;
   border-radius: var(--radius-sm);
   background: var(--bg-elevated);
+  transition: background 0.12s ease, transform 0.12s ease;
 }
 
 .listItem:hover {
   background: var(--bg-hover);
+  transform: translateX(2px);
 }
 
 .itemTitle {

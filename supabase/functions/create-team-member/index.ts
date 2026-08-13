@@ -1,10 +1,10 @@
 // Supabase Edge Function: create-team-member
 //
-// Invita un nuevo integrante a la org de Pulso Studio. Solo puede ser llamada
-// por un usuario con rol 'owner' (verificado contra public.users con su propio
-// JWT). Usa la service role key (secret de la función, nunca expuesto al
-// frontend) para invitar al usuario vía Supabase Auth y asignarle el rol
-// elegido.
+// Invita un nuevo integrante a la org de quien la invoca. Solo puede ser
+// llamada por un usuario con rol 'owner' (verificado contra public.users con
+// su propio JWT). Usa la service role key (secret de la función, nunca
+// expuesto al frontend) para crear el usuario vía Supabase Auth y asignarlo
+// explícitamente al org_id del owner que invita, con el rol elegido.
 //
 // Deploy:
 //   supabase functions deploy create-team-member
@@ -63,7 +63,7 @@ Deno.serve(async (req) => {
 
   const { data: callerProfile, error: profileError } = await callerClient
     .from('users')
-    .select('role')
+    .select('role, org_id')
     .eq('id', user.id)
     .single()
 
@@ -98,22 +98,22 @@ Deno.serve(async (req) => {
     email,
     password,
     email_confirm: true,
-    user_metadata: { full_name },
+    user_metadata: { full_name, invited: true },
   })
 
   if (createError) {
     return jsonResponse({ error: createError.message }, 400)
   }
 
-  // El trigger on_auth_user_created insertó la fila en public.users.
-  // Actualizamos con el nombre y rol elegidos.
-  const { error: updateError } = await adminClient
+  // invited: true le dice al trigger on_auth_user_created que no inserte
+  // nada en public.users — lo hacemos acá explícitamente, con el org_id del
+  // owner que invita (nunca confiar en un org_id que venga del cliente).
+  const { error: insertError } = await adminClient
     .from('users')
-    .update({ full_name, role })
-    .eq('id', created.user.id)
+    .insert({ id: created.user.id, org_id: callerProfile.org_id, full_name, role })
 
-  if (updateError) {
-    return jsonResponse({ error: updateError.message }, 400)
+  if (insertError) {
+    return jsonResponse({ error: insertError.message }, 400)
   }
 
   return jsonResponse({ user: { id: created.user.id, email, full_name, role } })

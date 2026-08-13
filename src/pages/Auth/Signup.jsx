@@ -5,15 +5,19 @@ import { useAuthStore } from '../../store/useAuthStore'
 import Button from '../../components/ui/Button'
 import Wordmark from '../../components/ui/Wordmark'
 import { EyeIcon, EyeOffIcon } from '../../components/ui/PasswordIcons'
+import buttonStyles from '../../components/ui/Button.module.css'
 import styles from './Login.module.css'
 
-export default function Login() {
+export default function Signup() {
   const session = useAuthStore((state) => state.session)
+  const [fullName, setFullName] = useState('')
+  const [orgName, setOrgName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [confirmationSent, setConfirmationSent] = useState(false)
 
   if (session) return <Navigate to="/app" replace />
 
@@ -22,24 +26,84 @@ export default function Login() {
     setError('')
     setLoading(true)
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName, org_name: orgName },
+      },
+    })
 
     if (error) {
-      setError('Email o contraseña incorrectos')
+      setError(error.message === 'User already registered' ? 'Ese email ya tiene una cuenta' : 'No pudimos crear la cuenta, intentá de nuevo')
       setLoading(false)
+      return
     }
+
+    setConfirmationSent(true)
+    setLoading(false)
+  }
+
+  if (confirmationSent) {
+    return (
+      <div className={styles.wrapper}>
+        <div className={styles.card}>
+          <div className={styles.brandRow}>
+            <Wordmark />
+          </div>
+          <p className={styles.subtitle}>
+            Te mandamos un email a <strong>{email}</strong> para confirmar tu cuenta. Abrí el link
+            y después iniciá sesión.
+          </p>
+          <Link
+            to="/login"
+            className={[buttonStyles.btn, buttonStyles.primary, styles.submit].join(' ')}
+          >
+            Ir a iniciar sesión
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
-        <div className={styles.brandRow}>
-          <Wordmark />
-        </div>
-        <p className={styles.subtitle}>Iniciá sesión para entrar al panel de tu agencia</p>
+        <span className={styles.wordmark}>Compass</span>
+        <p className={styles.subtitle}>Creá la cuenta de tu agencia</p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
           {error && <div className={styles.error}>{error}</div>}
+
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="fullName">
+              Tu nombre
+            </label>
+            <input
+              id="fullName"
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Nombre y apellido"
+              required
+              autoComplete="name"
+            />
+          </div>
+
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor="orgName">
+              Nombre de tu agencia
+            </label>
+            <input
+              id="orgName"
+              type="text"
+              value={orgName}
+              onChange={(e) => setOrgName(e.target.value)}
+              placeholder="Mi Agencia"
+              required
+              autoComplete="organization"
+            />
+          </div>
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="email">
@@ -68,7 +132,8 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                autoComplete="current-password"
+                minLength={6}
+                autoComplete="new-password"
               />
               <button
                 type="button"
@@ -83,13 +148,9 @@ export default function Login() {
           </div>
 
           <Button type="submit" className={styles.submit} disabled={loading}>
-            {loading ? 'Ingresando...' : 'Ingresar'}
+            {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </Button>
         </form>
-
-        <p className={styles.signupHint}>
-          ¿No tenés cuenta? <Link to="/signup">Creá una</Link>
-        </p>
       </div>
     </div>
   )

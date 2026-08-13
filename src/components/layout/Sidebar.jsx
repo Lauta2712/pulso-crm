@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useUIStore } from '../../store/useUIStore'
 import { useCurrentUser } from '../../hooks/useCurrentUser'
+import { useOrg } from '../../hooks/useOrg'
 import styles from './Sidebar.module.css'
 
 const NAV_GROUPS = [
@@ -50,6 +51,7 @@ export default function Sidebar() {
   const sidebarOpen = useUIStore((state) => state.sidebarOpen)
   const closeSidebar = useUIStore((state) => state.closeSidebar)
   const { data: currentUser } = useCurrentUser()
+  const { data: org } = useOrg()
 
   const filterItems = (items) =>
     items.filter((item) => !item.roles || item.roles.includes(currentUser?.role))
@@ -58,7 +60,16 @@ export default function Sidebar() {
     <>
       {sidebarOpen && <div className={styles.overlay} onClick={closeSidebar} />}
       <aside className={[styles.sidebar, sidebarOpen ? styles.open : ''].join(' ')}>
-        <img className={styles.logo} src="/img/logo_pulso_transparent.png" alt="Pulso Studio" />
+        <div className={styles.brand}>
+          {org?.logo_url ? (
+            <img className={styles.brandAvatar} src={org.logo_url} alt={org.name} />
+          ) : (
+            <span className={[styles.brandAvatar, styles.brandAvatarFallback].join(' ')}>
+              {org?.name?.charAt(0).toUpperCase() ?? '?'}
+            </span>
+          )}
+          <span className={styles.brandName}>{org?.name ?? 'Cargando...'}</span>
+        </div>
         <nav className={styles.nav}>
           {NAV_GROUPS.map((group, gi) => {
             const visible = filterItems(group.items)

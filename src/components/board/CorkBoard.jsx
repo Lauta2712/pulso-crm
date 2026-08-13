@@ -10,7 +10,6 @@ import {
 import { SortableContext, rectSortingStrategy, sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable'
 import PostIt from './PostIt'
 import { PIN_COLORS } from './postItColors'
-import EmptyState from '../ui/EmptyState'
 import Skeleton from '../ui/Skeleton'
 import { useUIStore } from '../../store/useUIStore'
 import {
@@ -33,6 +32,8 @@ export default function CorkBoard() {
   const addToast = useUIStore((s) => s.addToast)
 
   const [showDone, setShowDone] = useState(false)
+  const [draft, setDraft] = useState('')
+  const [tossed, setTossed] = useState(false)
   const [justCreatedId, setJustCreatedId] = useState(null)
 
   const sensors = useSensors(
@@ -44,12 +45,21 @@ export default function CorkBoard() {
   const done = (notes ?? []).filter((n) => n.status === 'done')
 
   const handleAdd = async () => {
+    const title = draft.trim()
+    if (!title) return
+
+    setDraft('')
+    setTossed(true)
+    setTimeout(() => setTossed(false), 250)
+
     try {
       const color = PIN_COLORS[Math.floor(Math.random() * PIN_COLORS.length)]
-      const created = await createNote.mutateAsync({ title: 'Nueva nota', color })
+      const created = await createNote.mutateAsync({ title, color })
       setJustCreatedId(created.id)
+      setTimeout(() => setJustCreatedId(null), 400)
     } catch (err) {
       console.error(err)
+      setDraft(title)
       addToast(err?.message || 'No se pudo crear la nota', 'error')
     }
   }
@@ -66,9 +76,7 @@ export default function CorkBoard() {
   const handleToggleDone = (id, value) => {
     toggleDone.mutate(
       { id, done: value },
-      {
-        onError: (err) => addToast(err?.message || 'No se pudo actualizar la nota', 'error'),
-      }
+      { onError: (err) => addToast(err?.message || 'No se pudo actualizar la nota', 'error') }
     )
   }
 
@@ -92,55 +100,60 @@ export default function CorkBoard() {
     })
   }
 
-  if (isLoading) {
-    return (
-      <div className={styles.grid}>
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} height="130px" radius="var(--radius-sm)" />
-        ))}
-      </div>
-    )
-  }
-
   if (isError) {
-    return <p style={{ color: 'var(--danger)' }}>Error al cargar el corcho.</p>
+    return <p style={{ color: 'var(--danger)' }}>Error al cargar el board.</p>
   }
 
   return (
-    <div className={styles.board}>
-      <div className={styles.toolbar}>
-        <button type="button" className={styles.doneToggle} onClick={() => setShowDone((v) => !v)}>
-          {showDone ? 'Ocultar completadas' : `Ver completadas (${done.length})`}
-        </button>
+    <div className={styles.wrapper}>
+      {done.length > 0 && (
+        <div className={styles.toolbar}>
+          <button type="button" className={styles.doneToggle} onClick={() => setShowDone((v) => !v)}>
+            {showDone ? 'Ocultar completadas' : `Ver completadas (${done.length})`}
+          </button>
+        </div>
+      )}
+
+      <div className={styles.composeRow}>
+        <textarea
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault()
+              handleAdd()
+            }
+          }}
+          placeholder="Escribí algo pendiente y apretá Enter..."
+          className={[styles.compose, tossed ? styles.tossed : ''].join(' ')}
+          rows={2}
+        />
       </div>
 
-      {pending.length === 0 && !showDone ? (
-        <EmptyState
-          title="El corcho está vacío"
-          description="Pegá tu primera idea o tarea suelta."
-          action={
-            <button type="button" className={styles.addTile} onClick={handleAdd}>
-              + Nueva nota
-            </button>
-          }
-        />
+      {isLoading ? (
+        <div className={styles.board}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} height="110px" radius="3px 3px 10px 3px" />
+          ))}
+        </div>
+      ) : pending.length === 0 ? (
+        <div className={styles.board}>
+          <p className={styles.empty}>Nada pendiente todavía — escribí arriba.</p>
+        </div>
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={pending.map((n) => n.id)} strategy={rectSortingStrategy}>
-            <div className={styles.grid}>
+            <div className={styles.board}>
               {pending.map((note) => (
                 <PostIt
                   key={note.id}
                   note={note}
-                  autoEdit={note.id === justCreatedId}
+                  justCreated={note.id === justCreatedId}
                   onSave={(updates) => handleSave(note.id, updates)}
                   onToggleDone={(value) => handleToggleDone(note.id, value)}
                   onDelete={() => handleDelete(note.id)}
                 />
               ))}
-              <button type="button" className={styles.addTile} onClick={handleAdd}>
-                + Nueva nota
-              </button>
             </div>
           </SortableContext>
         </DndContext>
@@ -148,7 +161,7 @@ export default function CorkBoard() {
 
       {showDone && done.length > 0 && (
         <div className={styles.doneSection}>
-          <div className={styles.grid}>
+          <div className={styles.board}>
             {done.map((note) => (
               <PostIt
                 key={note.id}

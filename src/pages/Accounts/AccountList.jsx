@@ -78,7 +78,7 @@ export default function AccountList() {
         <EmptyState
           icon={<IconKey />}
           title="No hay cuentas registradas"
-          description="Cargá las credenciales de las cuentas de Pulso Studio."
+          description="Cargá las credenciales de las cuentas de tu agencia."
           action={<Button onClick={() => setShowModal(true)}>+ Nueva cuenta</Button>}
         />
       )}

@@ -174,7 +174,7 @@ export default function Dashboard() {
         <BarChart
           title="Proyectos activos por tipo"
           data={projectsByType}
-          color="var(--accent-orange)"
+          color="var(--accent-secondary)"
           emptyLabel="No hay proyectos activos"
         />
         {canViewFinance && (

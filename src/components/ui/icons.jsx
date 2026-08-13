@@ -246,3 +246,20 @@ export function IconWallet(props) {
     </IconBase>
   )
 }
+
+export function IconSun(props) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+    </IconBase>
+  )
+}
+
+export function IconMoon(props) {
+  return (
+    <IconBase {...props}>
+      <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z" />
+    </IconBase>
+  )
+}

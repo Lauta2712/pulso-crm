@@ -1,20 +1,21 @@
-.board {
+.wrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .toolbar {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: var(--space-md);
 }
 
 .doneToggle {
-  padding: var(--space-xs) var(--space-sm);
+  padding: var(--space-xs) 0;
   border: none;
   background: none;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   cursor: pointer;
 }
 
@@ -22,45 +23,84 @@
   color: var(--text-primary);
 }
 
-.grid {
+.composeRow {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-md) 0;
+  flex-shrink: 0;
+}
+
+.compose {
+  width: 100%;
+  max-width: 340px;
+  min-height: 70px;
+  background: var(--bg-elevated);
+  border: 2px dashed var(--border);
+  border-radius: 3px 3px 10px 3px;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  text-align: center;
+  transition: border-color 0.15s ease, transform 0.25s ease, opacity 0.25s ease;
+}
+
+.compose::placeholder {
+  color: var(--text-muted);
+}
+
+.compose:focus {
+  border-style: solid;
+  border-color: var(--accent);
+  text-align: left;
+}
+
+.compose.tossed {
+  transform: scale(0.7) rotate(-8deg) translateY(-36px);
+  opacity: 0;
+}
+
+.board {
+  flex: 1;
+  min-height: 480px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  align-content: start;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: var(--space-md);
   padding: var(--space-lg);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   background-color: var(--bg-primary);
   background-image: radial-gradient(var(--border) 1px, transparent 1px);
-  background-size: 22px 22px;
+  background-size: 20px 20px;
+  overflow-y: auto;
 }
 
-.addTile {
-  min-height: 130px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: border-color 0.12s ease, color 0.12s ease;
-}
-
-.addTile:hover {
-  border-color: var(--accent);
-  color: var(--accent-hover);
+.empty {
+  grid-column: 1 / -1;
+  align-self: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
 
 .doneSection {
-  margin-top: var(--space-lg);
+  flex-shrink: 0;
+  margin-top: var(--space-md);
   padding-top: var(--space-md);
-  border-top: 1px dashed var(--border);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.doneSection .board {
+  flex: none;
+  max-height: 260px;
 }
 
 @media (max-width: 640px) {
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  .board {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     padding: var(--space-md);
   }
 }

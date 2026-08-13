@@ -33,6 +33,7 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
   const { data: clients } = useClients()
   const { data: users } = useUsers()
   const navigate = useNavigate()
+  const [showMore, setShowMore] = useState(false)
 
   const [form, setForm] = useState({
     name: '',
@@ -115,52 +116,64 @@ export default function ProjectFormModal({ clientId, onClose, onCreated }) {
           </div>
         </div>
 
-        <div className={styles.row}>
-          <div className={styles.field}>
-            <label className={styles.label}>Estado</label>
-            <Select value={form.status} onChange={handleSelectChange('status')}>
-              {STATUS_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </Select>
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Presupuesto (ARS)</label>
-            <input type="number" min="0" value={form.budget} onChange={handleChange('budget')} />
-          </div>
-        </div>
+        <button
+          type="button"
+          className={styles.moreToggle}
+          onClick={() => setShowMore((v) => !v)}
+        >
+          {showMore ? 'Ocultar detalles' : '+ Más detalles (estado, fechas, presupuesto...)'}
+        </button>
 
-        <div className={styles.row}>
-          <div className={styles.field}>
-            <label className={styles.label}>Fecha de inicio</label>
-            <input type="date" value={form.start_date} onChange={handleChange('start_date')} />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Fecha de fin</label>
-            <input type="date" value={form.end_date} onChange={handleChange('end_date')} />
-          </div>
-        </div>
+        <div className={[styles.extra, showMore ? styles.extraOpen : ''].join(' ')}>
+          <div className={styles.extraInner}>
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <label className={styles.label}>Estado</label>
+                <Select value={form.status} onChange={handleSelectChange('status')}>
+                  {STATUS_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Presupuesto (ARS)</label>
+                <input type="number" min="0" value={form.budget} onChange={handleChange('budget')} />
+              </div>
+            </div>
 
-        <div className={styles.field}>
-          <label className={styles.label}>Responsable</label>
-          <Select value={form.assigned_to} onChange={handleSelectChange('assigned_to')}>
-            <option value="">Sin asignar</option>
-            {users?.map((u) => (
-              <option key={u.id} value={u.id}>{u.full_name}</option>
-            ))}
-          </Select>
-        </div>
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <label className={styles.label}>Fecha de inicio</label>
+                <input type="date" value={form.start_date} onChange={handleChange('start_date')} />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Fecha de fin</label>
+                <input type="date" value={form.end_date} onChange={handleChange('end_date')} />
+              </div>
+            </div>
 
-        <div className={styles.row}>
-          <div className={styles.field}>
-            <label className={styles.label}>Repositorio</label>
-            <input value={form.repo_url} onChange={handleChange('repo_url')} placeholder="https://github.com/..." />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Deploy</label>
-            <input value={form.deploy_url} onChange={handleChange('deploy_url')} placeholder="https://..." />
+            <div className={styles.field}>
+              <label className={styles.label}>Responsable</label>
+              <Select value={form.assigned_to} onChange={handleSelectChange('assigned_to')}>
+                <option value="">Sin asignar</option>
+                {users?.map((u) => (
+                  <option key={u.id} value={u.id}>{u.full_name}</option>
+                ))}
+              </Select>
+            </div>
+
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <label className={styles.label}>Repositorio</label>
+                <input value={form.repo_url} onChange={handleChange('repo_url')} placeholder="https://github.com/..." />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Deploy</label>
+                <input value={form.deploy_url} onChange={handleChange('deploy_url')} placeholder="https://..." />
+              </div>
+            </div>
           </div>
         </div>
 

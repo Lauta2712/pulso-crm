@@ -116,7 +116,7 @@ export default function CandidateList() {
         <EmptyState
           icon={<IconUsers />}
           title={tab === 'all' ? 'No hay postulantes cargados' : 'No hay postulantes en este estado'}
-          description="Sumá los CVs de las personas que se postulan a Pulso Studio."
+          description="Sumá los CVs de las personas que se postulan a tu agencia."
           action={<Button onClick={() => setShowModal(true)}>+ Nuevo postulante</Button>}
         />
       )}

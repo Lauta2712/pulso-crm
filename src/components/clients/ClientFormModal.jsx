@@ -18,6 +18,7 @@ export default function ClientFormModal({ onClose }) {
   const addToast = useUIStore((state) => state.addToast)
   const createClient = useCreateClient()
   const { data: users } = useUsers()
+  const [showMore, setShowMore] = useState(false)
 
   const [form, setForm] = useState({
     name: '',
@@ -73,49 +74,61 @@ export default function ClientFormModal({ onClose }) {
           </div>
         </div>
 
-        <div className={styles.row}>
-          <div className={styles.field}>
-            <label className={styles.label}>Email</label>
-            <input type="email" value={form.email} onChange={handleChange('email')} />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Teléfono</label>
-            <input value={form.phone} onChange={handleChange('phone')} />
-          </div>
-        </div>
+        <button
+          type="button"
+          className={styles.moreToggle}
+          onClick={() => setShowMore((v) => !v)}
+        >
+          {showMore ? 'Ocultar detalles' : '+ Más detalles (email, teléfono, responsable...)'}
+        </button>
 
-        <div className={styles.row}>
-          <div className={styles.field}>
-            <label className={styles.label}>Instagram</label>
-            <input value={form.instagram} onChange={handleChange('instagram')} />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Origen</label>
-            <input
-              value={form.source}
-              onChange={handleChange('source')}
-              placeholder="Referido, redes, etc."
-            />
-          </div>
-        </div>
+        <div className={[styles.extra, showMore ? styles.extraOpen : ''].join(' ')}>
+          <div className={styles.extraInner}>
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <label className={styles.label}>Email</label>
+                <input type="email" value={form.email} onChange={handleChange('email')} />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Teléfono</label>
+                <input value={form.phone} onChange={handleChange('phone')} />
+              </div>
+            </div>
 
-        <div className={styles.row}>
-          <div className={styles.field}>
-            <label className={styles.label}>Primer contacto</label>
-            <input
-              type="date"
-              value={form.first_contact}
-              onChange={handleChange('first_contact')}
-            />
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>Responsable</label>
-            <Select value={form.assigned_to} onChange={handleSelectChange('assigned_to')}>
-              <option value="">Sin asignar</option>
-              {users?.map((u) => (
-                <option key={u.id} value={u.id}>{u.full_name}</option>
-              ))}
-            </Select>
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <label className={styles.label}>Instagram</label>
+                <input value={form.instagram} onChange={handleChange('instagram')} />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Origen</label>
+                <input
+                  value={form.source}
+                  onChange={handleChange('source')}
+                  placeholder="Referido, redes, etc."
+                />
+              </div>
+            </div>
+
+            <div className={styles.row}>
+              <div className={styles.field}>
+                <label className={styles.label}>Primer contacto</label>
+                <input
+                  type="date"
+                  value={form.first_contact}
+                  onChange={handleChange('first_contact')}
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Responsable</label>
+                <Select value={form.assigned_to} onChange={handleSelectChange('assigned_to')}>
+                  <option value="">Sin asignar</option>
+                  {users?.map((u) => (
+                    <option key={u.id} value={u.id}>{u.full_name}</option>
+                  ))}
+                </Select>
+              </div>
+            </div>
           </div>
         </div>
 

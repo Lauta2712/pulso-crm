@@ -1,3 +1,14 @@
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .filters {
   display: flex;
   gap: 4px;
@@ -32,12 +43,19 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--space-md);
+  animation: fadeUp 0.3s ease both;
 }
 
 .projectCard {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.projectCard:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
 }
 
 .projectHeader {
