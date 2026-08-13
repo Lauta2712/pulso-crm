@@ -3,3 +3,9 @@ verify_jwt = false
 
 [functions.delete-team-member]
 verify_jwt = false
+
+[functions.create-payment-preference]
+verify_jwt = false
+
+[functions.mp-webhook]
+verify_jwt = false

@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { useInvoice, useMarkInvoicePaid } from '../../hooks/useFinance'
+import { useInvoice, useMarkInvoicePaid, useCreatePaymentLink } from '../../hooks/useFinance'
 import InvoiceCard from '../../components/finance/InvoiceCard'
 import TransactionRow from '../../components/finance/TransactionRow'
 import EmptyState from '../../components/ui/EmptyState'
@@ -13,6 +13,7 @@ export default function InvoiceDetail() {
   const { id } = useParams()
   const { data: invoice, isLoading, isError } = useInvoice(id)
   const markPaid = useMarkInvoicePaid()
+  const createPaymentLink = useCreatePaymentLink()
   const addToast = useUIStore((state) => state.addToast)
 
   if (isLoading) {
@@ -53,6 +54,17 @@ export default function InvoiceDetail() {
     }
   }
 
+  const handleCreatePaymentLink = async () => {
+    try {
+      const { paymentLink } = await createPaymentLink.mutateAsync(invoice.id)
+      navigator.clipboard.writeText(paymentLink)
+      addToast('Link de pago copiado')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo generar el link de pago', 'error')
+    }
+  }
+
   return (
     <div className="page">
       <Link to="/app/finance" className={styles.backLink}>
@@ -64,7 +76,13 @@ export default function InvoiceDetail() {
       </div>
 
       <div className={styles.columns}>
-        <InvoiceCard invoice={invoice} onMarkPaid={handleMarkPaid} isMarking={markPaid.isPending} />
+        <InvoiceCard
+          invoice={invoice}
+          onMarkPaid={handleMarkPaid}
+          isMarking={markPaid.isPending}
+          onCreatePaymentLink={handleCreatePaymentLink}
+          isCreatingLink={createPaymentLink.isPending}
+        />
 
         <div className="card">
           <h2 style={{ fontSize: 15, fontWeight: 600, marginBottom: 'var(--space-md)' }}>

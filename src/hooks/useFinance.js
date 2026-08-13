@@ -62,6 +62,24 @@ export function useMarkInvoicePaid() {
   })
 }
 
+export function useCreatePaymentLink() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (invoiceId) => {
+      const { data, error } = await supabase.functions.invoke('create-payment-preference', {
+        body: { invoiceId },
+      })
+      if (error) throw error
+      if (data?.error) throw new Error(data.error)
+      return data
+    },
+    onSuccess: (_data, invoiceId) => {
+      queryClient.invalidateQueries({ queryKey: ['invoices', invoiceId] })
+      queryClient.invalidateQueries({ queryKey: ['invoices'] })
+    },
+  })
+}
+
 export function useTransactions(filters = {}) {
   return useQuery({
     queryKey: ['transactions', filters],

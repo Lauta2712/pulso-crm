@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
+  useCreatePaymentLink,
   useExpenses,
   useFinanceSummary,
   useInvoices,
@@ -33,6 +34,7 @@ export default function FinanceDashboard() {
   const { data: expenses, isLoading: loadingExpenses } = useExpenses()
   const { data: projects } = useProjects()
   const markPaid = useMarkInvoicePaid()
+  const createPaymentLink = useCreatePaymentLink()
 
   const [txProject, setTxProject] = useState('')
   const [txType, setTxType] = useState('')
@@ -49,6 +51,17 @@ export default function FinanceDashboard() {
     } catch (err) {
       console.error(err)
       addToast(err?.message || 'No se pudo actualizar la factura', 'error')
+    }
+  }
+
+  const handleCreatePaymentLink = async (id) => {
+    try {
+      const { paymentLink } = await createPaymentLink.mutateAsync(id)
+      navigator.clipboard.writeText(paymentLink)
+      addToast('Link de pago copiado')
+    } catch (err) {
+      console.error(err)
+      addToast(err?.message || 'No se pudo generar el link de pago', 'error')
     }
   }
 
@@ -156,9 +169,18 @@ export default function FinanceDashboard() {
                       <td className={styles.muted}>{formatDate(invoice.due_date)}</td>
                       <td onClick={(e) => e.stopPropagation()}>
                         {invoice.status !== 'paid' && invoice.status !== 'cancelled' && (
-                          <Button size="sm" variant="secondary" onClick={() => handleMarkPaid(invoice.id)}>
-                            Marcar pagada
-                          </Button>
+                          <div className={itemStyles.invoiceActions}>
+                            <Button
+                              size="sm"
+                              onClick={() => handleCreatePaymentLink(invoice.id)}
+                              disabled={createPaymentLink.isPending}
+                            >
+                              Cobrar con MP
+                            </Button>
+                            <Button size="sm" variant="secondary" onClick={() => handleMarkPaid(invoice.id)}>
+                              Marcar pagada
+                            </Button>
+                          </div>
                         )}
                       </td>
                     </tr>
@@ -175,6 +197,8 @@ export default function FinanceDashboard() {
                   onClick={() => navigate(`/app/finance/invoices/${invoice.id}`)}
                   onMarkPaid={() => handleMarkPaid(invoice.id)}
                   isMarking={markPaid.isPending}
+                  onCreatePaymentLink={() => handleCreatePaymentLink(invoice.id)}
+                  isCreatingLink={createPaymentLink.isPending}
                 />
               ))}
             </div>

@@ -3,6 +3,7 @@ import Button from '../ui/Button'
 import { formatCurrency, formatDate } from '../../lib/format'
 import { INVOICE_STATUS_CONFIG } from '../../lib/invoiceStatus'
 import { interactiveRowProps } from '../../lib/a11y'
+import { useUIStore } from '../../store/useUIStore'
 import styles from './Finance.module.css'
 
 export function InvoiceStatusBadge({ status }) {
@@ -10,8 +11,22 @@ export function InvoiceStatusBadge({ status }) {
   return <Badge variant={config.variant}>{config.label}</Badge>
 }
 
-export default function InvoiceCard({ invoice, onMarkPaid, isMarking, onClick }) {
+export default function InvoiceCard({
+  invoice,
+  onMarkPaid,
+  isMarking,
+  onCreatePaymentLink,
+  isCreatingLink,
+  onClick,
+}) {
+  const addToast = useUIStore((state) => state.addToast)
   const canMarkPaid = invoice.status !== 'paid' && invoice.status !== 'cancelled'
+
+  const handleCopyLink = (e) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(invoice.payment_link)
+    addToast('Link de pago copiado')
+  }
 
   return (
     <div
@@ -55,16 +70,45 @@ export default function InvoiceCard({ invoice, onMarkPaid, isMarking, onClick })
         )}
       </div>
 
-      {canMarkPaid && onMarkPaid && (
-        <Button
-          onClick={(e) => {
-            e.stopPropagation()
-            onMarkPaid()
-          }}
-          disabled={isMarking}
-        >
-          {isMarking ? 'Actualizando...' : 'Marcar como pagada'}
-        </Button>
+      {canMarkPaid && invoice.payment_link && (
+        <div className={styles.paymentLinkRow} onClick={(e) => e.stopPropagation()}>
+          <span className={styles.paymentLinkUrl}>{invoice.payment_link}</span>
+          <Button variant="ghost" size="sm" onClick={handleCopyLink}>
+            Copiar link
+          </Button>
+        </div>
+      )}
+
+      {canMarkPaid && (onMarkPaid || onCreatePaymentLink) && (
+        <div className={styles.invoiceActions}>
+          {onCreatePaymentLink && (
+            <Button
+              onClick={(e) => {
+                e.stopPropagation()
+                onCreatePaymentLink()
+              }}
+              disabled={isCreatingLink}
+            >
+              {isCreatingLink
+                ? 'Generando link...'
+                : invoice.payment_link
+                  ? 'Regenerar link de Mercado Pago'
+                  : 'Cobrar con Mercado Pago'}
+            </Button>
+          )}
+          {onMarkPaid && (
+            <Button
+              variant="secondary"
+              onClick={(e) => {
+                e.stopPropagation()
+                onMarkPaid()
+              }}
+              disabled={isMarking}
+            >
+              {isMarking ? 'Actualizando...' : 'Marcar como pagada'}
+            </Button>
+          )}
+        </div>
       )}
     </div>
   )
