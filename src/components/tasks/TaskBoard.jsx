@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   DndContext,
   DragOverlay,
@@ -19,6 +19,8 @@ export default function TaskBoard({ tasks, queryKey, onTaskClick, onAddTask }) {
   const moveTask = useMoveTask()
   const [activeTask, setActiveTask] = useState(null)
   const [activeColumn, setActiveColumn] = useState(COLUMNS[0].id)
+  const [pageDirection, setPageDirection] = useState('next')
+  const activeIndexRef = useRef(0)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -64,6 +66,17 @@ export default function TaskBoard({ tasks, queryKey, onTaskClick, onAddTask }) {
     moveTask.mutate({ id: draggedTask.id, status: targetStatus, position: newPosition, queryKey })
   }
 
+  const goToColumn = (id) => {
+    const nextIndex = COLUMNS.findIndex((c) => c.id === id)
+    setPageDirection(nextIndex >= activeIndexRef.current ? 'next' : 'prev')
+    activeIndexRef.current = nextIndex
+    setActiveColumn(id)
+  }
+
+  const activeIndex = COLUMNS.findIndex((c) => c.id === activeColumn)
+  const goPrev = () => activeIndex > 0 && goToColumn(COLUMNS[activeIndex - 1].id)
+  const goNext = () => activeIndex < COLUMNS.length - 1 && goToColumn(COLUMNS[activeIndex + 1].id)
+
   const handleComplete = (task) => {
     if (task.status === 'done') return
     const position = tasks.filter((t) => t.status === 'done').length
@@ -83,7 +96,7 @@ export default function TaskBoard({ tasks, queryKey, onTaskClick, onAddTask }) {
             key={col.id}
             type="button"
             className={[styles.mobileTab, col.id === activeColumn ? styles.mobileTabActive : ''].join(' ')}
-            onClick={() => setActiveColumn(col.id)}
+            onClick={() => goToColumn(col.id)}
           >
             {col.label}
             <span className={styles.mobileTabCount}>{col.tasks.length}</span>
@@ -92,20 +105,59 @@ export default function TaskBoard({ tasks, queryKey, onTaskClick, onAddTask }) {
       </div>
 
       <div className={styles.board}>
-        {columns.map((col) => (
-          <div
-            key={col.id}
-            className={[styles.columnWrap, col.id === activeColumn ? styles.columnWrapActive : ''].join(' ')}
-          >
-            <KanbanColumn
-              column={col}
-              onTaskClick={onTaskClick}
-              onAddTask={onAddTask}
-              onComplete={handleComplete}
-            />
-          </div>
-        ))}
+        {columns.map((col) => {
+          const isActive = col.id === activeColumn
+          const animationClass = pageDirection === 'next' ? styles.pageEnterNext : styles.pageEnterPrev
+          return (
+            <div
+              key={col.id}
+              className={[styles.columnWrap, isActive ? styles.columnWrapActive : '', isActive ? animationClass : '']
+                .join(' ')
+                .trim()}
+            >
+              <KanbanColumn
+                column={col}
+                onTaskClick={onTaskClick}
+                onAddTask={onAddTask}
+                onComplete={handleComplete}
+              />
+            </div>
+          )
+        })}
       </div>
+
+      <div className={styles.paginator}>
+        <button
+          type="button"
+          className={styles.pagerBtn}
+          onClick={goPrev}
+          disabled={activeIndex === 0}
+          aria-label="Columna anterior"
+        >
+          ‹
+        </button>
+        <div className={styles.pagerDots}>
+          {columns.map((col) => (
+            <button
+              key={col.id}
+              type="button"
+              className={[styles.pagerDot, col.id === activeColumn ? styles.pagerDotActive : ''].join(' ')}
+              onClick={() => goToColumn(col.id)}
+              aria-label={`Ir a ${col.label}`}
+            />
+          ))}
+        </div>
+        <button
+          type="button"
+          className={styles.pagerBtn}
+          onClick={goNext}
+          disabled={activeIndex === columns.length - 1}
+          aria-label="Columna siguiente"
+        >
+          ›
+        </button>
+      </div>
+
       <DragOverlay>{activeTask && <TaskCard task={activeTask} overlay />}</DragOverlay>
     </DndContext>
   )

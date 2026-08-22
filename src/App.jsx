@@ -8,6 +8,8 @@ import Skeleton from './components/ui/Skeleton'
 import Landing from './pages/Landing/Landing'
 import Login from './pages/Auth/Login'
 import Signup from './pages/Auth/Signup'
+import Subscribe from './pages/Subscribe/Subscribe'
+import SubscribeThanks from './pages/Subscribe/SubscribeThanks'
 import Dashboard from './pages/Dashboard/Dashboard'
 import ClientList from './pages/Clients/ClientList'
 import ClientDetail from './pages/Clients/ClientDetail'
@@ -69,6 +71,8 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/suscribirse" element={<Subscribe />} />
+        <Route path="/gracias-suscripcion" element={<SubscribeThanks />} />
         <Route
           path="/app"
           element={

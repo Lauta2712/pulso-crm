@@ -9,3 +9,12 @@ verify_jwt = false
 
 [functions.mp-webhook]
 verify_jwt = false
+
+[functions.create-product-subscription]
+verify_jwt = false
+
+[functions.product-subscription-webhook]
+verify_jwt = false
+
+[functions.list-product-subscriptions]
+verify_jwt = false
