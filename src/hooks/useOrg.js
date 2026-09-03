@@ -3,12 +3,20 @@ import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../store/useAuthStore'
 
 export function useOrg() {
+  const session = useAuthStore((s) => s.session)
+  const userId = session?.user?.id
+
   return useQuery({
-    queryKey: ['org'],
+    queryKey: ['org', userId],
+    enabled: !!userId,
     queryFn: async () => {
-      const { data, error } = await supabase.from('orgs').select('*').single()
+      const { data, error } = await supabase
+        .from('users')
+        .select('orgs(*)')
+        .eq('id', userId)
+        .single()
       if (error) throw error
-      return data
+      return data.orgs
     },
   })
 }

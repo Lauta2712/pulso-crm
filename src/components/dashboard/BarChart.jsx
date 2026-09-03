@@ -11,7 +11,7 @@ export default function BarChart({ title, data, color = 'var(--accent)', formatV
     <div className="card">
       <h2 className={styles.title}>{title}</h2>
       {total === 0 ? (
-        <EmptyState icon={<IconChart />} title={emptyLabel ?? 'Sin datos todavía'} />
+        <EmptyState icon={<IconChart />} title={emptyLabel ?? 'Sin datos todavía'} compact />
       ) : (
         <div className={styles.chart}>
           {data.map((d) => (

@@ -98,7 +98,7 @@ export default function ProjectList() {
               </div>
 
               <div className={styles.projectMeta}>
-                <Badge variant="accent">{project.type}</Badge>
+                <Badge variant="muted">{project.type}</Badge>
               </div>
 
               {project.users?.full_name && (

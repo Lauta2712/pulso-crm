@@ -25,3 +25,24 @@
   margin-bottom: var(--space-md);
   max-width: 360px;
 }
+
+/* Compact: for empty states nested inside an already-labeled section of a
+   denser dashboard (e.g. Finanzas), where the section heading already says
+   what's missing — the full-size treatment is meant for a page's single,
+   only piece of content, and reads as dead space when several of these
+   stack in one screen. */
+.compact {
+  padding: var(--space-md) var(--space-sm);
+}
+
+.compact .icon {
+  font-size: 20px;
+  margin-bottom: var(--space-sm);
+}
+
+.compact .title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}

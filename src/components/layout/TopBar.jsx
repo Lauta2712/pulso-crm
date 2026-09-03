@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/useAuthStore'
 import { useUIStore } from '../../store/useUIStore'
-import Button from '../ui/Button'
+import { useCurrentUser } from '../../hooks/useCurrentUser'
 import { IconMenu, IconSun, IconMoon } from '../ui/icons'
+import UserMenu from './UserMenu'
 import styles from './TopBar.module.css'
 
 export default function TopBar() {
@@ -11,10 +12,10 @@ export default function TopBar() {
   const toggleSidebar = useUIStore((state) => state.toggleSidebar)
   const theme = useUIStore((state) => state.theme)
   const toggleTheme = useUIStore((state) => state.toggleTheme)
+  const { data: currentUser } = useCurrentUser()
   const navigate = useNavigate()
 
   const email = session?.user?.email ?? ''
-  const initial = email.charAt(0).toUpperCase()
 
   const handleSignOut = async () => {
     await signOut()
@@ -37,13 +38,7 @@ export default function TopBar() {
         >
           {theme === 'dark' ? <IconSun /> : <IconMoon />}
         </button>
-        <div className={styles.user}>
-          <div className={styles.avatar}>{initial || '?'}</div>
-          <span>{email}</span>
-        </div>
-        <Button variant="ghost" size="sm" onClick={handleSignOut}>
-          Salir
-        </Button>
+        <UserMenu email={email} role={currentUser?.role} onSignOut={handleSignOut} />
       </div>
     </header>
   )

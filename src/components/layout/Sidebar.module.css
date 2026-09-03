@@ -14,13 +14,31 @@
   overflow: hidden;
 }
 
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  flex-shrink: 0;
+  min-width: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.workspaceLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 .brand {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  padding: 0 var(--space-sm);
-  margin-bottom: var(--space-lg);
-  flex-shrink: 0;
   min-width: 0;
 }
 
@@ -58,11 +76,23 @@
   margin: -4px -6px;
   font-size: 14px;
   font-weight: 600;
+  min-width: 0;
 }
 
 .orgSwitcher:hover {
   background: var(--bg-hover);
   border-color: transparent;
+}
+
+.roleBadge {
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--accent-secondary);
+  background: var(--accent-secondary-subtle);
+  padding: 2px 7px;
+  border-radius: 999px;
 }
 
 .nav {
@@ -118,11 +148,12 @@
 /* Links */
 
 .link {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-sm);
-  padding: 7px var(--space-sm);
+  padding: 7px var(--space-sm) 7px calc(var(--space-sm) + 2px);
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   font-size: 13px;
@@ -135,8 +166,44 @@
   color: var(--text-primary);
 }
 
+.linkMain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.linkIcon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  transition: color 0.12s ease;
+}
+
+.linkLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .linkActive {
   background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.linkActive::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 5px;
+  bottom: 5px;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.linkActive .linkIcon {
   color: var(--accent);
 }
 

@@ -226,7 +226,7 @@ export default function Dashboard() {
                     <div className={styles.itemTitle}>{project.name}</div>
                     <div className={styles.itemMeta}>{project.clients?.name ?? 'Sin cliente'}</div>
                   </div>
-                  <Badge variant="accent">{project.type}</Badge>
+                  <Badge variant="muted">{project.type}</Badge>
                 </Link>
               ))}
             </div>

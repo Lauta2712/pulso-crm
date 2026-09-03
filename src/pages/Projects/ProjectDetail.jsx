@@ -111,7 +111,7 @@ export default function ProjectDetail() {
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Badge variant={STATUS_VARIANT[project.status] ?? 'muted'}>{project.status}</Badge>
-          <Badge variant="accent">{project.type}</Badge>
+          <Badge variant="muted">{project.type}</Badge>
           <Button onClick={() => setShowNewTask(true)}>+ Nueva tarea</Button>
           <Button variant="danger" size="sm" onClick={handleDelete} disabled={deleteProject.isPending}>
             Eliminar

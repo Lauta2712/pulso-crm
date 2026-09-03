@@ -16,7 +16,7 @@ import Button from '../../components/ui/Button'
 import EmptyState from '../../components/ui/EmptyState'
 import Select from '../../components/ui/Select'
 import Skeleton, { SkeletonTableRows, SkeletonCard } from '../../components/ui/Skeleton'
-import { IconWallet } from '../../components/ui/icons'
+import { IconWallet, IconChart, IconInbox } from '../../components/ui/icons'
 import BarChart from '../../components/dashboard/BarChart'
 import { useUIStore } from '../../store/useUIStore'
 import { formatCurrency, formatDate } from '../../lib/format'
@@ -83,6 +83,45 @@ export default function FinanceDashboard() {
         <h1 className="page-title">Finanzas</h1>
       </div>
 
+      <div className={styles.metrics}>
+        <div className={styles.metricCard}>
+          <span className={[styles.metricIcon, styles.metricIconSuccess].join(' ')}>
+            <IconChart />
+          </span>
+          <div className={styles.metricBody}>
+            <span className={styles.metricLabel}>Ingresos del mes</span>
+            <span className={styles.metricValue}>{formatCurrency(summary?.income)}</span>
+          </div>
+        </div>
+        <div className={styles.metricCard}>
+          <span className={[styles.metricIcon, styles.metricIconDanger].join(' ')}>
+            <IconChart />
+          </span>
+          <div className={styles.metricBody}>
+            <span className={styles.metricLabel}>Gastos del mes</span>
+            <span className={styles.metricValue}>{formatCurrency(summary?.expense)}</span>
+          </div>
+        </div>
+        <div className={styles.metricCard}>
+          <span className={[styles.metricIcon, styles.metricIconAccent].join(' ')}>
+            <IconWallet />
+          </span>
+          <div className={styles.metricBody}>
+            <span className={styles.metricLabel}>Balance</span>
+            <span className={styles.metricValue}>{formatCurrency(summary?.balance)}</span>
+          </div>
+        </div>
+        <div className={styles.metricCard}>
+          <span className={[styles.metricIcon, styles.metricIconWarning].join(' ')}>
+            <IconInbox />
+          </span>
+          <div className={styles.metricBody}>
+            <span className={styles.metricLabel}>Por cobrar</span>
+            <span className={styles.metricValue}>{formatCurrency(summary?.receivable)}</span>
+          </div>
+        </div>
+      </div>
+
       <div className={styles.charts}>
         <BarChart
           title="Ingresos vs gastos (mes)"
@@ -132,7 +171,7 @@ export default function FinanceDashboard() {
 
         {!loadingInvoices && (!invoices || invoices.length === 0) && (
           <div className={styles.cardSection}>
-            <EmptyState icon={<IconWallet />} title="No hay facturas cargadas" />
+            <EmptyState icon={<IconWallet />} title="No hay facturas cargadas" compact />
           </div>
         )}
 
@@ -239,7 +278,7 @@ export default function FinanceDashboard() {
                 </div>
               ))}
             {!loadingTx && (!transactions || transactions.length === 0) && (
-              <EmptyState icon={<IconWallet />} title="No hay transacciones" />
+              <EmptyState icon={<IconWallet />} title="No hay transacciones" compact />
             )}
             {!loadingTx &&
               transactions?.map((tx) => <TransactionRow key={tx.id} transaction={tx} />)}
@@ -260,7 +299,7 @@ export default function FinanceDashboard() {
                 </div>
               ))}
             {!loadingExpenses && (!expenses || expenses.length === 0) && (
-              <EmptyState icon={<IconWallet />} title="No hay gastos cargados" />
+              <EmptyState icon={<IconWallet />} title="No hay gastos cargados" compact />
             )}
             {!loadingExpenses &&
               expenses?.map((expense) => (
@@ -285,25 +324,6 @@ export default function FinanceDashboard() {
                 </div>
               ))}
           </div>
-        </div>
-      </div>
-
-      <div className={styles.metrics}>
-        <div className={['card', styles.metricCard].join(' ')}>
-          <span className={styles.metricLabel}>Ingresos del mes</span>
-          <span className={styles.metricValue}>{formatCurrency(summary?.income)}</span>
-        </div>
-        <div className={['card', styles.metricCard].join(' ')}>
-          <span className={styles.metricLabel}>Gastos del mes</span>
-          <span className={styles.metricValue}>{formatCurrency(summary?.expense)}</span>
-        </div>
-        <div className={['card', styles.metricCard].join(' ')}>
-          <span className={styles.metricLabel}>Balance</span>
-          <span className={styles.metricValue}>{formatCurrency(summary?.balance)}</span>
-        </div>
-        <div className={['card', styles.metricCard].join(' ')}>
-          <span className={styles.metricLabel}>Por cobrar</span>
-          <span className={styles.metricValue}>{formatCurrency(summary?.receivable)}</span>
         </div>
       </div>
     </div>
