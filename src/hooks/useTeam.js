@@ -1,31 +1,44 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../lib/supabase'
+import { useOrg } from './useOrg'
 
 export function useTeamOverview() {
+  const { data: org } = useOrg()
+
   return useQuery({
-    queryKey: ['team-overview'],
+    queryKey: ['team-overview', org?.id],
+    enabled: !!org?.id,
     queryFn: async () => {
-      const [usersRes, membersRes, tasksRes] = await Promise.all([
-        supabase.from('users').select('*').order('full_name'),
+      const [membershipsRes, membersRes, tasksRes] = await Promise.all([
+        supabase
+          .from('org_members')
+          .select('id, role, user_id, users(id, full_name, avatar_url, created_at)')
+          .eq('org_id', org.id)
+          .order('full_name', { foreignTable: 'users' }),
         supabase
           .from('project_members')
           .select('user_id, role, projects(id, name, status, clients(id, name))'),
         supabase.from('tasks').select('assigned_to, status').not('assigned_to', 'is', null),
       ])
 
-      if (usersRes.error) throw usersRes.error
+      if (membershipsRes.error) throw membershipsRes.error
       if (membersRes.error) throw membersRes.error
       if (tasksRes.error) throw tasksRes.error
 
-      return usersRes.data.map((user) => ({
-        ...user,
-        projects: membersRes.data
-          .filter((m) => m.user_id === user.id && m.projects)
-          .map((m) => ({ ...m.projects, memberRole: m.role })),
-        openTasks: tasksRes.data.filter(
-          (t) => t.assigned_to === user.id && t.status !== 'done'
-        ).length,
-      }))
+      return membershipsRes.data.map((m) => {
+        const user = m.users
+        return {
+          ...user,
+          role: m.role,
+          org_member_id: m.id,
+          projects: membersRes.data
+            .filter((pm) => pm.user_id === user.id && pm.projects)
+            .map((pm) => ({ ...pm.projects, memberRole: pm.role })),
+          openTasks: tasksRes.data.filter(
+            (t) => t.assigned_to === user.id && t.status !== 'done'
+          ).length,
+        }
+      })
     },
   })
 }

@@ -1,13 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '../lib/supabase'
+import { useOrg } from './useOrg'
 
 export function useUsers() {
+  const { data: org } = useOrg()
+
   return useQuery({
-    queryKey: ['users'],
+    queryKey: ['users', org?.id],
+    enabled: !!org?.id,
     queryFn: async () => {
-      const { data, error } = await supabase.from('users').select('*').order('full_name')
+      const { data, error } = await supabase
+        .from('org_members')
+        .select('id, role, user_id, users(id, full_name, avatar_url, created_at)')
+        .eq('org_id', org.id)
+        .order('full_name', { foreignTable: 'users' })
       if (error) throw error
-      return data
+      return data.map((m) => ({ ...m.users, role: m.role, org_member_id: m.id }))
     },
   })
 }
@@ -35,11 +43,11 @@ export function useUpdateUser() {
 export function useUpdateUserRole() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: async ({ id, role }) => {
+    mutationFn: async ({ orgMemberId, role }) => {
       const { data, error } = await supabase
-        .from('users')
+        .from('org_members')
         .update({ role })
-        .eq('id', id)
+        .eq('id', orgMemberId)
         .select()
         .single()
       if (error) throw error
@@ -47,6 +55,7 @@ export function useUpdateUserRole() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
+      queryClient.invalidateQueries({ queryKey: ['team-overview'] })
     },
   })
 }

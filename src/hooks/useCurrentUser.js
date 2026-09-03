@@ -10,7 +10,7 @@ export function useCurrentUser() {
     queryKey: ['current-user', userId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('users')
+        .from('my_membership')
         .select('*')
         .eq('id', userId)
         .single()

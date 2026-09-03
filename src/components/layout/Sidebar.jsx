@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom'
 import { useUIStore } from '../../store/useUIStore'
 import { useCurrentUser } from '../../hooks/useCurrentUser'
-import { useOrg } from '../../hooks/useOrg'
+import { useOrg, useMyMemberships, useSwitchActiveOrg } from '../../hooks/useOrg'
+import Select from '../ui/Select'
 import styles from './Sidebar.module.css'
 
 const NAV_GROUPS = [
@@ -52,6 +53,8 @@ export default function Sidebar() {
   const closeSidebar = useUIStore((state) => state.closeSidebar)
   const { data: currentUser } = useCurrentUser()
   const { data: org } = useOrg()
+  const { data: memberships } = useMyMemberships()
+  const switchActiveOrg = useSwitchActiveOrg()
 
   const filterItems = (items) =>
     items.filter((item) => !item.roles || item.roles.includes(currentUser?.role))
@@ -68,7 +71,22 @@ export default function Sidebar() {
               {org?.name?.charAt(0).toUpperCase() ?? '?'}
             </span>
           )}
-          <span className={styles.brandName}>{org?.name ?? 'Cargando...'}</span>
+          {memberships && memberships.length > 1 ? (
+            <Select
+              value={org?.id}
+              onChange={(orgId) => switchActiveOrg.mutate(orgId)}
+              className={styles.orgSwitcher}
+              disabled={switchActiveOrg.isPending}
+            >
+              {memberships.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name}
+                </option>
+              ))}
+            </Select>
+          ) : (
+            <span className={styles.brandName}>{org?.name ?? 'Cargando...'}</span>
+          )}
         </div>
         <nav className={styles.nav}>
           {NAV_GROUPS.map((group, gi) => {

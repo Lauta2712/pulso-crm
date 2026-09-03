@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Modal from '../ui/Modal'
 import Button from '../ui/Button'
 import Select from '../ui/Select'
-import { useUpdateUser } from '../../hooks/useUsers'
+import { useUpdateUser, useUpdateUserRole } from '../../hooks/useUsers'
 import { useUIStore } from '../../store/useUIStore'
 import styles from './EditMemberModal.module.css'
 
@@ -17,16 +17,24 @@ const ROLE_OPTIONS = [
 export default function EditMemberModal({ member, onClose }) {
   const addToast = useUIStore((state) => state.addToast)
   const updateUser = useUpdateUser()
+  const updateUserRole = useUpdateUserRole()
 
   const [form, setForm] = useState({ full_name: member.full_name ?? '', role: member.role })
 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
   const handleSelectChange = (field) => (value) => setForm((f) => ({ ...f, [field]: value }))
 
+  const isPending = updateUser.isPending || updateUserRole.isPending
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await updateUser.mutateAsync({ id: member.id, ...form })
+      if (form.full_name !== member.full_name) {
+        await updateUser.mutateAsync({ id: member.id, full_name: form.full_name })
+      }
+      if (form.role !== member.role) {
+        await updateUserRole.mutateAsync({ orgMemberId: member.org_member_id, role: form.role })
+      }
       addToast('Integrante actualizado')
       onClose()
     } catch (err) {
@@ -57,8 +65,8 @@ export default function EditMemberModal({ member, onClose }) {
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" disabled={updateUser.isPending}>
-            {updateUser.isPending ? 'Guardando...' : 'Guardar'}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? 'Guardando...' : 'Guardar'}
           </Button>
         </div>
       </form>

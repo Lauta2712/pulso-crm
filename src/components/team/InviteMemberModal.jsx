@@ -25,13 +25,15 @@ export default function InviteMemberModal({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (form.password.length < 6) {
-      addToast('La contraseña debe tener al menos 6 caracteres', 'error')
-      return
-    }
-    if (form.password !== form.confirmPassword) {
-      addToast('Las contraseñas no coinciden', 'error')
-      return
+    if (form.password) {
+      if (form.password.length < 6) {
+        addToast('La contraseña debe tener al menos 6 caracteres', 'error')
+        return
+      }
+      if (form.password !== form.confirmPassword) {
+        addToast('Las contraseñas no coinciden', 'error')
+        return
+      }
     }
     try {
       await createTeamMember.mutateAsync({ email: form.email, full_name: form.full_name, role: form.role, password: form.password })
@@ -57,12 +59,15 @@ export default function InviteMemberModal({ onClose }) {
 
         <div className={styles.field}>
           <label className={styles.label}>Contraseña</label>
-          <input type="password" value={form.password} onChange={handleChange('password')} required placeholder="Mínimo 6 caracteres" />
+          <input type="password" value={form.password} onChange={handleChange('password')} placeholder="Mínimo 6 caracteres" />
+          <span className={styles.hint}>
+            Si el email ya tiene una cuenta en Compass, se ignora la contraseña y solo se lo agrega a esta organización.
+          </span>
         </div>
 
         <div className={styles.field}>
           <label className={styles.label}>Confirmar contraseña</label>
-          <input type="password" value={form.confirmPassword} onChange={handleChange('confirmPassword')} required />
+          <input type="password" value={form.confirmPassword} onChange={handleChange('confirmPassword')} />
         </div>
 
         <div className={styles.field}>

@@ -1,10 +1,12 @@
 // Supabase Edge Function: delete-team-member
 //
-// Elimina un integrante de la org de quien la invoca. Solo puede ser llamada por
-// un usuario con rol 'owner' (verificado contra public.users con su propio
-// JWT). Usa la service role key (secret de la función, nunca expuesto al
-// frontend) para borrar al usuario vía Supabase Auth; la fila en public.users
-// se elimina en cascada (on delete cascade).
+// Elimina a un integrante de la org activa de quien la invoca. Solo puede
+// ser llamada por un usuario con rol 'owner' (verificado contra org_members
+// con su propio JWT). Usa la service role key (secret de la función, nunca
+// expuesto al frontend).
+//
+// Multi-org: esto borra únicamente la membresía (org_members) de ESTA org,
+// nunca la cuenta de Auth — la persona puede pertenecer a otras orgs.
 //
 // Deploy:
 //   supabase functions deploy delete-team-member
@@ -61,11 +63,24 @@ Deno.serve(async (req) => {
 
   const { data: callerProfile, error: profileError } = await callerClient
     .from('users')
-    .select('role, org_id')
+    .select('active_org_id')
     .eq('id', user.id)
     .single()
 
-  if (profileError || callerProfile?.role !== 'owner') {
+  if (profileError || !callerProfile) {
+    return jsonResponse({ error: 'No se pudo resolver la organización del caller' }, 400)
+  }
+
+  const callerOrgId = callerProfile.active_org_id
+
+  const { data: callerMembership, error: membershipError } = await callerClient
+    .from('org_members')
+    .select('role')
+    .eq('user_id', user.id)
+    .eq('org_id', callerOrgId)
+    .single()
+
+  if (membershipError || callerMembership?.role !== 'owner') {
     return jsonResponse({ error: 'Solo el owner puede eliminar integrantes' }, 403)
   }
 
@@ -88,17 +103,21 @@ Deno.serve(async (req) => {
 
   const adminClient = createClient(supabaseUrl, serviceRoleKey)
 
-  const { data: targetProfile, error: targetError } = await adminClient
-    .from('users')
-    .select('org_id')
-    .eq('id', user_id)
-    .single()
+  const { data: targetMembership, error: targetError } = await adminClient
+    .from('org_members')
+    .select('id')
+    .eq('user_id', user_id)
+    .eq('org_id', callerOrgId)
+    .maybeSingle()
 
-  if (targetError || !targetProfile || targetProfile.org_id !== callerProfile.org_id) {
+  if (targetError || !targetMembership) {
     return jsonResponse({ error: 'Integrante no encontrado' }, 404)
   }
 
-  const { error: deleteError } = await adminClient.auth.admin.deleteUser(user_id)
+  const { error: deleteError } = await adminClient
+    .from('org_members')
+    .delete()
+    .eq('id', targetMembership.id)
 
   if (deleteError) {
     return jsonResponse({ error: deleteError.message }, 400)

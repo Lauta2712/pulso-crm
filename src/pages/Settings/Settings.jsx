@@ -67,9 +67,9 @@ export default function Settings() {
     }
   }
 
-  const handleRoleChange = async (userId, role) => {
+  const handleRoleChange = async (orgMemberId, role) => {
     try {
-      await updateUserRole.mutateAsync({ id: userId, role })
+      await updateUserRole.mutateAsync({ orgMemberId, role })
       addToast('Rol actualizado')
     } catch (err) {
       console.error(err)
@@ -180,7 +180,7 @@ export default function Settings() {
                 {isOwner ? (
                   <Select
                     value={user.role}
-                    onChange={(value) => handleRoleChange(user.id, value)}
+                    onChange={(value) => handleRoleChange(user.org_member_id, value)}
                     className={styles.roleSelect}
                   >
                     {ROLE_OPTIONS.map((opt) => (

@@ -83,6 +83,53 @@ ProjectFormModal, TaskBoard/TaskCard/TaskModal, InvoiceCard, TransactionRow) imp
       automáticamente a la org "Pulso Studio".
 - [ ] **Pendiente**: probar login end-to-end con `pnpm dev`.
 
+## Módulo de Conciliación y Cobranza Automatizada (planificado, no iniciado)
+
+Extiende lo existente (facturas + Mercado Pago Checkout Pro), no arranca de cero. Decisiones ya
+tomadas para la próxima sesión:
+
+- **JavaScript**, no TypeScript en frontend (el prompt original pedía TSX; se descartó por
+  `CLAUDE.md`). Las Edge Functions nuevas sí van en `.ts`, como ya es la convención en
+  `supabase/functions/*`.
+- **Sin `tenant_id` nuevo**: se reusa el modelo `org_id` + RLS (`auth_org_id()`) ya existente.
+- **Sin credenciales de pasarela por agencia** (no Stripe, no keys por org): se extiende la
+  máquina de estados sobre la integración de Mercado Pago compartida que ya existe
+  (`create-payment-preference`, `mp-webhook`).
+
+Máquina de estados: `draft → sent → viewed → paid | overdue → in_recovery → paid | failed`
+(+ `cancelled` en cualquier punto). `in_recovery` y `failed` son valores nuevos del enum
+`invoice_status` (hoy: draft/sent/viewed/paid/overdue/cancelled).
+
+Archivos a crear/editar (lista propuesta, sin implementar todavía):
+
+- [ ] `supabase/migrations/0017_collection_state_machine.sql` — nuevo. `ALTER TYPE invoice_status`
+      (+`in_recovery`, +`failed`); columnas en `invoices` (`recovery_attempts`,
+      `last_reminder_sent_at`, `next_retry_at`, `failed_reason`); tabla `collection_events`
+      (log de transiciones: invoice_id, from_status, to_status, source `webhook|cron|manual`,
+      payload jsonb, org_id, RLS igual que `invoices`).
+- [ ] `supabase/functions/collections-cron/index.ts` — nuevo. Job programado: `sent` vencida →
+      `overdue`; `overdue` con N días → `in_recovery` + dispara reminder; `in_recovery` con M días
+      sin pago → `failed`. Loguea en `collection_events`.
+- [ ] `supabase/functions/send-payment-reminder/index.ts` — nuevo. Envía recordatorio (definir
+      mecanismo: email vs. in-app — pendiente de decidir) y regenera link MP si venció.
+- [ ] `supabase/functions/mp-webhook/index.ts` — editar. Hoy solo maneja `paid`; agregar
+      `rejected`/`cancelled` de MP → `in_recovery`/`failed` + log en `collection_events`.
+- [ ] `src/hooks/useCollections.js` — nuevo. `useCollectionEvents(invoiceId)`,
+      `useSendReminder()`, `useRetryInvoicePayment()`, `useMarkInvoiceFailed()`.
+- [ ] `src/hooks/useFinance.js` — editar. `useInvoicesInRecovery()` / filtro overdue+in_recovery.
+- [ ] `src/lib/invoiceStatus.js` — editar. Entradas `in_recovery` (`warning`) y `failed`
+      (`danger`) en `INVOICE_STATUS_CONFIG`.
+- [ ] `src/components/finance/CollectionTimeline.jsx` + `.module.css` — nuevo. Timeline de
+      `collection_events` en el detalle de factura.
+- [ ] `src/components/finance/InvoiceCard.jsx` — editar. Botón "Reintentar cobro" en
+      `in_recovery`, mostrar `recovery_attempts`/`next_retry_at`.
+- [ ] `src/pages/Finance/InvoiceDetail.jsx` — editar. Montar `CollectionTimeline` + acciones.
+- [ ] `src/pages/Finance/FinanceDashboard.jsx` — editar. Sección/filtro "En cobranza"
+      (overdue + in_recovery) reusando `InvoiceCard`, sin página nueva.
+
+**Pendiente de decidir antes de codear**: mecanismo de reminders (email vs. solo in-app) y los
+umbrales de días para `overdue → in_recovery → failed`.
+
 ## Diferido (sin acción por ahora)
 
 - Self-hosting de Supabase con Docker — el usuario lo va a investigar por su cuenta más adelante.

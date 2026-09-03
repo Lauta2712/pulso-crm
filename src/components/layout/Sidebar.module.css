@@ -51,6 +51,20 @@
   text-overflow: ellipsis;
 }
 
+.orgSwitcher {
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.orgSwitcher:hover {
+  background: var(--bg-hover);
+  border-color: transparent;
+}
+
 .nav {
   display: flex;
   flex-direction: column;
